@@ -1,63 +1,90 @@
-import Link from 'next/link';
+
+
+import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="footer">
-      <div className="footer-content">
-        <div className="footer-section">
-          <h3>Về Chúng Tôi</h3>
-          <p>
-            Công ty Thiết Kế & Thi Công Kiến Trúc Chuyên Nghiệp - Mang đến giải pháp
-            kiến trúc toàn diện với chất lượng, sáng tạo và bền vững.
-          </p>
-          <div className="social-links">
-            <a href="#" title="Facebook">f</a>
-            <a href="#" title="Instagram">📷</a>
-            <a href="#" title="LinkedIn">in</a>
-            <a href="#" title="YouTube">▶️</a>
+    <footer className="w-full text-white">
+
+      {/* TOP */}
+      <div className="relative bg-gradient-to-br from-[#a10d12] via-[#8f0b0f] to-[#7c0a0d] overflow-hidden">
+
+        {/* polygon overlay */}
+        <div className="absolute inset-0 opacity-20 bg-[linear-gradient(120deg,transparent_25%,rgba(255,255,255,.15)_25%,rgba(255,255,255,.15)_50%,transparent_50%,transparent_75%,rgba(255,255,255,.15)_75%)] bg-[length:600px_600px]" />
+
+        <div className="max-w-[1200px] mx-auto py-16 px-6 grid grid-cols-3 gap-16 max-md:grid-cols-1">
+
+          {/* CONTACT */}
+          <div>
+            <h2 className="text-2xl font-semibold mb-6">Thông tin liên hệ</h2>
+
+            <ul className="space-y-4 text-[17px] leading-relaxed">
+              <li><b>Công ty:</b> DHStudio tư vấn và thiết kế kiến trúc</li>
+              <li><b>Địa chỉ:</b> 7 Đông Hội, Thôn Trung Thôn, Đông Anh, Hà Nội, Việt Nam</li>
+              <li><b>Hotline:</b> 0983239596</li>
+              <li><b>Email:</b> dhs.studio.arch@gmail.com</li>
+              <li><b>Website:</b> https://www.dhstudio.com.vn</li>
+            </ul>
           </div>
-        </div>
 
-        <div className="footer-section">
-          <h3>Liên Kết Nhanh</h3>
-          <ul>
-            <li><Link href="/">Trang Chủ</Link></li>
-            <li><Link href="/about">Về Chúng Tôi</Link></li>
-            <li><Link href="/services">Dịch Vụ</Link></li>
-            <li><Link href="/projects">Dự Án</Link></li>
-            <li><Link href="/posts">Blog</Link></li>
-            <li><Link href="/contact">Liên Hệ</Link></li>
-          </ul>
-        </div>
+          {/* ABOUT */}
+          <div>
+            <h2 className="text-2xl font-semibold mb-6">Về chúng tôi</h2>
 
-        <div className="footer-section">
-          <h3>Dịch Vụ</h3>
-          <ul>
-            <li><Link href="/services">Thiết Kế Kiến Trúc</Link></li>
-            <li><Link href="/services">Thi Công Xây Dựng</Link></li>
-            <li><Link href="/services">Thiết Kế Nội Thất</Link></li>
-            <li><Link href="/services">Tư Vấn Kỹ Thuật</Link></li>
-            <li><Link href="/services">Quản Lý Dự Án</Link></li>
-          </ul>
-        </div>
+            <ul className="space-y-5 text-[18px]">
+              {[
+                ["Giới thiệu","/about"],
+                ["Lĩnh vực","/services"],
+                ["Bài viết","/posts"],
+                ["Dự án","/projects"],
+                ["Liên hệ","/contact"]
+              ].map(([text,link],i)=>(
+                <li key={i} className="pb-2 border-b border-white/40 hover:text-gray-200">
+                  <Link href={link}>{text}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        <div className="footer-section">
-          <h3>Liên Hệ</h3>
-          <p>📍 123 Đường Nguyễn Hữu Cảnh, Q.1, TP.HCM</p>
-          <p>📞 +84 28 3823 8899</p>
-          <p>📧 <a href="mailto:info@architecture.vn">info@architecture.vn</a></p>
-          <p>🕐 Thứ 2-6: 8:00-17:30 | Thứ 7: 8:00-12:00</p>
+          {/* SOCIAL */}
+          <div>
+            <h2 className="text-2xl font-semibold mb-6">Kết nối với chúng tôi</h2>
+
+            <div className="flex gap-5">
+
+
+
+              <Link 
+              href="https://m.me/104988175154682"
+              target="_blank"    
+              style={{ backgroundImage: 'url(/images/email_icon.png)'}}
+              />
+              <Link 
+              href="https://m.me/104988175154682"
+              target="_blank"    
+              style={{ backgroundImage: 'url(/images/email_icon.png)'}}
+              />
+              <a 
+              href="https://zalo.me/0983239596"
+              target="_blank"    
+              style={{ backgroundImage: 'url(/images/email_icon.png)'}}
+              />
+              <a 
+              href="tel:0983239596"
+              target="_blank"    
+              style={{ backgroundImage: 'url(/images/email_icon.png)'}}
+              />
+
+
+            </div>
+          </div>
+
         </div>
       </div>
-
-      <div className="footer-bottom">
-        <p>&copy; 2026 Công Ty Thiết Kế & Thi Công Kiến Trúc. Tất cả quyền được bảo lưu.</p>
-        <div className="footer-links">
-          <a href="#privacy">Chính Sách Riêng Tư</a>
-          <a href="#terms">Điều Khoản Sử Dụng</a>
-          <a href="#sitemap">Sơ Đồ Trang</a>
-        </div>
+      <div className="bg-[#c40000] text-center py-3 font-semibold">
+        Copyright 2023 ©
       </div>
+
     </footer>
   );
 }
