@@ -1,3 +1,4 @@
+import { Link } from "lucide-react";
 import Image from "next/image";
 
 const projects = [
@@ -27,9 +28,8 @@ export default function ProjectsSection() {
                     </h2>
 
                     <p className="mt-5 text-gray-500 leading-relaxed max-w-sm">
-                        Browse through some of our proudest builds and transformations
+                        Hãy cùng chiêm ngưỡng một số công trình và dự án cải tạo mà chúng tôi tự hào nhất.
                     </p>
-
                     <button className="mt-10 border border-gray-300 px-6 py-3 flex items-center gap-3 hover:bg-black hover:text-white transition">
                         Xem thêm các dự án khác
                         <span>→</span>

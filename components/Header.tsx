@@ -43,6 +43,7 @@ export default function Header() {
     { name: "Về chúng tôi", href: "/about" },
     { name: "Dự án", href: "/projects" },
     { name: "Liên hệ", href: "/contact" },
+    { name: "Bài viết", href: "/posts" },
   ];
 
   return (

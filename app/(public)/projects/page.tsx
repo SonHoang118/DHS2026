@@ -1,109 +1,234 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
-export default function Projects() {
-  const projects = [
-    {
-      slug: 'toa-nha-thuong-mai-trung-tam',
-      title: 'Tòa Nhà Thương Mại Trung Tâm',
-      category: 'Thương Mại',
-      year: 2022,
-      location: 'Quận 1, TP.HCM',
-      description: 'Tòa nhà 15 tầng với diện tích 5000m² bao gồm văn phòng, không gian bán lẻ và nhà hàng',
-    },
-    {
-      slug: 'khu-biet-thu-cao-cap',
-      title: 'Khu Biệt Thự Cao Cấp',
-      category: 'Nhà Ở',
-      year: 2021,
-      location: 'Thảo Điền, TP.HCM',
-      description: '50 biệt thự hiệu quả năng lượng với kiến trúc hiện đại và tiện ích cao cấp',
-    },
-    {
-      slug: 'trung-tam-trinh-dien-nghe-thuat',
-      title: 'Trung Tâm Trình Diễn Nghệ Thuật',
-      category: 'Công Cộng',
-      year: 2023,
-      location: 'Quan Hạng, Hà Nội',
-      description: 'Công trình công cộng hiện đại với công suất 1000 chỗ, thiết kế kiến trúc độc đáo',
-    },
-    {
-      slug: 'toa-nha-van-phong-xanh',
-      title: 'Tòa Nhà Văn Phòng Xanh',
-      category: 'Thương Mại',
-      year: 2023,
-      location: 'Biwase, TP.HCM',
-      description: 'Tòa nhà 10 tầng với chứng chỉ LEED Green Building, công nghệ tiết kiệm năng lượng',
-    },
-    {
-      slug: 'khu-dan-cu-nhan-ai',
-      title: 'Khu Dân Cư Nhân Ái',
-      category: 'Nhà Ở',
-      year: 2020,
-      location: 'Bình Chánh, TP.HCM',
-      description: '200 căn hộ với tiện ích đầy đủ, công viên trung tâm và trường học',
-    },
-    {
-      slug: 'benh-vien-da-khoa-tien-tien',
-      title: 'Bệnh Viện Đa Khoa Tiên Tiến',
-      category: 'Công Cộng',
-      year: 2022,
-      location: 'Hải Phòng',
-      description: 'Bệnh viện 300 giường trang bị công nghệ y tế hiện đại, kiến trúc thân thiện bệnh nhân',
-    },
-  ];
+const PER_PAGE = 8;
+
+async function getProjects(page: number) {
+  const skip = (page - 1) * PER_PAGE;
+  const res = await fetch(
+    `/api/projects?skip=${skip}&limit=${PER_PAGE}`,
+    { cache: "no-store" }
+  );
+  if (!res.ok) throw new Error("Failed to fetch");
+  return res.json();
+}
+
+function Card({ item, large }: any) {
+  return (
+    <div className="group cursor-pointer">
+      <div className="relative overflow-hidden border-2 border-transparent group-hover:border-red-500 transition">
+        <Image
+          src={item.imgs?.[0]?.link ?? "/fallback.jpg"}
+          alt=""
+          width={600}
+          height={400}
+          className={`w-full object-cover transition duration-500 group-hover:scale-102 ${large ? "h-[320px]" : "h-[220px]"}`}
+        />
+        <div className="absolute top-3 left-3 flex gap-2 text-xs">
+          <span className="bg-gray-800 text-white px-2 py-1 rounded">Houses</span>
+          <span className="bg-gray-600 text-white px-2 py-1 rounded">Sell</span>
+        </div>
+      </div>
+      <h3 className="mt-3 font-semibold text-gray-800">{item.name}</h3>
+      <p className="text-sm text-gray-400">{item.investor}</p>
+      <p className="mt-2 text-red-500 text-sm font-medium">xem chi tiết →</p>
+    </div>
+  );
+}
+
+function Pagination({ page, totalPages, onPageChange }: { page: number; totalPages: number; onPageChange: (p: number) => void }) {
+  return (
+    <div className="flex justify-center gap-2 mt-10">
+      <button
+        className={`px-3 py-1 border rounded ${page === 1 ? "pointer-events-none opacity-40" : ""}`}
+        onClick={() => onPageChange(page - 1)}
+        disabled={page === 1}
+      >
+        Prev
+      </button>
+      {Array.from({ length: totalPages }).map((_, i) => (
+        <button
+          key={i}
+          className={`px-3 py-1 border rounded ${page === i + 1 ? "bg-black text-white" : "hover:bg-gray-100"}`}
+          onClick={() => onPageChange(i + 1)}
+          disabled={page === i + 1}
+        >
+          {i + 1}
+        </button>
+      ))}
+      <button
+        className={`px-3 py-1 border rounded ${page === totalPages ? "pointer-events-none opacity-40" : ""}`}
+        onClick={() => onPageChange(page + 1)}
+        disabled={page === totalPages}
+      >
+        Next
+      </button>
+    </div>
+  );
+}
+
+export default function Page() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [projects, setProjects] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const page = Number(searchParams.get("page") || 1);
+  const totalPages = Math.ceil(total / PER_PAGE);
+
+  useEffect(() => {
+    setLoading(true);
+    getProjects(page)
+      .then((data) => {
+        setProjects(data.items);
+        setTotal(data.total);
+      })
+      .finally(() => setLoading(false));
+  }, [page]);
+
+  const handlePageChange = (p: number) => {
+    router.push(`?page=${p}`);
+  };
 
   return (
-    <main>
-      <section className="page-header">
-        <h1>Dự Án Của Chúng Tôi</h1>
-        <p>Những công trình tiêu biểu đã hoàn thành</p>
-      </section>
-
-      <section className="projects-list">
-        <div className="projects-grid">
-          {projects.map((project) => (
-            <div key={project.slug} className="project-card-item">
-              <div className="project-card-image">
-                <div className="project-emoji">🏗️</div>
-              </div>
-              <div className="project-card-content">
-                <span className="project-category">{project.category}</span>
-                <h3>{project.title}</h3>
-                <p className="project-location">📍 {project.location}</p>
-                <p className="project-year">Năm: {project.year}</p>
-                <p className="project-description">{project.description}</p>
-                <Link href={`/projects/${project.slug}`} className="btn btn-small">
-                  Xem Chi Tiết
-                </Link>
-              </div>
+    <section className="max-w-7xl mx-auto px-4 py-12">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl font-bold text-gray-800">Explore our featured listings</h2>
+        <p className="text-gray-400 text-sm max-w-md text-right">From modern city apartments to spacious family homes, find the one that feels just right.</p>
+      </div>
+      {loading ? (
+        <div className="text-center py-10">Đang tải dữ liệu...</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {projects.map((item: any, i: number) => (
+            <div key={item._id} className={i === 0 ? "md:col-span-2" : ""}>
+              <Card item={item} large={i === 0} />
             </div>
           ))}
         </div>
-      </section>
-
-      <section className="projects-stats">
-        <h2>Thành Tựu Của Chúng Tôi</h2>
-        <div className="stats-grid">
-          <div className="stat-item">
-            <h3>150+</h3>
-            <p>Dự Án Hoàn Thành</p>
-          </div>
-          <div className="stat-item">
-            <h3>500,000+</h3>
-            <p>M² Kiến Trúc</p>
-          </div>
-          <div className="stat-item">
-            <h3>100%</h3>
-            <p>Khách Hàng Hài Lòng</p>
-          </div>
-          <div className="stat-item">
-            <h3>$100M+</h3>
-            <p>Giá Trị Dự Án</p>
-          </div>
-        </div>
-      </section>
-    </main>
+      )}
+      <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
+    </section>
   );
 }
+
+// import Image from "next/image";
+// import Link from "next/link";
+
+// const PER_PAGE = 8;
+
+// async function getProjects(page: number) {
+//   const skip = (page - 1) * PER_PAGE;
+
+//   const res = await fetch(
+//     `${process.env.NEXT_PUBLIC_API_URL}/api/projects?skip=${skip}&limit=${PER_PAGE}`,
+//     { cache: "no-store" }
+//   );
+
+//   if (!res.ok) throw new Error("Failed to fetch");
+
+//   return res.json();
+// }
+
+// function Card({ item, large }: any) {
+//   return (
+//     <div className="group cursor-pointer">
+//       <div className="relative overflow-hidden border-2 border-transparent group-hover:border-red-500 transition">
+//         <Image
+//           src={item.imgs?.[0]?.link ?? "/fallback.jpg"}
+//           alt=""
+//           width={600}
+//           height={400}
+//           className={`w-full object-cover transition duration-500 group-hover:scale-102 ${large ? "h-[320px]" : "h-[220px]"
+//             }`}
+//         />
+
+//         <div className="absolute top-3 left-3 flex gap-2 text-xs">
+//           <span className="bg-gray-800 text-white px-2 py-1 rounded">
+//             Houses
+//           </span>
+//           <span className="bg-gray-600 text-white px-2 py-1 rounded">
+//             Sell
+//           </span>
+//         </div>
+//       </div>
+
+//       <h3 className="mt-3 font-semibold text-gray-800">{item.name}</h3>
+//       <p className="text-sm text-gray-400">{item.investor}</p>
+
+//       <p className="mt-2 text-red-500 text-sm font-medium">
+//         xem chi tiết →
+//       </p>
+//     </div>
+//   );
+// }
+
+// export default async function Page({ searchParams }: any) {
+//   const page = Number(searchParams.page || 1);
+
+//   const data = await getProjects(page);
+//   const projects = data.items;
+//   const total = data.total;
+
+//   const totalPages = Math.ceil(total / PER_PAGE);
+
+//   return (
+//     <section className="max-w-7xl mx-auto px-4 py-12">
+//       {/* header */}
+//       <div className="flex justify-between items-center mb-8">
+//         <h2 className="text-2xl font-bold text-gray-800">
+//           Explore our featured listings
+//         </h2>
+
+//         <p className="text-gray-400 text-sm max-w-md text-right">
+//           From modern city apartments to spacious family homes, find the one
+//           that feels just right.
+//         </p>
+//       </div>
+
+//       {/* grid */}
+//       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+//         {projects.map((item: any, i: number) => (
+//           <div key={item._id} className={i === 0 ? "md:col-span-2" : ""}>
+//             <Card item={item} large={i === 0} />
+//           </div>
+//         ))}
+//       </div>
+
+//       {/* pagination */}
+//       <div className="flex justify-center gap-2 mt-10">
+//         <Link
+//           href={`?page=${page - 1}`}
+//           className={`px-3 py-1 border rounded ${page === 1 && "pointer-events-none opacity-40"
+//             }`}
+//         >
+//           Prev
+//         </Link>
+
+//         {Array.from({ length: totalPages }).map((_, i) => (
+//           <Link
+//             key={i}
+//             href={`?page=${i + 1}`}
+//             className={`px-3 py-1 border rounded ${page === i + 1
+//                 ? "bg-black text-white"
+//                 : "hover:bg-gray-100"
+//               }`}
+//           >
+//             {i + 1}
+//           </Link>
+//         ))}
+
+//         <Link
+//           href={`?page=${page + 1}`}
+//           className={`px-3 py-1 border rounded ${page === totalPages && "pointer-events-none opacity-40"
+//             }`}
+//         >
+//           Next
+//         </Link>
+//       </div>
+//     </section>
+//   );
+// }

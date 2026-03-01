@@ -101,14 +101,13 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <div className="max-w-6xl mx-auto px-6 py-10">
+      <div className="max-w-6xl mx-auto px-6 py-24">
 
         {/* Header */}
         <div className="flex justify-between items-start mb-6">
-          <h1 className="text-3xl font-semibold">Oakridge Smart Home</h1>
+          <h1 className="text-3xl font-semibold">BIỆT THỰ SONG LẬP ID JUNCTION</h1>
           <p className="text-sm text-gray-500 max-w-md text-right">
-            Oakridge Smart Home in San Diego combines smart and clean technology,
-            sustainable materials, and redefining modern living.
+            Một chút 𝒇𝒂𝒓𝒎𝒉𝒐𝒖𝒔𝒆 nhẹ nhàng cho căn biệt thự song lập 𝐈𝐃 𝐉𝐔𝐍𝐂𝐓𝐈𝐎𝐍 (Nhơn Trạch, Long Thành).
           </p>
         </div>
 
@@ -124,29 +123,24 @@ export default function Home() {
 
         {/* Info Row */}
         <div className="grid grid-cols-4 gap-6 border-b pb-6 mb-8 text-sm">
-          <Info label="Service" value="Residential Construction" />
-          <Info label="Date" value="June 2025" />
-          <Info label="Location" value="San Diego, CA" />
-          <Info label="Client" value="Kevin & Marissa Lake" />
+          <Info label="Dịch vụ" value="Xây dựng nhà ở" />
+          <Info label="Ngày" value="Tháng 6, 2025" />
+          <Info label="Địa điểm" value="Nhơn Trạch, Long Thành" />
+          <Info label="Khách hàng" value="Mr Hoàng Sơn" />
         </div>
 
         {/* Value + About */}
         <div className="grid grid-cols-3 gap-10 mb-10">
           <div>
-            <p className="text-gray-500 mb-2">Project Value</p>
-            <h2 className="text-3xl font-bold text-orange-500">$1.2 Million</h2>
+            <p className="text-gray-500 mb-2">Vốn đầu tư</p>
+            <h2 className="text-3xl font-bold text-orange-500">1.2 tỷ VND</h2>
           </div>
 
           <div className="col-span-2">
-            <h3 className="text-xl font-semibold mb-3">About Project</h3>
+            <h3 className="text-xl font-semibold mb-3">Thông tin về dự án</h3>
             <p className="text-gray-600 leading-relaxed text-sm">
-              The Oakridge Smart Home project began with a clear client vision:
-              a tech-integrated, future-ready home that harmonizes comfort,
-              design, and sustainability. Our team worked closely with the Lakes
-              to create a custom build featuring solar panels, home automation,
-              energy-efficient HVAC, and minimalist interiors. The home includes
-              4 bedrooms, 3 bathrooms, a home office, and outdoor living space
-              designed for family gatherings and relaxation.
+              Mandala Kim Bôi Hòa Bình – biệt thự trên không nơi mang đến phong cách sống nghỉ dưỡng xa hoa, đẳng cấp giữa không trung. Một siêu phẩm đỉnh cao từ tập đoàn Apec Group.
+              Với nhiều năm kinh nghiệm trong tư vấn thiết kế ứng dụng tiến trình BIM cho các dự án nghỉ dưỡng thấp tầng và cao tầng Point Group tự hào khi là đơn vị tổng thầu thiết kế của dự án.
             </p>
           </div>
         </div>
@@ -163,18 +157,17 @@ export default function Home() {
 
         {/* Work Process */}
         <div>
-          <h3 className="text-2xl font-semibold mb-6">Work Process</h3>
+          <h3 className="text-2xl font-semibold mb-6">Quy trình làm việc</h3>
 
           <ul className="space-y-6 text-sm text-gray-600">
             <li className="flex gap-3">
               <Dot />
               <div>
                 <p className="font-medium text-gray-800">
-                  Client Consultation & Concept Development
+                  Tư vấn khách hàng & Phát triển ý tưởng
                 </p>
                 <p>
-                  We start by understanding clients' unique needs and preferences,
-                  defining goals and technology choices to create a tailored vision.
+                  Dự án Mandala Kim Bôi Hòa Bình được tư vấn thiết kế và triển khai hoàn toàn theo tiến trình BIM với cả 3 bộ môn Kiến trúc, kết cấu và cơ điện.Áp dụng nền tảng BIM cloud BIM360
                 </p>
               </div>
             </li>
@@ -183,12 +176,10 @@ export default function Home() {
               <Dot />
               <div>
                 <p className="font-medium text-gray-800">
-                  Architectural Design & Smart Planning
+                  Thiết kế kiến trúc & Lập kế hoạch thông minh
                 </p>
                 <p>
-                  We integrate smart home systems and sustainable features into
-                  the design, focusing on energy efficiency, eco-friendliness,
-                  and modern aesthetics.
+                  Mô hình BIM kết cấu được xây dựng trên phần mềm BIM Tool (Revit)  triển khai toàn bộ các cấu kiện và hồ sơ bản vẽ xuất ra từ mô hình duy nhất theo tiến trình BIM giúp tăng Khả năng phân tích và giải lập lường trước các giải pháp trên mô hình dẫn đến có được những thiết kế hợp lý hơn
                 </p>
               </div>
             </li>
@@ -241,13 +232,11 @@ export default function Home() {
             </span>
 
             <h2 className="text-5xl font-semibold mt-6">
-              Let’s Work Together
+              Hãy cùng nhau hợp tác!
             </h2>
 
             <p className="mt-6 text-gray-300 leading-relaxed max-w-md">
-              Whether you have a question, need more details about our
-              services, or want to discuss a potential collaboration, we're
-              here to help.
+              Dù bạn có câu hỏi, cần thêm thông tin về dịch vụ của chúng tôi, hay muốn thảo luận về một hợp tác tiềm năng, chúng tôi luôn sẵn sàng hỗ trợ.
             </p>
 
 
@@ -256,32 +245,32 @@ export default function Home() {
 
               <div className="border-t border-gray-500 pt-6 flex gap-16">
                 <div>
-                  <p className="text-gray-400">Message Us</p>
-                  <p className="mt-2 text-white">contact@bricknetbuilds.com</p>
+                  <p className="text-gray-400">Gửi tin nhắn</p>
+                  <p className="mt-2 text-white">dhs.studio.arch@gmail.com</p>
                 </div>
 
                 <div>
-                  <p className="text-gray-400">Call Us</p>
-                  <p className="mt-2 text-white">(555) 483-2190</p>
+                  <p className="text-gray-400">Gọi cho chúng tôi</p>
+                  <p className="mt-2 text-white">+84 983 239 596</p>
                 </div>
               </div>
 
 
               <div className="border-t border-gray-500 pt-6">
-                <p className="text-gray-400">Location</p>
+                <p className="text-gray-400">Đại chỉ</p>
                 <p className="mt-2 text-white">
-                  82 Westfield Industrial Blvd, San Diego, CA 92101
+                  7 Đông Hội, Thôn Trung Thôn, Đông Anh, Hà Nội, Việt Nam
                 </p>
               </div>
 
 
               <div className="border-t border-gray-500 pt-6">
-                <p className="text-gray-400">Business Hours</p>
+                <p className="text-gray-400">Giờ làm việc</p>
 
                 <div className="mt-2 space-y-1 text-white">
-                  <p>Monday - Friday, 8:00 AM - 6:00 PM</p>
-                  <p>Saturday: 9:00 AM - 2:00 PM</p>
-                  <p>Sunday: Closed</p>
+                  <p>Thứ Hai - Thứ Sáu, 7:00  - 17:00 </p>
+                  <p>Thứ Bảy: 9:00 - 14:00</p>
+                  <p>Chủ Nhật: Đóng cửa</p>
                 </div>
               </div>
 

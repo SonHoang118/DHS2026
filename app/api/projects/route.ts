@@ -2,18 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
-    // TODO: Fetch projects from database
-    return NextResponse.json({ message: 'Get projects' });
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 });
-  }
-}
+    const { searchParams } = new URL(request.url);
+    const skip = parseInt(searchParams.get("skip") || "0", 10);
+    const limit = parseInt(searchParams.get("limit") || "10", 10);
 
-export async function POST(request: NextRequest) {
-  try {
-    // TODO: Create a new project
-    return NextResponse.json({ message: 'Project created' }, { status: 201 });
+    const { getProjects } = await import("@/lib/services/projectService");
+    const { items, total } = await getProjects(skip, limit);
+
+    return NextResponse.json({
+      items,
+      total
+    });
+
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create project' }, { status: 500 });
+    console.error(error);
+    return NextResponse.json(
+      { error: 'Failed to fetch projects' },
+      { status: 500 }
+    );
   }
 }
