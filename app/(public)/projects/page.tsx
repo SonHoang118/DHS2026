@@ -4,9 +4,13 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import FaqSection from "@/components/FaqSection";
+import Pagination from "@/components/Pagination";
+import ProjectCard from "@/components/ProjectCard";
 
 const PER_PAGE = 8;
 
+
+// Fetch projects 
 async function getProjects(page: number) {
   const skip = (page - 1) * PER_PAGE;
   const res = await fetch(
@@ -17,85 +21,6 @@ async function getProjects(page: number) {
   return res.json();
 }
 
-
-function Card({ item, large, index }: any) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  // Tạo delay random cho mỗi lần render
-  const [delay] = useState(() => Math.floor(Math.random() * 400));
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new window.IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={ref}
-      className={`group cursor-pointer transition duration-700 ease-out transform ${visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
-      style={{ willChange: "transform, opacity", transitionDelay: `${delay}ms` }}
-    >
-      <div className="relative overflow-hidden border-2 border-transparent group-hover:border-red-500 transition">
-        <Image
-          src={item.imgs?.[0]?.link ?? "/fallback.jpg"}
-          alt=""
-          width={600}
-          height={400}
-          className={`w-full object-cover transition duration-500 group-hover:scale-102 ${large ? "h-[320px]" : "h-[220px]"}`}
-        />
-        <div className="absolute top-3 left-3 flex gap-2 text-xs">
-          <span className="bg-gray-800 text-white px-2 py-1 rounded">Houses</span>
-          <span className="bg-gray-600 text-white px-2 py-1 rounded">Sell</span>
-        </div>
-      </div>
-      <h3 className="mt-3 font-semibold text-gray-800">{item.name}</h3>
-      <p className="text-sm text-gray-400">{item.investor}</p>
-      <p className="mt-2 text-red-500 text-sm font-medium">xem chi tiết →</p>
-    </div>
-  );
-}
-
-function Pagination({ page, totalPages, onPageChange }: { page: number; totalPages: number; onPageChange: (p: number) => void }) {
-  return (
-    <div className="flex justify-center gap-2 mt-10">
-      <button
-        className={`px-3 py-1 border rounded ${page === 1 ? "pointer-events-none opacity-40" : ""}`}
-        onClick={() => onPageChange(page - 1)}
-        disabled={page === 1}
-      >
-        Prev
-      </button>
-      {Array.from({ length: totalPages }).map((_, i) => (
-        <button
-          key={i}
-          className={`px-3 py-1 border rounded ${page === i + 1 ? "bg-black text-white" : "hover:bg-gray-100"}`}
-          onClick={() => onPageChange(i + 1)}
-          disabled={page === i + 1}
-        >
-          {i + 1}
-        </button>
-      ))}
-      <button
-        className={`px-3 py-1 border rounded ${page === totalPages ? "pointer-events-none opacity-40" : ""}`}
-        onClick={() => onPageChange(page + 1)}
-        disabled={page === totalPages}
-      >
-        Next
-      </button>
-    </div>
-  );
-}
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -132,13 +57,12 @@ export default function Page() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {projects.map((item: any, i: number) => (
             <div key={item._id} className={i === 0 ? "md:col-span-2" : ""}>
-              <Card item={item} large={i === 0} index={i} />
+              <ProjectCard item={item} large={i === 0} index={i} />
             </div>
           ))}
         </div>
       )}
       <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
-
       <FaqSection/>
     </section>
   );

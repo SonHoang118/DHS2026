@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <main className="min-h-screen text-gray-800">
 
-      <div className="mx-auto mt-10 w-[1200px]" style={{ height: '500px' }}>
+      <div className="mx-auto mt-10 w-300" style={{ height: '500px' }}>
         <Slider
           images={[
             'https://miro.medium.com/v2/resize:fit:1400/1*uRC-z-KOuJHgCuruttLw5Q.jpeg',
@@ -23,6 +23,9 @@ export default function Home() {
           ]}
         />
       </div>
+
+
+      {/* Heading Xin chào */}
       <section className="py-14 text-center">
 
         {/* TITLE */}
@@ -48,10 +51,7 @@ export default function Home() {
       </section>
 
 
-
-
-
-
+      {/* Đôi chút về chúng tôi */}
       <section className="bg-[#f6f7f8] py-20 px-6">
         <div className="max-w-6xl mx-auto">
 
@@ -101,94 +101,104 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <div className="max-w-6xl mx-auto px-6 py-24">
 
-        {/* Header */}
-        <div className="flex justify-between items-start mb-6">
-          <h1 className="text-3xl font-semibold">BIỆT THỰ SONG LẬP ID JUNCTION</h1>
-          <p className="text-sm text-gray-500 max-w-md text-right">
-            Một chút 𝒇𝒂𝒓𝒎𝒉𝒐𝒖𝒔𝒆 nhẹ nhàng cho căn biệt thự song lập 𝐈𝐃 𝐉𝐔𝐍𝐂𝐓𝐈𝐎𝐍 (Nhơn Trạch, Long Thành).
-          </p>
-        </div>
 
-        {/* Hero Image */}
-        <div className="w-full h-[320px] relative rounded-md overflow-hidden mb-8">
-          <Image
-            src="/images/hero.jpg"
-            alt="hero"
-            fill
-            className="object-cover"
-          />
-        </div>
-
-        {/* Info Row */}
-        <div className="grid grid-cols-4 gap-6 border-b pb-6 mb-8 text-sm">
-          <Info label="Dịch vụ" value="Xây dựng nhà ở" />
-          <Info label="Ngày" value="Tháng 6, 2025" />
-          <Info label="Địa điểm" value="Nhơn Trạch, Long Thành" />
-          <Info label="Khách hàng" value="Mr Hoàng Sơn" />
-        </div>
-
-        {/* Value + About */}
-        <div className="grid grid-cols-3 gap-10 mb-10">
-          <div>
-            <p className="text-gray-500 mb-2">Vốn đầu tư</p>
-            <h2 className="text-3xl font-bold text-orange-500">1.2 tỷ VND</h2>
-          </div>
-
-          <div className="col-span-2">
-            <h3 className="text-xl font-semibold mb-3">Thông tin về dự án</h3>
-            <p className="text-gray-600 leading-relaxed text-sm">
-              Mandala Kim Bôi Hòa Bình – biệt thự trên không nơi mang đến phong cách sống nghỉ dưỡng xa hoa, đẳng cấp giữa không trung. Một siêu phẩm đỉnh cao từ tập đoàn Apec Group.
-              Với nhiều năm kinh nghiệm trong tư vấn thiết kế ứng dụng tiến trình BIM cho các dự án nghỉ dưỡng thấp tầng và cao tầng Point Group tự hào khi là đơn vị tổng thầu thiết kế của dự án.
+      {/* Dự án mới đây */}
+      <section>
+        <div className="max-w-6xl mx-auto px-6 py-24">
+          {/* Header */}
+          <div className="flex justify-between items-start mb-6">
+            <h1 className="text-3xl font-semibold">BIỆT THỰ SONG LẬP ID JUNCTION</h1>
+            <p className="text-sm text-gray-500 max-w-md text-right">
+              Một chút 𝒇𝒂𝒓𝒎𝒉𝒐𝒖𝒔𝒆 nhẹ nhàng cho căn biệt thự song lập 𝐈𝐃 𝐉𝐔𝐍𝐂𝐓𝐈𝐎𝐍 (Nhơn Trạch, Long Thành).
             </p>
           </div>
+
+          {/* Hero Image */}
+          <div className="w-full h-[320px] relative rounded-md overflow-hidden mb-8">
+            <Image
+              src="/images/hero.jpg"
+              alt="hero"
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          {/* Info Row */}
+          <div className="grid grid-cols-4 gap-6 border-b pb-6 mb-8 text-sm">
+            <Info label="Dịch vụ" value="Xây dựng nhà ở" />
+            <Info label="Ngày" value="Tháng 6, 2025" />
+            <Info label="Địa điểm" value="Nhơn Trạch, Long Thành" />
+            <Info label="Khách hàng" value="Mr Hoàng Sơn" />
+          </div>
+
+          {/* Value + About */}
+          <div className="grid grid-cols-3 gap-10 mb-10">
+            <div>
+              <p className="text-gray-500 mb-2">Vốn đầu tư</p>
+              <h2 className="text-3xl font-bold text-orange-500">1.2 tỷ VND</h2>
+            </div>
+
+            <div className="col-span-2">
+              <h3 className="text-xl font-semibold mb-3">Thông tin về dự án</h3>
+              <p className="text-gray-600 leading-relaxed text-sm">
+                Mandala Kim Bôi Hòa Bình – biệt thự trên không nơi mang đến phong cách sống nghỉ dưỡng xa hoa, đẳng cấp giữa không trung. Một siêu phẩm đỉnh cao từ tập đoàn Apec Group.
+                Với nhiều năm kinh nghiệm trong tư vấn thiết kế ứng dụng tiến trình BIM cho các dự án nghỉ dưỡng thấp tầng và cao tầng Point Group tự hào khi là đơn vị tổng thầu thiết kế của dự án.
+              </p>
+            </div>
+          </div>
+
+          {/* Image */}
+          <div className="w-full h-[260px] relative rounded-md overflow-hidden mb-12">
+            <Image
+              src="/images/interior.jpeg"
+              alt="interior"
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          {/* Work Process */}
+          <div>
+            <h3 className="text-2xl font-semibold mb-6">Quy trình làm việc</h3>
+
+            <ul className="space-y-6 text-sm text-gray-600">
+              <li className="flex gap-3">
+                <Dot />
+                <div>
+                  <p className="font-medium text-gray-800">
+                    Tư vấn khách hàng & Phát triển ý tưởng
+                  </p>
+                  <p>
+                    Dự án Mandala Kim Bôi Hòa Bình được tư vấn thiết kế và triển khai hoàn toàn theo tiến trình BIM với cả 3 bộ môn Kiến trúc, kết cấu và cơ điện.Áp dụng nền tảng BIM cloud BIM360
+                  </p>
+                </div>
+              </li>
+
+              <li className="flex gap-3">
+                <Dot />
+                <div>
+                  <p className="font-medium text-gray-800">
+                    Thiết kế kiến trúc & Lập kế hoạch thông minh
+                  </p>
+                  <p>
+                    Mô hình BIM kết cấu được xây dựng trên phần mềm BIM Tool (Revit)  triển khai toàn bộ các cấu kiện và hồ sơ bản vẽ xuất ra từ mô hình duy nhất theo tiến trình BIM giúp tăng Khả năng phân tích và giải lập lường trước các giải pháp trên mô hình dẫn đến có được những thiết kế hợp lý hơn
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
+      </section>
 
-        {/* Image */}
-        <div className="w-full h-[260px] relative rounded-md overflow-hidden mb-12">
-          <Image
-            src="/images/interior.jpeg"
-            alt="interior"
-            fill
-            className="object-cover"
-          />
-        </div>
 
-        {/* Work Process */}
-        <div>
-          <h3 className="text-2xl font-semibold mb-6">Quy trình làm việc</h3>
 
-          <ul className="space-y-6 text-sm text-gray-600">
-            <li className="flex gap-3">
-              <Dot />
-              <div>
-                <p className="font-medium text-gray-800">
-                  Tư vấn khách hàng & Phát triển ý tưởng
-                </p>
-                <p>
-                  Dự án Mandala Kim Bôi Hòa Bình được tư vấn thiết kế và triển khai hoàn toàn theo tiến trình BIM với cả 3 bộ môn Kiến trúc, kết cấu và cơ điện.Áp dụng nền tảng BIM cloud BIM360
-                </p>
-              </div>
-            </li>
-
-            <li className="flex gap-3">
-              <Dot />
-              <div>
-                <p className="font-medium text-gray-800">
-                  Thiết kế kiến trúc & Lập kế hoạch thông minh
-                </p>
-                <p>
-                  Mô hình BIM kết cấu được xây dựng trên phần mềm BIM Tool (Revit)  triển khai toàn bộ các cấu kiện và hồ sơ bản vẽ xuất ra từ mô hình duy nhất theo tiến trình BIM giúp tăng Khả năng phân tích và giải lập lường trước các giải pháp trên mô hình dẫn đến có được những thiết kế hợp lý hơn
-                </p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-
+      {/* Một vài dự án khác */}
       <ProjectsSection />
 
+
+
+      {/* Vị trí của chúng tôi */}
       <section className="text-center py-24">
 
         {/* badge */}
@@ -203,14 +213,13 @@ export default function Home() {
         <div className="flex justify-center my-8">
           <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d52341.83352513132!2d105.86872856610702!3d21.08382458817568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjHCsDA2JzAyLjciTiAxMDXCsDUzJzAzLjEiRQ!5e0!3m2!1svi!2sus!4v1772254206197!5m2!1svi!2sus" width="1000" height="450" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
         </div>
-
-
       </section>
 
 
+      {/* Hãy nói về dự án của bạn nào ! */}
       <section className="bg-[#f3f4f6] py-20 text-center">
         <h1 className="text-[56px] font-semibold text-[#2c3640]">
-            Hãy nói về dự án của bạn nào !
+          Hãy nói về dự án của bạn nào !
         </h1>
 
         <p className="mt-6 text-gray-500 max-w-2xl mx-auto text-lg">
@@ -344,11 +353,27 @@ export default function Home() {
 
         </div>
       </section>
+
+      
+
+      {/* Một vài bài viết khác */}
       <BlogSection />
+
+      {/* Câu hỏi thường gặp */}
       <FaqSection />
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
+
 function Info({ label, value }: { label: string; value: string }) {
   return (
     <div>
