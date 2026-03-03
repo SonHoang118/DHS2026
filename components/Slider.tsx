@@ -1,12 +1,16 @@
  'use client';
-import React from 'react';
+
 import SliderLib from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const Slider = ({ images, noDot }) => {
+type SliderProps = {
+    images: string[];
+};
+
+const Slider = ({ images }: SliderProps) => {
     const settings = {
-        dots: !noDot,
+        dots: false,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
@@ -25,7 +29,7 @@ const Slider = ({ images, noDot }) => {
     return (
         <div>
             <SliderLib {...settings}>
-                {images.map((image, index) => (
+                {images.map((image: string, index: number) => (
                     <div key={index}>
                         <img
                             src={image}
