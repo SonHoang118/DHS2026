@@ -1,56 +1,91 @@
 'use client';
 
+import Slider from '@/components/Slider';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
+
+type ProjectDetailData = {
+  _id?: string;
+  name?: string;
+  investor?: string;
+  location?: string;
+  date?: string;
+  decs?: string;
+  nFloors?: number;
+  style?: string[] | string;
+  area?: string;
+  totalCost?: string;
+  imgs?: any;
+  slugify?: string;
+};
+
+const normalizeImageList = (rawImages: any): string[] => {
+  if (!Array.isArray(rawImages)) {
+    return [];
+  }
+
+  return rawImages
+    .map((img) => {
+      if (typeof img === 'string') {
+        return img;
+      }
+      if (img && typeof img === 'object') {
+        return img.link || img.url || img.src || '';
+      }
+      return '';
+    })
+    .filter((url: string) => Boolean(url));
+};
+
+const normalizeStyleList = (rawStyle: any): string[] => {
+  if (Array.isArray(rawStyle)) {
+    return rawStyle.filter(Boolean);
+  }
+  if (typeof rawStyle === 'string' && rawStyle.trim()) {
+    return rawStyle
+      .split(',')
+      .map((part) => part.trim())
+      .filter(Boolean);
+  }
+  return [];
+};
 
 export default function ProjectDetail() {
   const params = useParams();
   const slug = params.slug as string;
+  const [project, setProject] = useState<ProjectDetailData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const detailsRef = useRef<HTMLDivElement>(null);
 
-  // Dummy projects - in real app, fetch from database
-  const projects: Record<string, any> = {
-    'thiet-ke-thi-cong-noi-that-tu-bep-nha-chi-minh': {
-      name: 'Thiết kế thi công nội thất tủ bếp nhà chị Minh',
-      investor: 'Mr. Minh',
-      location: 'Đằng Hải',
-      date: '2023-09-05',
-      decs: 'Dù xa hay gần. Khách hàng cần là chúng tôi có mặt. Thiết kế nội thất tủ bếp hiện đại với chất lượng cao, công nghệ mới nhất. Dự án được thực hiện trong 2 tháng với sự hài lòng hoàn toàn từ khách hàng.',
-      nFloors: 2,
-      style: ['Modern', 'Minimalist'],
-      area: '120m²',
-      totalCost: '50,000,000 VNĐ',
-      imgs: [
-        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop&crop=top',
-        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop&crop=top',
-        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop&crop=top',
-        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop&crop=top',
-        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop&crop=top',
-        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop&crop=top',
-        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop&crop=top',
-        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop&crop=top',
-      ],
-    },
-    'toa-nha-thuong-mai-trung-tam': {
-      name: 'Tòa Nhà Thương Mại Trung Tâm',
-      investor: 'Công ty Bất Động Sản ABC',
-      location: 'Quận 1, TP.HCM',
-      date: '2022-06-15',
-      decs: 'Tòa nhà 15 tầng với diện tích 5000m² bao gồm văn phòng, không gian bán lẻ và nhà hàng. Công trình được thiết kế theo tiêu chuẩn LEED Silver với các tính năng tiết kiệm năng lượng và thân thiện môi trường.',
-      nFloors: 15,
-      style: ['Commercial', 'Modern'],
-      area: '5000m²',
-      totalCost: '15,000,000 USD',
-      imgs: [
-        'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=600&fit=crop',
-      ],
-    },
-  };
+  const projectImages = useMemo(() => normalizeImageList(project?.imgs), [project?.imgs]);
+  const projectStyles = useMemo(() => normalizeStyleList(project?.style), [project?.style]);
 
-  const project = projects[slug] || projects['thiet-ke-thi-cong-noi-that-tu-bep-nha-chi-minh'];
+  useEffect(() => {
+    if (!slug) {
+      return;
+    }
+
+    setLoading(true);
+    setCurrentImageIndex(0);
+
+    fetch(`/api/projects/${encodeURIComponent(slug)}`, { cache: 'no-store' })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error('Project not found');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setProject(data);
+      })
+      .catch(() => {
+        setProject(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [slug]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -70,11 +105,11 @@ export default function ProjectDetail() {
   }, []);
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % project.imgs.length);
+    setCurrentImageIndex((prev) => (prev + 1) % projectImages.length);
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + project.imgs.length) % project.imgs.length);
+    setCurrentImageIndex((prev) => (prev - 1 + projectImages.length) % projectImages.length);
   };
 
   const imagesWithColumns = useMemo(() => {
@@ -97,15 +132,15 @@ export default function ProjectDetail() {
       };
     };
 
-    const seed = createSeedFromText(`${slug}-${project.imgs.length}`);
+    const seed = createSeedFromText(`${slug}-${projectImages.length}`);
     const rand = createPrng(seed);
 
     const result: { img: string; colSpan: number; idx: number }[] = [];
     let currentRowSum = 0;
 
-    project.imgs.forEach((img: string, idx: number) => {
+    projectImages.forEach((img: string, idx: number) => {
       const remaining = 4 - currentRowSum;
-      const isLastImage = idx === project.imgs.length - 1;
+      const isLastImage = idx === projectImages.length - 1;
 
       let colSpan: number;
 
@@ -125,51 +160,38 @@ export default function ProjectDetail() {
     });
 
     return result;
-  }, [project.imgs, slug]);
+  }, [projectImages, slug]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center text-gray-600">
+        Đang tải dự án...
+      </main>
+    );
+  }
+
+  if (!project) {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-4">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">Không tìm thấy dự án</h1>
+          <p className="text-gray-500">Dự án bạn chọn không tồn tại hoặc đã bị xóa.</p>
+        </div>
+      </main>
+    );
+  }
+
+  const displayDate = project.date ? new Date(project.date) : null;
+  const projectTitle = project.name || 'Dự án';
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 scroll-smooth">
       {/* Image Gallery Hero */}
-      <section className="relative bg-black overflow-hidden">
-        <div className="relative aspect-video bg-black flex items-center justify-center">
-          <img
-            src={project.imgs[currentImageIndex]}
-            alt={project.name}
-            className="w-full h-full object-cover"
-          />
-          {project.imgs.length > 1 && (
-            <>
-              <button
-                onClick={prevImage}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 transition-all z-10"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <button
-                onClick={nextImage}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 transition-all z-10"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
-                {project.imgs.map((_: string, idx: number) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentImageIndex(idx)}
-                    className={`w-2 h-2 transition-all ${
-                      idx === currentImageIndex ? 'bg-white w-6' : 'bg-white/50'
-                    }`}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </section>
+      <div className="mx-auto mt-10 w-300" style={{ height: '500px' }}>
+        <Slider
+          images={projectImages.length > 0 ? projectImages : ['/fallback.jpg']}
+        />
+      </div>
 
       {/* Project Info Section */}
       <section
@@ -181,10 +203,10 @@ export default function ProjectDetail() {
             {/* Main Info */}
             <div className="lg:col-span-2">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                {project.name}
+                {projectTitle}
               </h1>
               <div className="flex flex-wrap gap-3 mb-8">
-                {project.style?.map((s: string) => (
+                {projectStyles.map((s: string) => (
                   <span
                     key={s}
                     className="bg-[#C00707] text-white px-4 py-2 text-sm font-semibold"
@@ -195,18 +217,18 @@ export default function ProjectDetail() {
               </div>
 
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                {project.decs}
+                {project.decs || 'Đang cập nhật mô tả dự án.'}
               </p>
 
               {/* Key Stats */}
               <div className="grid md:grid-cols-2 gap-6 mb-8">
                 <div className="bg-gradient-to-br from-[#C00707]/10 to-[#FF4400]/10 p-6">
                   <h4 className="text-sm font-semibold text-gray-600 mb-2">Diện Tích</h4>
-                  <p className="text-2xl font-bold text-[#C00707]">{project.area}</p>
+                  <p className="text-2xl font-bold text-[#C00707]">{project.area || 'Đang cập nhật'}</p>
                 </div>
                 <div className="bg-gradient-to-br from-[#FF4400]/10 to-[#FFB33F]/10 p-6">
                   <h4 className="text-sm font-semibold text-gray-600 mb-2">Số Tầng</h4>
-                  <p className="text-2xl font-bold text-[#FF4400]">{project.nFloors}</p>
+                  <p className="text-2xl font-bold text-[#FF4400]">{project.nFloors ?? 'Đang cập nhật'}</p>
                 </div>
                 <div className="bg-gradient-to-br from-[#FFB33F]/10 to-[#134E8E]/10 p-6">
                   <h4 className="text-sm font-semibold text-gray-600 mb-2">Giá Trị Dự Án</h4>
@@ -215,7 +237,7 @@ export default function ProjectDetail() {
                 <div className="bg-gradient-to-br from-[#134E8E]/10 to-[#C00707]/10 p-6">
                   <h4 className="text-sm font-semibold text-gray-600 mb-2">Thời Gian</h4>
                   <p className="text-2xl font-bold text-[#134E8E]">
-                    {new Date(project.date).getFullYear()}
+                    {displayDate ? displayDate.getFullYear() : 'Đang cập nhật'}
                   </p>
                 </div>
               </div>
@@ -225,22 +247,22 @@ export default function ProjectDetail() {
             <div className="space-y-6">
               <div className="bg-gradient-to-br from-[#C00707]/10 to-[#FF4400]/10 p-8">
                 <h3 className="text-lg font-bold text-gray-800 mb-4">📍 Vị Trí</h3>
-                <p className="text-gray-700 mb-2">{project.location}</p>
+                <p className="text-gray-700 mb-2">{project.location || 'Đang cập nhật'}</p>
                 <p className="text-sm text-gray-500">
-                  {new Date(project.date).toLocaleDateString('vi-VN')}
+                  {displayDate ? displayDate.toLocaleDateString('vi-VN') : 'Đang cập nhật'}
                 </p>
               </div>
 
               <div className="bg-gradient-to-br from-[#FF4400]/10 to-[#FFB33F]/10 p-8">
                 <h3 className="text-lg font-bold text-gray-800 mb-4">👤 Chủ Đầu Tư</h3>
-                <p className="text-gray-700">{project.investor}</p>
+                <p className="text-gray-700">{project.investor || 'Đang cập nhật'}</p>
               </div>
 
-              {project.style && project.style.length > 0 && (
+              {projectStyles.length > 0 && (
                 <div className="bg-gradient-to-br from-[#134E8E]/10 to-[#C00707]/10 p-8">
                   <h3 className="text-lg font-bold text-gray-800 mb-4">🎨 Phong Cách</h3>
                   <div className="flex flex-wrap gap-2">
-                    {project.style.map((s: string) => (
+                    {projectStyles.map((s: string) => (
                       <span
                         key={s}
                         className="bg-white px-3 py-1 text-sm border border-[#134E8E] text-[#134E8E]"
@@ -255,7 +277,7 @@ export default function ProjectDetail() {
           </div>
 
           {/* Thumbnail Gallery */}
-          {project.imgs.length > 1 && (
+          {projectImages.length > 1 && (
             <div className="border-t pt-8">
               <h3 className="text-xl font-bold text-gray-800 mb-6">Hình Ảnh Dự Án</h3>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -280,7 +302,7 @@ export default function ProjectDetail() {
                       aspectRatio: colSpan === 1 ? '1' : colSpan === 2 ? '2' : colSpan === 3 ? '1.5' : '4'
                     }}
                   >
-                    <img src={img} alt={`${project.name} ${idx + 1}`} className="w-full h-full object-cover" />
+                    <img src={img} alt={`${projectTitle} ${idx + 1}`} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

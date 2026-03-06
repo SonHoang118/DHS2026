@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 
 type ProjectCardProps = {
@@ -26,8 +27,12 @@ export default function ProjectCard({ item, large, index }: ProjectCardProps) {
 		observer.observe(el);
 		return () => observer.disconnect();
 	}, []);
+	const projectPath = `/projects/${item.slugify || item._id}`;
+
 	return (
-		<div
+		<Link
+			href={projectPath}
+			aria-label={`Xem chi tiet du an ${item.name}`}
 			ref={ref}
 			className={`group cursor-pointer transition duration-700 ease-out transform ${visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
 			style={{ willChange: "transform, opacity", transitionDelay: `${delay}ms` }}
@@ -48,6 +53,6 @@ export default function ProjectCard({ item, large, index }: ProjectCardProps) {
 			<h3 className="mt-3 font-semibold text-gray-800">{item.name}</h3>
 			<p className="text-sm text-gray-400">{item.investor}</p>
 			<p className="mt-2 text-red-500 text-sm font-medium">xem chi tiết →</p>
-		</div>
+		</Link>
 	);
 }
