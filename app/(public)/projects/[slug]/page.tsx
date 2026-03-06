@@ -124,7 +124,7 @@ export default function ProjectDetail() {
       {/* Project Info Section */}
       <section
         ref={detailsRef}
-        className="py-20 px-4 md:px-8 lg:px-16 bg-white opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
+        className="py-20 px-4 md:px-8 lg:px-16 bg-white opacity-100 transform translate-y-0 transition-all duration-1000 ease-out"
       >
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-12 mb-12">
@@ -208,20 +208,74 @@ export default function ProjectDetail() {
           {project.imgs.length > 1 && (
             <div className="border-t pt-8">
               <h3 className="text-xl font-bold text-gray-800 mb-6">Hình Ảnh Dự Án</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {project.imgs.map((img: string, idx: number) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentImageIndex(idx)}
-                    className={`relative aspect-square overflow-hidden transition-all ${
-                      idx === currentImageIndex
-                        ? 'ring-4 ring-[#C00707]'
-                        : 'hover:opacity-80'
-                    }`}
-                  >
-                    <img src={img} alt={`${project.name} ${idx + 1}`} className="w-full h-full object-cover" />
-                  </button>
-                ))}
+              <div className="grid grid-cols-4 gap-4">
+                {(() => {
+                  // Function to assign deterministic columns ensuring no gaps at end of rows (except last row)
+                  const assignColumns = (images: string[]) => {
+                    const result: { img: string; colSpan: number; idx: number }[] = [];
+                    let currentRowSum = 0;
+                    let rowImages: { img: string; colSpan: number; idx: number }[] = [];
+
+                    // Predefined column spans to cycle through for consistency
+                    const columnSpans = [1, 2, 3, 2, 1, 3, 1, 4, 2, 1, 3, 2];
+
+                    images.forEach((img, idx) => {
+                      let colSpan: number;
+                      const remaining = 4 - currentRowSum;
+
+                      if (remaining === 0) {
+                        // Start new row
+                        result.push(...rowImages);
+                        rowImages = [];
+                        currentRowSum = 0;
+                      }
+
+                      // Use deterministic span from predefined array
+                      const preferredSpan = columnSpans[idx % columnSpans.length];
+
+                      if (preferredSpan <= remaining) {
+                        colSpan = preferredSpan;
+                      } else {
+                        // Fallback to fit remaining space
+                        colSpan = remaining;
+                      }
+
+                      rowImages.push({ img, colSpan, idx });
+                      currentRowSum += colSpan;
+
+                      if (currentRowSum === 4) {
+                        result.push(...rowImages);
+                        rowImages = [];
+                        currentRowSum = 0;
+                      }
+                    });
+
+                    // Add remaining images (last row can be incomplete)
+                    result.push(...rowImages);
+
+                    return result;
+                  };
+
+                  const imagesWithColumns = assignColumns(project.imgs);
+
+                  return imagesWithColumns.map(({ img, colSpan, idx }) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentImageIndex(idx)}
+                      className={`relative overflow-hidden transition-all ${
+                        idx === currentImageIndex
+                          ? 'ring-4 ring-[#C00707]'
+                          : 'hover:opacity-80'
+                      }`}
+                      style={{
+                        gridColumn: `span ${colSpan}`,
+                        aspectRatio: colSpan === 1 ? '1' : colSpan === 2 ? '2' : colSpan === 3 ? '1.5' : '4'
+                      }}
+                    >
+                      <img src={img} alt={`${project.name} ${idx + 1}`} className="w-full h-full object-cover" />
+                    </button>
+                  ));
+                })()}
               </div>
             </div>
           )}
