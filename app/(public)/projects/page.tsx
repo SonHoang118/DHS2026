@@ -47,6 +47,8 @@ export default function Page() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-12">
+      
+
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800">Explore our featured listings</h2>
         <p className="text-gray-400 text-sm max-w-md text-right">From modern city apartments to spacious family homes, find the one that feels just right.</p>

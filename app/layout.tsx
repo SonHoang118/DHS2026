@@ -18,6 +18,12 @@ export const metadata: Metadata = {
   title: "Công Ty Thiết Kế & Thi Công Kiến Trúc Chuyên Nghiệp",
   description: "Giải pháp kiến trúc toàn diện từ thiết kế đến thi công. Hơn 10 năm kinh nghiệm trong lĩnh vực kiến trúc và xây dựng.",
   keywords: "kiến trúc, thi công, thiết kế, xây dựng, tư vấn",
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
+    date: false,
+  },
 };
 
 export default function RootLayout({
@@ -31,7 +37,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
-        {children}
+        <div className="pt-20 md:pt-24">{children}</div>
         <Footer />
       </body>
     </html>

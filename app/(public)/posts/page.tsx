@@ -22,8 +22,6 @@ async function getPosts(page: number) {
 }
 
 
-
-
 export default function Posts() {
   const searchParams = useSearchParams();
   const router = useRouter();

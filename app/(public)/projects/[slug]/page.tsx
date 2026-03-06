@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 export default function ProjectDetail() {
   const params = useParams();
@@ -76,6 +76,56 @@ export default function ProjectDetail() {
   const prevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + project.imgs.length) % project.imgs.length);
   };
+
+  const imagesWithColumns = useMemo(() => {
+    const createSeedFromText = (text: string) => {
+      let hash = 2166136261;
+      for (let i = 0; i < text.length; i += 1) {
+        hash ^= text.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      return hash >>> 0;
+    };
+
+    const createPrng = (seed: number) => {
+      let t = seed;
+      return () => {
+        t += 0x6d2b79f5;
+        let r = Math.imul(t ^ (t >>> 15), t | 1);
+        r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
+        return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+      };
+    };
+
+    const seed = createSeedFromText(`${slug}-${project.imgs.length}`);
+    const rand = createPrng(seed);
+
+    const result: { img: string; colSpan: number; idx: number }[] = [];
+    let currentRowSum = 0;
+
+    project.imgs.forEach((img: string, idx: number) => {
+      const remaining = 4 - currentRowSum;
+      const isLastImage = idx === project.imgs.length - 1;
+
+      let colSpan: number;
+
+      if (isLastImage) {
+        colSpan = remaining;
+      } else {
+        const maxSpan = Math.min(3, remaining);
+        colSpan = Math.floor(rand() * maxSpan) + 1;
+      }
+
+      result.push({ img, colSpan, idx });
+      currentRowSum += colSpan;
+
+      if (currentRowSum === 4) {
+        currentRowSum = 0;
+      }
+    });
+
+    return result;
+  }, [project.imgs, slug]);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 scroll-smooth">
@@ -208,74 +258,31 @@ export default function ProjectDetail() {
           {project.imgs.length > 1 && (
             <div className="border-t pt-8">
               <h3 className="text-xl font-bold text-gray-800 mb-6">Hình Ảnh Dự Án</h3>
-              <div className="grid grid-cols-4 gap-4">
-                {(() => {
-                  // Function to assign deterministic columns ensuring no gaps at end of rows (except last row)
-                  const assignColumns = (images: string[]) => {
-                    const result: { img: string; colSpan: number; idx: number }[] = [];
-                    let currentRowSum = 0;
-                    let rowImages: { img: string; colSpan: number; idx: number }[] = [];
-
-                    // Predefined column spans to cycle through for consistency
-                    const columnSpans = [1, 2, 3, 2, 1, 3, 1, 4, 2, 1, 3, 2];
-
-                    images.forEach((img, idx) => {
-                      let colSpan: number;
-                      const remaining = 4 - currentRowSum;
-
-                      if (remaining === 0) {
-                        // Start new row
-                        result.push(...rowImages);
-                        rowImages = [];
-                        currentRowSum = 0;
-                      }
-
-                      // Use deterministic span from predefined array
-                      const preferredSpan = columnSpans[idx % columnSpans.length];
-
-                      if (preferredSpan <= remaining) {
-                        colSpan = preferredSpan;
-                      } else {
-                        // Fallback to fit remaining space
-                        colSpan = remaining;
-                      }
-
-                      rowImages.push({ img, colSpan, idx });
-                      currentRowSum += colSpan;
-
-                      if (currentRowSum === 4) {
-                        result.push(...rowImages);
-                        rowImages = [];
-                        currentRowSum = 0;
-                      }
-                    });
-
-                    // Add remaining images (last row can be incomplete)
-                    result.push(...rowImages);
-
-                    return result;
-                  };
-
-                  const imagesWithColumns = assignColumns(project.imgs);
-
-                  return imagesWithColumns.map(({ img, colSpan, idx }) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentImageIndex(idx)}
-                      className={`relative overflow-hidden transition-all ${
-                        idx === currentImageIndex
-                          ? 'ring-4 ring-[#C00707]'
-                          : 'hover:opacity-80'
-                      }`}
-                      style={{
-                        gridColumn: `span ${colSpan}`,
-                        aspectRatio: colSpan === 1 ? '1' : colSpan === 2 ? '2' : colSpan === 3 ? '1.5' : '4'
-                      }}
-                    >
-                      <img src={img} alt={`${project.name} ${idx + 1}`} className="w-full h-full object-cover" />
-                    </button>
-                  ));
-                })()}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {imagesWithColumns.map(({ img, colSpan, idx }) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`relative overflow-hidden transition-all ${
+                      colSpan === 1
+                        ? 'md:col-span-1'
+                        : colSpan === 2
+                          ? 'md:col-span-2'
+                          : colSpan === 3
+                            ? 'md:col-span-3'
+                            : 'md:col-span-4'
+                    } ${
+                      idx === currentImageIndex
+                        ? 'ring-4 ring-[#C00707]'
+                        : 'hover:opacity-80'
+                    }`}
+                    style={{
+                      aspectRatio: colSpan === 1 ? '1' : colSpan === 2 ? '2' : colSpan === 3 ? '1.5' : '4'
+                    }}
+                  >
+                    <img src={img} alt={`${project.name} ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
               </div>
             </div>
           )}

@@ -21,7 +21,12 @@ export default function Footer() {
             <ul className="space-y-4 text-[17px] leading-relaxed">
               <li><b>Công ty:</b> DHStudio tư vấn và thiết kế kiến trúc</li>
               <li><b>Địa chỉ:</b> 7 Đông Hội, Thôn Trung Thôn, Đông Anh, Hà Nội, Việt Nam</li>
-              <li><b>Hotline:</b> 0983239596</li>
+              <li>
+                <b>Hotline:</b>{" "}
+                <a href="tel:0983239596" className="underline-offset-2 hover:underline">
+                  0983239596
+                </a>
+              </li>
               <li><b>Email:</b> dhs.studio.arch@gmail.com</li>
               <li><b>Website:</b> https://www.dhstudio.com.vn</li>
             </ul>
