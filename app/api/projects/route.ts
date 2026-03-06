@@ -5,9 +5,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const skip = parseInt(searchParams.get("skip") || "0", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
+    const q = searchParams.get("q") || "";
 
     const { getProjects } = await import("@/lib/services/projectService");
-    const { items, total } = await getProjects(skip, limit);
+    const { items, total } = await getProjects(skip, limit, q);
 
     return NextResponse.json({
       items,
