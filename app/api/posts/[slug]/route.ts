@@ -3,67 +3,8 @@ import mongoose from "mongoose";
 import { connectDB } from "@/lib/mongodb";
 import { Post } from "@/models/Post";
 import { deleteCloudinaryImage } from "@/lib/cloudinary";
-
-type PostImage = {
-  link: string;
-  id: string;
-};
-
-function createSlug(value: string) {
-  return value
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-function normalizeImages(rawImages: unknown): PostImage[] {
-  if (!Array.isArray(rawImages)) {
-    return [];
-  }
-
-  const normalized = rawImages
-    .map((item) => {
-      if (typeof item === "string") {
-        const link = item.trim();
-        return link ? { link, id: "" } : null;
-      }
-
-      if (item && typeof item === "object") {
-        const link =
-          typeof (item as Record<string, unknown>).link === "string"
-            ? (item as Record<string, string>).link.trim()
-            : "";
-        const id =
-          typeof (item as Record<string, unknown>).id === "string"
-            ? (item as Record<string, string>).id.trim()
-            : "";
-
-        if (!link) {
-          return null;
-        }
-
-        return { link, id };
-      }
-
-      return null;
-    })
-    .filter((item): item is PostImage => Boolean(item));
-
-  const seen = new Set<string>();
-  return normalized.filter((image) => {
-    const key = image.id || image.link;
-    if (seen.has(key)) {
-      return false;
-    }
-    seen.add(key);
-    return true;
-  });
-}
+import { normalizeImageRecords } from "@/utils/image";
+import { createSlug } from "@/utils/slug";
 
 function normalizeContent(rawContent: unknown) {
   if (typeof rawContent === "string") {
@@ -133,7 +74,7 @@ function extractContentImageUrls(rawContent: string) {
 
 function collectPostCloudinaryIds(params: {
   imgTitle: string;
-  imgsId: PostImage[];
+  imgsId: Array<{ link: string; id: string }>;
   content: string;
 }) {
   const ids = new Set<string>();
@@ -239,7 +180,7 @@ export async function PUT(
     const title = typeof body?.title === 'string' ? body.title.trim() : '';
     const imgTitle = typeof body?.imgTitle === 'string' ? body.imgTitle.trim() : '';
     const content = normalizeContent(body?.content);
-    const imgsId = normalizeImages(body?.imgsId);
+    const imgsId = normalizeImageRecords(body?.imgsId);
 
     if (!title) {
       return NextResponse.json({ error: 'Missing field: title' }, { status: 400 });
@@ -251,7 +192,7 @@ export async function PUT(
 
     const previousImageIds = collectPostCloudinaryIds({
       imgTitle: String(post.imgTitle || ''),
-      imgsId: normalizeImages(post.imgsId),
+      imgsId: normalizeImageRecords(post.imgsId),
       content: String(post.content || ''),
     });
 
@@ -308,7 +249,7 @@ export async function DELETE(
     const allImageIds = Array.from(
       collectPostCloudinaryIds({
         imgTitle: String(post.imgTitle || ''),
-        imgsId: normalizeImages(post.imgsId),
+        imgsId: normalizeImageRecords(post.imgsId),
         content: String(post.content || ''),
       })
     );

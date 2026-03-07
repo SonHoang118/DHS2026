@@ -1,6 +1,9 @@
 'use client';
 
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import ProjectModal from '@/components/admin/ProjectModal';
+import { normalizeImageRecords } from '@/utils/image';
+import { createSlug } from '@/utils/slug';
 
 type ProjectImage = {
   link: string;
@@ -38,11 +41,6 @@ type ProjectItem = ProjectFormData & {
   id: string;
 };
 
-type ToastState = {
-  type: 'success' | 'error';
-  message: string;
-} | null;
-
 const initialForm: ProjectFormData = {
   imgs: [],
   name: '',
@@ -58,55 +56,6 @@ const initialForm: ProjectFormData = {
   slugify: '',
 };
 
-function normalizeProjectImages(rawImages: unknown): ProjectImage[] {
-  if (!Array.isArray(rawImages)) {
-    return [];
-  }
-
-  const normalized = rawImages
-    .map((img) => {
-      if (typeof img === 'string') {
-        const link = img.trim();
-        return link ? { link, id: '' } : null;
-      }
-
-      if (img && typeof img === 'object') {
-        const imageObj = img as Record<string, unknown>;
-        const link = typeof imageObj.link === 'string' ? imageObj.link.trim() : '';
-        const id = typeof imageObj.id === 'string' ? imageObj.id.trim() : '';
-        if (!link) {
-          return null;
-        }
-        return { link, id };
-      }
-
-      return null;
-    })
-    .filter((item): item is ProjectImage => Boolean(item));
-
-  const seen = new Set<string>();
-  return normalized.filter((image) => {
-    const key = image.id || image.link;
-    if (seen.has(key)) {
-      return false;
-    }
-    seen.add(key);
-    return true;
-  });
-}
-
-function createSlug(value: string) {
-  return value
-    .trim()
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
-}
-
 export default function AdminProjects() {
   const [projects, setProjects] = useState<ProjectItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -121,16 +70,8 @@ export default function AdminProjects() {
   const [isUploadingImages, setIsUploadingImages] = useState(false);
   const [isSavingProject, setIsSavingProject] = useState(false);
   const [deletingProjectId, setDeletingProjectId] = useState<string | null>(null);
-  const [toast, setToast] = useState<ToastState>(null);
   const [pendingImageFiles, setPendingImageFiles] = useState<File[]>([]);
   const [pendingImagePreviews, setPendingImagePreviews] = useState<string[]>([]);
-
-  const showToast = (type: 'success' | 'error', message: string) => {
-    setToast({ type, message });
-    window.setTimeout(() => {
-      setToast((prev) => (prev?.message === message ? null : prev));
-    }, 2600);
-  };
 
   const fetchProjects = async () => {
     try {
@@ -144,7 +85,7 @@ export default function AdminProjects() {
       const items = Array.isArray(data?.items) ? data.items : [];
       const mapped: ProjectItem[] = items.map((item: any) => ({
         id: String(item?._id || item?.id || ''),
-        imgs: normalizeProjectImages(item?.imgs),
+        imgs: normalizeImageRecords(item?.imgs),
         name: String(item?.name || ''),
         investor: String(item?.investor || ''),
         totalCost: String(item?.totalCost || ''),
@@ -169,7 +110,7 @@ export default function AdminProjects() {
       setProjects(mapped);
     } catch {
       setProjects([]);
-      showToast('error', 'Khong tai duoc danh sach du an');
+      window.alert('Khong tai duoc danh sach du an');
     } finally {
       setIsLoadingProjects(false);
     }
@@ -188,7 +129,7 @@ export default function AdminProjects() {
       setStyles(items);
     } catch {
       setStyles([]);
-      showToast('error', 'Khong tai duoc danh sach style');
+      window.alert('Khong tai duoc danh sach style');
     } finally {
       setIsLoadingStyles(false);
     }
@@ -207,7 +148,7 @@ export default function AdminProjects() {
       setCategories(items);
     } catch {
       setCategories([]);
-      showToast('error', 'Khong tai duoc danh sach category');
+      window.alert('Khong tai duoc danh sach category');
     } finally {
       setIsLoadingCategories(false);
     }
@@ -221,6 +162,14 @@ export default function AdminProjects() {
 
   const handleChange = (field: keyof ProjectFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleNameChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      name: value,
+      slugify: createSlug(value),
+    }));
   };
 
   const handleImagesUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -247,6 +196,23 @@ export default function AdminProjects() {
     setPendingImagePreviews([]);
   };
 
+  const handleRemoveExistingImage = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      imgs: prev.imgs.filter((_, imageIdx) => imageIdx !== index),
+    }));
+  };
+
+  const handleRemovePendingImage = (index: number) => {
+    const previewUrl = pendingImagePreviews[index];
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
+    setPendingImagePreviews((prev) => prev.filter((_, imageIdx) => imageIdx !== index));
+    setPendingImageFiles((prev) => prev.filter((_, imageIdx) => imageIdx !== index));
+  };
+
   const uploadPendingImages = async () => {
     if (pendingImageFiles.length === 0) {
       return [] as ProjectImage[];
@@ -264,7 +230,7 @@ export default function AdminProjects() {
       throw new Error(data?.error || 'Upload anh that bai');
     }
 
-    const images = normalizeProjectImages(data?.images);
+    const images = normalizeImageRecords(data?.images);
     if (images.length !== pendingImageFiles.length) {
       throw new Error('So luong anh upload khong hop le');
     }
@@ -349,14 +315,14 @@ export default function AdminProjects() {
       });
       const data = await response.json();
       if (!response.ok) {
-        showToast('error', data?.error || 'Khong the xoa du an');
+        window.alert(data?.error || 'Khong the xoa du an');
         return;
       }
 
       await Promise.all([fetchProjects(), fetchStyles()]);
-      showToast('success', 'Da xoa du an');
+      window.alert('Da xoa du an');
     } catch {
-      showToast('error', 'Loi ket noi khi xoa du an');
+      window.alert('Loi ket noi khi xoa du an');
     } finally {
       setDeletingProjectId(null);
     }
@@ -401,18 +367,18 @@ export default function AdminProjects() {
 
       if (!response.ok) {
         setFormError(data?.error || 'Khong the luu du an');
-        showToast('error', data?.error || 'Khong the luu du an');
+        window.alert(data?.error || 'Khong the luu du an');
         return;
       }
 
       await Promise.all([fetchProjects(), fetchStyles(), fetchCategories()]);
       resetPendingImages();
-      showToast('success', editingProjectId ? 'Cap nhat du an thanh cong' : 'Tao du an thanh cong');
+      window.alert(editingProjectId ? 'Cap nhat du an thanh cong' : 'Tao du an thanh cong');
       closeModal();
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Loi ket noi khi luu du an';
       setFormError(message);
-      showToast('error', message);
+      window.alert(message);
     } finally {
       setIsSavingProject(false);
       setIsUploadingImages(false);
@@ -421,18 +387,6 @@ export default function AdminProjects() {
 
   return (
     <div className="space-y-6">
-      {toast && (
-        <div
-          className={`fixed right-4 top-20 z-70 rounded-xl border px-4 py-3 text-sm shadow-lg ${
-            toast.type === 'success'
-              ? 'border-[#9ad5b2] bg-[#effaf2] text-[#1b5e3d]'
-              : 'border-[#f2b9b4] bg-[#fff3f2] text-[#9a2f24]'
-          }`}
-        >
-          {toast.message}
-        </div>
-      )}
-
       <section className="rounded-3xl border border-[#153631]/10 bg-[linear-gradient(120deg,#173f3a_0%,#27554e_100%)] p-6 text-white shadow-[0_18px_40px_rgba(14,35,31,0.2)] sm:p-7">
         <p className="text-xs uppercase tracking-[0.2em] text-[#e8d0b2]">Project management</p>
         <h2 className="mt-3 text-2xl font-semibold">Quan ly du an</h2>
@@ -522,268 +476,29 @@ export default function AdminProjects() {
         </div>
       </section>
 
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
-          <div className="max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl sm:p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h4 className="text-lg font-semibold text-[#13322f]">
-                {editingProjectId ? 'Chinh sua du an' : 'Them du an moi'}
-              </h4>
-              <button
-                type="button"
-                onClick={closeModal}
-                className="rounded-lg border border-[#153631]/20 px-3 py-1 text-sm text-[#173531] hover:bg-[#f4f8f6]"
-              >
-                Dong
-              </button>
-            </div>
-
-            {formError && (
-              <div className="mb-4 rounded-lg border border-[#f2b9b4] bg-[#fff3f2] px-4 py-2 text-sm text-[#9a2f24]">
-                {formError}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1 sm:col-span-2">
-                <label className="text-sm font-medium text-[#1a3834]">imgs</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleImagesUpload}
-                  className="w-full rounded-lg border border-[#153631]/20 px-3 py-2 text-sm outline-none file:mr-3 file:rounded-md file:border-0 file:bg-[#173531] file:px-3 file:py-1.5 file:text-white hover:file:bg-[#0f2926]"
-                />
-                <p className="text-xs text-[#667d73]">
-                  {isUploadingImages
-                    ? 'Dang upload anh len Cloudinary...'
-                    : `Da co ${formData.imgs.length} anh da luu, ${pendingImageFiles.length} anh moi`}
-                </p>
-                {(formData.imgs.length > 0 || pendingImagePreviews.length > 0) && (
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                    {formData.imgs.map((img, idx) => (
-                      <div key={`${img.id || img.link}-${idx}`} className="group relative overflow-hidden rounded-lg border border-[#153631]/20">
-                        <img src={img.link} alt={`project-${idx}`} className="h-20 w-full object-cover" />
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              imgs: prev.imgs.filter((_, imageIdx) => imageIdx !== idx),
-                            }))
-                          }
-                          className="absolute right-1 top-1 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white"
-                        >
-                          X
-                        </button>
-                      </div>
-                    ))}
-                    {pendingImagePreviews.map((img, idx) => (
-                      <div key={`${img}-${idx}`} className="group relative overflow-hidden rounded-lg border border-[#153631]/20">
-                        <img src={img} alt={`new-project-${idx}`} className="h-20 w-full object-cover" />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            URL.revokeObjectURL(img);
-                            setPendingImagePreviews((prev) => prev.filter((_, imageIdx) => imageIdx !== idx));
-                            setPendingImageFiles((prev) => prev.filter((_, imageIdx) => imageIdx !== idx));
-                          }}
-                          className="absolute right-1 top-1 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white"
-                        >
-                          X
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-[#1a3834]">name</label>
-                <input
-                  value={formData.name}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setFormData((prev) => ({
-                      ...prev,
-                      name: value,
-                      slugify: createSlug(value),
-                    }));
-                  }}
-                  className="w-full rounded-lg border border-[#153631]/20 px-3 py-2 text-sm outline-none focus:border-[#173531]"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-[#1a3834]">investor</label>
-                <input
-                  value={formData.investor}
-                  onChange={(e) => handleChange('investor', e.target.value)}
-                  className="w-full rounded-lg border border-[#153631]/20 px-3 py-2 text-sm outline-none focus:border-[#173531]"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-[#1a3834]">totalCost</label>
-                <input
-                  value={formData.totalCost}
-                  onChange={(e) => handleChange('totalCost', e.target.value)}
-                  placeholder="120 ty VND"
-                  className="w-full rounded-lg border border-[#153631]/20 px-3 py-2 text-sm outline-none focus:border-[#173531]"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-[#1a3834]">location</label>
-                <input
-                  value={formData.location}
-                  onChange={(e) => handleChange('location', e.target.value)}
-                  className="w-full rounded-lg border border-[#153631]/20 px-3 py-2 text-sm outline-none focus:border-[#173531]"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-[#1a3834]">date</label>
-                <input
-                  type="date"
-                  value={formData.date}
-                  onChange={(e) => handleChange('date', e.target.value)}
-                  className="w-full rounded-lg border border-[#153631]/20 px-3 py-2 text-sm outline-none focus:border-[#173531]"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-[#1a3834]">nFloors</label>
-                <input
-                  value={formData.nFloors}
-                  onChange={(e) => handleChange('nFloors', e.target.value)}
-                  className="w-full rounded-lg border border-[#153631]/20 px-3 py-2 text-sm outline-none focus:border-[#173531]"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-[#1a3834]">style</label>
-                <div className="max-h-40 space-y-2 overflow-y-auto rounded-lg border border-[#153631]/20 px-3 py-2">
-                  {isLoadingStyles && <p className="text-sm text-[#667d73]">Dang tai style...</p>}
-                  {!isLoadingStyles && styles.length === 0 && (
-                    <p className="text-sm text-[#667d73]">Khong co style de chon</p>
-                  )}
-                  {!isLoadingStyles && styles.map((styleOption) => (
-                    <label key={styleOption._id} className="flex items-center gap-2 text-sm text-[#1a3834]">
-                      <input
-                        type="checkbox"
-                        checked={formData.style.includes(styleOption.name)}
-                        onChange={() => handleStyleToggle(styleOption.name)}
-                        className="h-4 w-4 rounded border-[#153631]/30"
-                      />
-                      <span>{styleOption.name}</span>
-                    </label>
-                  ))}
-                </div>
-                {formData.style.length > 0 && (
-                  <div className="space-y-1 text-xs text-[#667d73]">
-                    {formData.style.map((styleName) => {
-                      const selected = styles.find((s) => s.name === styleName);
-                      const list = selected?.id_projects_list || [];
-                      return (
-                        <p key={styleName}>
-                          {styleName}: {list.length > 0 ? list.join(', ') : '[]'}
-                        </p>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-[#1a3834]">category</label>
-                <div className="max-h-40 space-y-2 overflow-y-auto rounded-lg border border-[#153631]/20 px-3 py-2">
-                  {isLoadingCategories && <p className="text-sm text-[#667d73]">Dang tai category...</p>}
-                  {!isLoadingCategories && categories.length === 0 && (
-                    <p className="text-sm text-[#667d73]">Khong co category de chon</p>
-                  )}
-                  {!isLoadingCategories && categories.map((categoryOption) => (
-                    <label key={categoryOption._id} className="flex items-center gap-2 text-sm text-[#1a3834]">
-                      <input
-                        type="checkbox"
-                        checked={formData.category.includes(categoryOption.name)}
-                        onChange={() => handleCategoryToggle(categoryOption.name)}
-                        className="h-4 w-4 rounded border-[#153631]/30"
-                      />
-                      <span>{categoryOption.name}</span>
-                    </label>
-                  ))}
-                </div>
-                {formData.category.length > 0 && (
-                  <div className="space-y-1 text-xs text-[#667d73]">
-                    {formData.category.map((categoryName) => {
-                      const selected = categories.find((c) => c.name === categoryName);
-                      const list = selected?.id_projects_list || [];
-                      return (
-                        <p key={categoryName}>
-                          {categoryName}: {list.length > 0 ? list.join(', ') : '[]'}
-                        </p>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-[#1a3834]">area</label>
-                <input
-                  value={formData.area}
-                  onChange={(e) => handleChange('area', e.target.value)}
-                  placeholder="5400m2"
-                  className="w-full rounded-lg border border-[#153631]/20 px-3 py-2 text-sm outline-none focus:border-[#173531]"
-                />
-              </div>
-
-              <div className="space-y-1 sm:col-span-2">
-                <label className="text-sm font-medium text-[#1a3834]">slugify</label>
-                <input
-                  value={formData.slugify}
-                  readOnly
-                  placeholder="toa-nha-thuong-mai-trung-tam"
-                  className="w-full cursor-not-allowed rounded-lg border border-[#153631]/20 bg-[#f4f8f6] px-3 py-2 text-sm text-[#5d756a] outline-none"
-                />
-                <p className="text-xs text-[#667d73]">Slug duoc tu dong tao theo ten du an.</p>
-              </div>
-
-              <div className="space-y-1 sm:col-span-2">
-                <label className="text-sm font-medium text-[#1a3834]">decs</label>
-                <textarea
-                  rows={4}
-                  value={formData.decs}
-                  onChange={(e) => handleChange('decs', e.target.value)}
-                  className="w-full rounded-lg border border-[#153631]/20 px-3 py-2 text-sm outline-none focus:border-[#173531]"
-                />
-              </div>
-
-              <div className="sm:col-span-2 flex items-center justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="rounded-xl border border-[#153631]/20 px-4 py-2 text-sm font-medium text-[#173531] hover:bg-[#eff6f2]"
-                >
-                  Huy
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSavingProject || isUploadingImages}
-                  className="rounded-xl bg-[#173531] px-4 py-2 text-sm font-medium text-white hover:bg-[#0f2926]"
-                >
-                  {isSavingProject
-                    ? 'Dang luu...'
-                    : editingProjectId
-                      ? 'Cap nhat du an'
-                      : 'Luu du an'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <ProjectModal
+        isOpen={isOpen}
+        editingProjectId={editingProjectId}
+        formError={formError}
+        formData={formData}
+        styles={styles}
+        categories={categories}
+        isLoadingStyles={isLoadingStyles}
+        isLoadingCategories={isLoadingCategories}
+        isUploadingImages={isUploadingImages}
+        isSavingProject={isSavingProject}
+        pendingImageFiles={pendingImageFiles}
+        pendingImagePreviews={pendingImagePreviews}
+        onClose={closeModal}
+        onSubmit={handleSubmit}
+        onImagesUpload={handleImagesUpload}
+        onFieldChange={handleChange}
+        onNameChange={handleNameChange}
+        onStyleToggle={handleStyleToggle}
+        onCategoryToggle={handleCategoryToggle}
+        onRemoveExistingImage={handleRemoveExistingImage}
+        onRemovePendingImage={handleRemovePendingImage}
+      />
     </div>
   );
 }

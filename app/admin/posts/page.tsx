@@ -1,7 +1,9 @@
 'use client';
 
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import ReactQuillComponent from '@/components/ReactQuillComponent';
+import PostModal from '@/components/admin/PostModal';
+import { normalizeImageRecords } from '@/utils/image';
+import { createSlug } from '@/utils/slug';
 
 type PostImage = {
   link: string;
@@ -26,11 +28,6 @@ type PostItem = PostFormData & {
   createdAt?: string;
 };
 
-type ToastState = {
-  type: 'success' | 'error';
-  message: string;
-} | null;
-
 const initialForm: PostFormData = {
   imgTitle: '',
   title: '',
@@ -38,63 +35,6 @@ const initialForm: PostFormData = {
   imgsId: [],
   slugify: '',
 };
-
-function createSlug(value: string) {
-  return value
-    .trim()
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
-}
-
-function normalizePostImages(rawImages: unknown): PostImage[] {
-  if (!Array.isArray(rawImages)) {
-    return [];
-  }
-
-  const normalized = rawImages
-    .map((img) => {
-      if (typeof img === 'string') {
-        const link = img.trim();
-        return link ? { link, id: '' } : null;
-      }
-
-      if (img && typeof img === 'object') {
-        const imageObj = img as Record<string, unknown>;
-        const link =
-          typeof imageObj.link === 'string'
-            ? imageObj.link.trim()
-            : typeof imageObj.url === 'string'
-              ? imageObj.url.trim()
-              : '';
-        const id = typeof imageObj.id === 'string' ? imageObj.id.trim() : '';
-
-        if (!link) {
-          return null;
-        }
-
-        return { link, id };
-      }
-
-      return null;
-    })
-    .filter((item): item is PostImage => Boolean(item));
-
-  const seen = new Set<string>();
-  return normalized.filter((image) => {
-    const key = image.id || image.link;
-    if (seen.has(key)) {
-      return false;
-    }
-
-    seen.add(key);
-    return true;
-  });
-}
 
 function contentPreview(rawContent: string) {
   if (!rawContent.trim()) {
@@ -145,18 +85,10 @@ export default function AdminPosts() {
   const [isUploadingImages, setIsUploadingImages] = useState(false);
   const [isSavingPost, setIsSavingPost] = useState(false);
   const [deletingPostId, setDeletingPostId] = useState<string | null>(null);
-  const [toast, setToast] = useState<ToastState>(null);
 
   const [pendingTitleImageFile, setPendingTitleImageFile] = useState<File | null>(null);
   const [pendingTitleImagePreview, setPendingTitleImagePreview] = useState('');
   const [pendingContentImages, setPendingContentImages] = useState<PendingContentImage[]>([]);
-
-  const showToast = (type: 'success' | 'error', message: string) => {
-    setToast({ type, message });
-    window.setTimeout(() => {
-      setToast((prev) => (prev?.message === message ? null : prev));
-    }, 2600);
-  };
 
   const fetchPosts = async () => {
     try {
@@ -173,7 +105,7 @@ export default function AdminPosts() {
         imgTitle: String(item?.imgTitle || ''),
         title: String(item?.title || ''),
         content: typeof item?.content === 'string' ? item.content : '',
-        imgsId: normalizePostImages(item?.imgsId),
+        imgsId: normalizeImageRecords(item?.imgsId, { includeUrl: true }),
         slugify: String(item?.slugify || ''),
         createdAt: typeof item?.createdAt === 'string' ? item.createdAt : undefined,
       }));
@@ -181,7 +113,7 @@ export default function AdminPosts() {
       setPosts(mapped);
     } catch {
       setPosts([]);
-      showToast('error', 'Khong tai duoc danh sach bai viet');
+      window.alert('Khong tai duoc danh sach bai viet');
     } finally {
       setIsLoadingPosts(false);
     }
@@ -328,6 +260,21 @@ export default function AdminPosts() {
     return previewUrl;
   };
 
+  const handleTitleChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      title: value,
+      slugify: createSlug(value),
+    }));
+  };
+
+  const handleContentChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      content: value,
+    }));
+  };
+
   const uploadFiles = async (files: File[]) => {
     if (files.length === 0) {
       return [] as PostImage[];
@@ -346,7 +293,7 @@ export default function AdminPosts() {
       throw new Error(data?.error || 'Upload anh that bai');
     }
 
-    const images = normalizePostImages(data?.images);
+    const images = normalizeImageRecords(data?.images, { includeUrl: true });
     if (images.length !== files.length) {
       throw new Error('So luong anh upload khong hop le');
     }
@@ -369,6 +316,19 @@ export default function AdminPosts() {
     setPendingTitleImageFile(file);
     setPendingTitleImagePreview(URL.createObjectURL(file));
     event.target.value = '';
+  };
+
+  const handleRemovePendingTitleImage = () => {
+    if (pendingTitleImagePreview) {
+      URL.revokeObjectURL(pendingTitleImagePreview);
+    }
+
+    setPendingTitleImageFile(null);
+    setPendingTitleImagePreview('');
+  };
+
+  const handleRemoveCurrentTitleImage = () => {
+    setFormData((prev) => ({ ...prev, imgTitle: '' }));
   };
 
   const openModal = () => {
@@ -418,14 +378,14 @@ export default function AdminPosts() {
 
       const data = await response.json();
       if (!response.ok) {
-        showToast('error', data?.error || 'Khong the xoa bai viet');
+        window.alert(data?.error || 'Khong the xoa bai viet');
         return;
       }
 
       await fetchPosts();
-      showToast('success', 'Da xoa bai viet');
+      window.alert('Da xoa bai viet');
     } catch {
-      showToast('error', 'Loi ket noi khi xoa bai viet');
+      window.alert('Loi ket noi khi xoa bai viet');
     } finally {
       setDeletingPostId(null);
     }
@@ -535,17 +495,17 @@ export default function AdminPosts() {
       const data = await response.json();
       if (!response.ok) {
         setFormError(data?.error || 'Khong the luu bai viet');
-        showToast('error', data?.error || 'Khong the luu bai viet');
+        window.alert(data?.error || 'Khong the luu bai viet');
         return;
       }
 
       await fetchPosts();
-      showToast('success', editingPostId ? 'Cap nhat bai viet thanh cong' : 'Tao bai viet thanh cong');
+      window.alert(editingPostId ? 'Cap nhat bai viet thanh cong' : 'Tao bai viet thanh cong');
       closeModal();
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Loi ket noi khi luu bai viet';
       setFormError(message);
-      showToast('error', message);
+      window.alert(message);
     } finally {
       setIsSavingPost(false);
       setIsUploadingImages(false);
@@ -554,18 +514,6 @@ export default function AdminPosts() {
 
   return (
     <div className="space-y-6">
-      {toast && (
-        <div
-          className={`fixed right-4 top-20 z-70 rounded-xl border px-4 py-3 text-sm shadow-lg ${
-            toast.type === 'success'
-              ? 'border-[#9ad5b2] bg-[#effaf2] text-[#1b5e3d]'
-              : 'border-[#f2b9b4] bg-[#fff3f2] text-[#9a2f24]'
-          }`}
-        >
-          {toast.message}
-        </div>
-      )}
-
       <section className="rounded-3xl border border-[#153631]/10 bg-[linear-gradient(120deg,#253f5f_0%,#364f77_100%)] p-6 text-white shadow-[0_18px_40px_rgba(23,43,69,0.22)] sm:p-7">
         <p className="text-xs uppercase tracking-[0.2em] text-[#e6ddbf]">Content desk</p>
         <h2 className="mt-3 text-2xl font-semibold">Quan ly bai viet</h2>
@@ -654,127 +602,23 @@ export default function AdminPosts() {
         </div>
       </section>
 
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
-          <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl sm:p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h4 className="text-lg font-semibold text-[#13322f]">
-                {editingPostId ? 'Chinh sua bai viet' : 'Them bai viet moi'}
-              </h4>
-              <button
-                type="button"
-                onClick={closeModal}
-                className="rounded-lg border border-[#153631]/20 px-3 py-1 text-sm text-[#173531] hover:bg-[#f4f8f6]"
-              >
-                Dong
-              </button>
-            </div>
-
-            {formError && (
-              <div className="mb-4 rounded-lg border border-[#f2b9b4] bg-[#fff3f2] px-4 py-2 text-sm text-[#9a2f24]">
-                {formError}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1 sm:col-span-2">
-                <label className="text-sm font-medium text-[#1a3834]">imgTitle</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleTitleImageChange}
-                  className="w-full rounded-lg border border-[#153631]/20 px-3 py-2 text-sm outline-none file:mr-3 file:rounded-md file:border-0 file:bg-[#253f5f] file:px-3 file:py-1.5 file:text-white hover:file:bg-[#1b2f48]"
-                />
-                <div className="mt-2">
-                  {pendingTitleImagePreview ? (
-                    <div className="relative w-fit overflow-hidden rounded-lg border border-[#153631]/20">
-                      <img src={pendingTitleImagePreview} alt="title-preview" className="h-24 w-36 object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          URL.revokeObjectURL(pendingTitleImagePreview);
-                          setPendingTitleImageFile(null);
-                          setPendingTitleImagePreview('');
-                        }}
-                        className="absolute right-1 top-1 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white"
-                      >
-                        X
-                      </button>
-                    </div>
-                  ) : formData.imgTitle ? (
-                    <div className="relative w-fit overflow-hidden rounded-lg border border-[#153631]/20">
-                      <img src={formData.imgTitle} alt="title" className="h-24 w-36 object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => setFormData((prev) => ({ ...prev, imgTitle: '' }))}
-                        className="absolute right-1 top-1 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white"
-                      >
-                        X
-                      </button>
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-
-              <div className="space-y-1 sm:col-span-2">
-                <label className="text-sm font-medium text-[#1a3834]">title</label>
-                <input
-                  value={formData.title}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setFormData((prev) => ({
-                      ...prev,
-                      title: value,
-                      slugify: createSlug(value),
-                    }));
-                  }}
-                  className="w-full rounded-lg border border-[#153631]/20 px-3 py-2 text-sm outline-none focus:border-[#173531]"
-                />
-              </div>
-
-              <div className="space-y-1 sm:col-span-2">
-                <label className="text-sm font-medium text-[#1a3834]">content (DraftJS)</label>
-                <ReactQuillComponent
-                  value={formData.content}
-                  onPickImage={handlePickEditorImage}
-                  onChange={(nextValue) => setFormData((prev) => ({ ...prev, content: nextValue }))}
-                />
-              </div>
-
-              <div className="space-y-1 sm:col-span-2">
-                <label className="text-sm font-medium text-[#1a3834]">slugify</label>
-                <input
-                  value={formData.slugify}
-                  readOnly
-                  className="w-full cursor-not-allowed rounded-lg border border-[#153631]/20 bg-[#f4f8f6] px-3 py-2 text-sm text-[#5d756a] outline-none"
-                />
-                <p className="text-xs text-[#667d73]">Slug duoc tu dong tao theo tieu de bai viet.</p>
-              </div>
-
-              <div className="sm:col-span-2 flex items-center justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="rounded-xl border border-[#153631]/20 px-4 py-2 text-sm font-medium text-[#173531] hover:bg-[#eff6f2]"
-                >
-                  Huy
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSavingPost || isUploadingImages}
-                  className="rounded-xl bg-[#253f5f] px-4 py-2 text-sm font-medium text-white hover:bg-[#1b2f48]"
-                >
-                  {isSavingPost
-                    ? 'Dang luu...'
-                    : editingPostId
-                      ? 'Cap nhat bai viet'
-                      : 'Luu bai viet'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <PostModal
+        isOpen={isOpen}
+        editingPostId={editingPostId}
+        formError={formError}
+        formData={formData}
+        isUploadingImages={isUploadingImages}
+        isSavingPost={isSavingPost}
+        pendingTitleImagePreview={pendingTitleImagePreview}
+        onClose={closeModal}
+        onSubmit={handleSubmit}
+        onTitleImageChange={handleTitleImageChange}
+        onRemovePendingTitleImage={handleRemovePendingTitleImage}
+        onRemoveCurrentTitleImage={handleRemoveCurrentTitleImage}
+        onTitleChange={handleTitleChange}
+        onPickEditorImage={handlePickEditorImage}
+        onContentChange={handleContentChange}
+      />
     </div>
   );
 }

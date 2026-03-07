@@ -3,6 +3,7 @@
 import FaqSection from '@/components/FaqSection';
 import ProjectsSection from '@/components/ProjectsSection';
 import draftToHtml from 'draftjs-to-html';
+import { extractImageLinks } from '@/utils/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -97,13 +98,10 @@ const parseRawContent = (rawContent: unknown): RawDraftContentState | null => {
 const normalizePostImages = (rawImages: any): string[] => {
   if (!Array.isArray(rawImages)) return [];
 
-  return rawImages
-    .map((img) => {
-      if (typeof img === 'string') return img;
-      if (img && typeof img === 'object') return img.link || img.url || img.src || '';
-      return '';
-    })
-    .filter(Boolean);
+  return extractImageLinks(rawImages, {
+    includeUrl: true,
+    includeSrc: true,
+  });
 };
 
 export default function PostDetail() {

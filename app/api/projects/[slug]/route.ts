@@ -5,67 +5,8 @@ import { Project } from "@/models/Project";
 import { Style } from "@/models/Style";
 import { Category } from "@/models/Category";
 import { deleteCloudinaryImage } from "@/lib/cloudinary";
-
-type ProjectImage = {
-  link: string;
-  id: string;
-};
-
-function normalizeImages(rawImages: unknown): ProjectImage[] {
-  if (!Array.isArray(rawImages)) {
-    return [];
-  }
-
-  const normalized = rawImages
-    .map((item) => {
-      if (typeof item === "string") {
-        const link = item.trim();
-        return link ? { link, id: "" } : null;
-      }
-
-      if (item && typeof item === "object") {
-        const link =
-          typeof (item as Record<string, unknown>).link === "string"
-            ? (item as Record<string, string>).link.trim()
-            : "";
-        const id =
-          typeof (item as Record<string, unknown>).id === "string"
-            ? (item as Record<string, string>).id.trim()
-            : "";
-
-        if (!link) {
-          return null;
-        }
-
-        return { link, id };
-      }
-
-      return null;
-    })
-    .filter((item): item is ProjectImage => Boolean(item));
-
-  const seen = new Set<string>();
-  return normalized.filter((image) => {
-    const key = image.id || image.link;
-    if (seen.has(key)) {
-      return false;
-    }
-    seen.add(key);
-    return true;
-  });
-}
-
-function createSlug(value: string) {
-  return value
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
+import { normalizeImageRecords } from "@/utils/image";
+import { createSlug } from "@/utils/slug";
 
 async function buildUniqueSlug(name: string, projectId: string) {
   const base = createSlug(name);
@@ -136,7 +77,7 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const imgs = normalizeImages(body?.imgs);
+    const imgs = normalizeImageRecords(body?.imgs);
 
     const style = Array.isArray(body?.style)
       ? [...new Set(body.style
@@ -189,8 +130,7 @@ export async function PUT(
         ? [String(project.style)]
         : [];
 
-    const previousImages = normalizeImages(project.imgs);
-    const removedImageIds = previousImages
+    const removedImageIds = normalizeImageRecords(project.imgs)
       .filter((prevImage) => !payload.imgs.some((nextImage) => {
         if (prevImage.id && nextImage.id) {
           return prevImage.id === nextImage.id;
@@ -282,7 +222,7 @@ export async function DELETE(
         ? [String(project.category)]
         : [];
 
-    const imageIds = normalizeImages(project.imgs)
+    const imageIds = normalizeImageRecords(project.imgs)
       .map((image) => image.id)
       .filter(Boolean);
 
