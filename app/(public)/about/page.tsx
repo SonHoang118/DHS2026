@@ -1,5 +1,6 @@
 'use client';
 
+import FaqSection from '@/components/FaqSection';
 import { useRef, useEffect } from 'react';
 
 export default function About() {
@@ -18,7 +19,7 @@ export default function About() {
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
     );
 
     if (overviewRef.current) observer.observe(overviewRef.current);
@@ -33,16 +34,16 @@ export default function About() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 scroll-smooth">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center bg-gradient-to-r from-[#243241] via-[#134E8E] to-[#375f8b] text-white overflow-hidden">
+      <section className="relative md:h-[90vh] h-[82vh] flex items-center justify-center bg-gradient-to-r from-[#243241] via-[#134E8E] to-[#375f8b] text-white overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
+          <h1 className="text-4xl md:text-7xl font-bold mb-6">
             Về DHStudio
           </h1>
-          <p className="text-xl md:text-2xl opacity-90 animate-fade-in animation-delay-300 mb-8">
+          <p className="text-[15px] md:text-2xl opacity-90 animation-delay-300 mb-8">
             Công ty Tư Vấn & Thiết Kế Kiến Trúc Hàng Đầu
           </p>
-          <div className="animate-fade-in animation-delay-300">
+          <div className="">
             <p className="text-lg mb-8 opacity-80">
               Chúng tôi mang lại những giải pháp kiến trúc sáng tạo, bền vững và tạo nên sự thay đổi cho cộng đồng
             </p>
@@ -58,7 +59,7 @@ export default function About() {
       {/* Stats Section */}
       <section className="py-16 px-4 md:px-8 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="text-5xl font-bold text-[#C00707] mb-3">10+</div>
               <p className="text-gray-600 text-lg font-semibold">Năm Kinh Nghiệm</p>
@@ -90,7 +91,7 @@ export default function About() {
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-800 mb-6">
               Câu Chuyện Của DHStudio
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -368,6 +369,9 @@ export default function About() {
           </div>
         </div>
       </section>
+      <div className="mt-8 md:mt-0">
+        <FaqSection />
+      </div>
 
       {/* CTA Section */}
       <section
@@ -401,6 +405,7 @@ export default function About() {
           </p>
         </div>
       </section>
+      
     </main>
   );
 }

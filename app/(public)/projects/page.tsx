@@ -74,9 +74,9 @@ export default function Page() {
     <section className="max-w-7xl mx-auto px-4 py-12">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Explore our featured listings</h2>
+          <h2 className="text-2xl font-bold text-gray-800">Khám phá các dự án nổi bật</h2>
           <p className="text-gray-400 text-sm max-w-md">
-            From modern city apartments to spacious family homes, find the one that feels just right.
+            Từ các căn hộ hiện đại trong thành phố đến những ngôi nhà rộng rãi cho gia đình, tìm dự án phù hợp với bạn để tham khảo.
           </p>
         </div>
 

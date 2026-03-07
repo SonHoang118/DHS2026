@@ -29,7 +29,7 @@ export default function FaqSection() {
     const [open, setOpen] = useState<number | null>(0);
 
     return (
-        <section className="py-24 px-6">
+        <section className="py-10 md:py-24 px-6">
 
             {/* HEADER */}
             <div className="text-center max-w-3xl mx-auto">
@@ -37,11 +37,11 @@ export default function FaqSection() {
                     FAQs
                 </span>
 
-                <h2 className="text-[46px] font-semibold mt-6 text-[#2c3640]">
+                <h2 className="text-[25px] md:text-[46px] font-semibold mt-6 text-[#2c3640]">
                     Bạn cần giúp đỡ gì? Chúng tôi luôn sẵn sàng hỗ trợ bạn
                 </h2>
 
-                <p className="text-gray-500 mt-5 text-lg">
+                <p className="text-gray-500 mt-5 text-[15px] md:text-lg">
                     Tìm câu trả lời nhanh cho những câu hỏi thường gặp từ khách hàng mới và quay lại
                 </p>
             </div>
@@ -59,15 +59,15 @@ export default function FaqSection() {
                                 onClick={() => setOpen(active ? null : i)}
                                 className="w-full flex items-center justify-between text-left"
                             >
-                                <div className="flex gap-8 items-start">
+                                <div className="flex items-start gap-2 md:gap-8">
 
                                     {/* NUMBER */}
-                                    <span className="text-orange-500 text-xl font-semibold w-10">
+                                    <span className="block w-10 shrink-0 text-orange-500 text-[16px] md:text-xl font-semibold">
                                         {String(i + 1).padStart(2, "0")}
                                     </span>
 
                                     {/* QUESTION */}
-                                    <span className="text-2xl font-medium text-[#58595a]">
+                                    <span className="block flex-1 text-[16px] md:text-2xl font-medium text-[#363738] leading-snug">
                                         {item.q}
                                     </span>
                                 </div>
@@ -85,7 +85,7 @@ export default function FaqSection() {
                                 className={`grid transition-all duration-300 overflow-hidden ${active ? "grid-rows-[1fr] mt-6" : "grid-rows-[0fr]"
                                     }`}
                             >
-                                <div className="overflow-hidden pl-[72px] text-gray-500 text-lg">
+                                <div className="overflow-hidden pl-12 md:pl-[72px] text-gray-500 text-[13px] md:text-lg">
                                     {item.a}
                                 </div>
                             </div>

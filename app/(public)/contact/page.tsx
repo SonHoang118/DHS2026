@@ -38,13 +38,13 @@ export default function Contact() {
       <section className="relative h-screen flex items-center justify-center bg-gradient-to-r from-[#243241] via-[#134E8E] to-[#375f8b] text-white overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
+          <h1 className="text-4xl md:text-7xl font-bold mb-6 ">
             Liên Hệ Với Chúng Tôi
           </h1>
-          <p className="text-xl md:text-2xl opacity-90 animate-fade-in animation-delay-300 mb-8">
+          <p className="text-[16px] md:text-2xl opacity-90  animation-delay-300 mb-8">
             Chúng tôi rất vui được nghe từ bạn
           </p>
-          <div className="animate-fade-in animation-delay-300">
+          <div className=" animation-delay-300">
             <p className="text-lg mb-8 opacity-80">
               Hãy để chúng tôi giúp bạn biến ý tưởng thành hiện thực với dịch vụ kiến trúc và thiết kế chuyên nghiệp
             </p>
@@ -106,8 +106,8 @@ export default function Contact() {
       </section>
 
       {/* Contact Content */}
-      <section 
-      className="py-20 px-4 md:px-8 lg:px-16">
+      <section
+        className="py-20 px-4 md:px-8 lg:px-16">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12">
 
           {/* Contact Info */}
@@ -197,9 +197,9 @@ export default function Contact() {
           <div
             id="contact-form"
             ref={formRef}
-            className="bg-white p-8 shadow-lg opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
+            className="bg-white p-4 py-8 md:p-8 shadow-lg opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
           >
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Gửi Tin Nhắn Cho Chúng Tôi</h2>
+            <h2 className="text-xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Gửi Tin Nhắn Cho Chúng Tôi</h2>
             <ContactForm />
           </div>
         </div>
@@ -211,7 +211,7 @@ export default function Contact() {
         className="py-20 px-4 md:px-8 lg:px-16 bg-white opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
       >
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-12">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-12">
             Tại Sao Liên Hệ Với Chúng Tôi?
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -265,24 +265,24 @@ export default function Contact() {
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-4">
               Tìm Đường Đến Văn Phòng Chúng Tôi
             </h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-600 text-[13px] md:text-lg max-w-2xl mx-auto">
               Địa chỉ văn phòng chính tại trung tâm TP.HCM, dễ dàng tiếp cận bằng nhiều phương tiện công cộng
             </p>
           </div>
 
           <div className="bg-white shadow-lg overflow-hidden">
             <div className="relative aspect-video bg-gray-200">
-                <iframe
-                  className="absolute inset-0 w-full h-full"
-                  src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d52341.83352513132!2d105.86872856610702!3d21.08382458817568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjHCsDA2JzAyLjciTiAxMDXCsDUzJzAzLjEiRQ!5e0!3m2!1svi!2sus!4v1772254206197!5m2!1svi!2sus"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d52341.83352513132!2d105.86872856610702!3d21.08382458817568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjHCsDA2JzAyLjciTiAxMDXCsDUzJzAzLjEiRQ!5e0!3m2!1svi!2sus!4v1772254206197!5m2!1svi!2sus"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
           </div>
 
@@ -321,7 +321,7 @@ export default function Contact() {
       </section>
 
       {/* FAQ Section */}
-      <FaqSection/>
+      <FaqSection />
 
       {/* CTA Section */}
       <section

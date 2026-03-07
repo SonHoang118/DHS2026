@@ -6,7 +6,7 @@ export async function getPosts(skip: number = 0, limit: number = 10) {
   await connectDB();
 
   const [posts, total] = await Promise.all([
-    Post.find({}).skip(skip).limit(limit).lean(),
+    Post.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
     Post.countDocuments()
   ]);
 

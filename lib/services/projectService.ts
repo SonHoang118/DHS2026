@@ -20,7 +20,7 @@ export async function getProjects(skip: number = 0, limit: number = 10, keyword:
     : {};
 
   const [projects, total] = await Promise.all([
-    Project.find(query).skip(skip).limit(limit).lean(),
+    Project.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
     Project.countDocuments(query)
   ]);
 

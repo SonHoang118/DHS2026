@@ -27,7 +27,7 @@ export default function ScrollToTopButton() {
       type="button"
       aria-label="Len dau trang"
       onClick={scrollToTop}
-      className={`fixed right-4 md:right-6 bottom-5 md:bottom-7 z-60 rounded-full w-11 h-11 md:w-12 md:h-12 border border-white/40 bg-white/60 backdrop-blur-xl supports-backdrop-filter:bg-white/45 text-[#C00707] shadow-[0_6px_24px_rgba(15,23,42,0.08)] transition-all duration-300 hover:bg-white/75 ${
+      className={`fixed right-6 md:right-6 bottom-9 md:bottom-7 z-60 rounded-full w-15 h-15 md:w-16 md:h-16 border border-white/40 bg-white/60 backdrop-blur-xl supports-backdrop-filter:bg-white/45 text-[#C00707] shadow-[0_6px_24px_rgba(15,23,42,0.08)] transition-all duration-300 hover:bg-white/75 ${
         show
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-3 pointer-events-none"

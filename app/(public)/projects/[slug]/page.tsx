@@ -16,6 +16,7 @@ type ProjectDetailData = {
   decs?: string;
   nFloors?: number;
   style?: string[] | string;
+  category?: string[] | string;
   area?: string;
   totalCost?: string;
   imgs?: any;
@@ -64,6 +65,7 @@ export default function ProjectDetail() {
 
   const projectImages = useMemo(() => normalizeImageList(project?.imgs), [project?.imgs]);
   const projectStyles = useMemo(() => normalizeStyleList(project?.style), [project?.style]);
+  const projectCategory = useMemo(() => normalizeStyleList(project?.category), [project?.category]);
 
   useEffect(() => {
     if (!slug) {
@@ -222,7 +224,7 @@ export default function ProjectDetail() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 scroll-smooth">
       {/* Image Gallery Hero */}
-      <div className="mx-auto mt-10 w-300" style={{ height: '500px' }}>
+      <div className="mx-auto mt-10 w-full max-w-6xl" style={{ height: 'clamp(220px, 55vw, 500px)' }}>
         <Slider
           images={projectImages.length > 0 ? projectImages : ['/fallback.jpg']}
         />
@@ -231,17 +233,17 @@ export default function ProjectDetail() {
       {/* Project Info Section */}
       <section
         ref={detailsRef}
-        className="py-20 px-4 md:px-8 lg:px-16 bg-white opacity-100 transform translate-y-0 transition-all duration-1000 ease-out"
+        className="py-10 px-4 md:px-8 lg:px-16 bg-white opacity-100 transform translate-y-0 transition-all duration-1000 ease-out"
       >
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-12 mb-12">
             {/* Main Info */}
             <div className="lg:col-span-2">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
                 {projectTitle}
               </h1>
               <div className="flex flex-wrap gap-3 mb-8">
-                {projectStyles.map((s: string) => (
+                {projectCategory.map((s: string) => (
                   <span
                     key={s}
                     className="bg-[#C00707] text-white px-4 py-2 text-sm font-semibold"
@@ -251,47 +253,47 @@ export default function ProjectDetail() {
                 ))}
               </div>
 
-              <p className="text-lg text-gray-600 leading-relaxed mb-8">
+              {project.decs && <p className="text-lg text-gray-600 leading-relaxed mb-8">
                 {project.decs || 'Đang cập nhật mô tả dự án.'}
-              </p>
+              </p>}
 
               {/* Key Stats */}
               <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-gradient-to-br from-[#C00707]/10 to-[#FF4400]/10 p-6">
+                {project.area && <div className="bg-gradient-to-br from-[#C00707]/10 to-[#FF4400]/10 p-6">
                   <h4 className="text-sm font-semibold text-gray-600 mb-2">Diện Tích</h4>
                   <p className="text-2xl font-bold text-[#C00707]">{project.area || 'Đang cập nhật'}</p>
-                </div>
-                <div className="bg-gradient-to-br from-[#FF4400]/10 to-[#FFB33F]/10 p-6">
+                </div>}
+                {project.nFloors && <div className="bg-gradient-to-br from-[#FF4400]/10 to-[#FFB33F]/10 p-6">
                   <h4 className="text-sm font-semibold text-gray-600 mb-2">Số Tầng</h4>
                   <p className="text-2xl font-bold text-[#FF4400]">{project.nFloors ?? 'Đang cập nhật'}</p>
-                </div>
-                <div className="bg-gradient-to-br from-[#FFB33F]/10 to-[#134E8E]/10 p-6">
+                </div>}
+                {project.totalCost && <div className="bg-gradient-to-br from-[#FFB33F]/10 to-[#134E8E]/10 p-6">
                   <h4 className="text-sm font-semibold text-gray-600 mb-2">Giá Trị Dự Án</h4>
                   <p className="text-2xl font-bold text-[#FFB33F]">{project.totalCost || 'Thương lượng'}</p>
-                </div>
-                <div className="bg-gradient-to-br from-[#134E8E]/10 to-[#C00707]/10 p-6">
+                </div>}
+                {project.date && <div className="bg-gradient-to-br from-[#134E8E]/10 to-[#C00707]/10 p-6">
                   <h4 className="text-sm font-semibold text-gray-600 mb-2">Thời Gian</h4>
                   <p className="text-2xl font-bold text-[#134E8E]">
                     {displayDate ? displayDate.getFullYear() : 'Đang cập nhật'}
                   </p>
-                </div>
+                </div>}
               </div>
             </div>
 
             {/* Sidebar Info */}
             <div className="space-y-6">
-              <div className="bg-gradient-to-br from-[#C00707]/10 to-[#FF4400]/10 p-8">
+              {project.location && <div className="bg-gradient-to-br from-[#C00707]/10 to-[#FF4400]/10 p-8">
                 <h3 className="text-lg font-bold text-gray-800 mb-4">📍 Vị Trí</h3>
                 <p className="text-gray-700 mb-2">{project.location || 'Đang cập nhật'}</p>
                 <p className="text-sm text-gray-500">
                   {displayDate ? displayDate.toLocaleDateString('vi-VN') : 'Đang cập nhật'}
                 </p>
-              </div>
+              </div>}
 
-              <div className="bg-gradient-to-br from-[#FF4400]/10 to-[#FFB33F]/10 p-8">
+              {project.investor && <div className="bg-gradient-to-br from-[#FF4400]/10 to-[#FFB33F]/10 p-8">
                 <h3 className="text-lg font-bold text-gray-800 mb-4">👤 Chủ Đầu Tư</h3>
                 <p className="text-gray-700">{project.investor || 'Đang cập nhật'}</p>
-              </div>
+              </div>}
 
               {projectStyles.length > 0 && (
                 <div className="bg-gradient-to-br from-[#134E8E]/10 to-[#C00707]/10 p-8">
@@ -350,13 +352,17 @@ export default function ProjectDetail() {
       {relatedProjects.length > 0 && (
         <section className="py-16 px-4 md:px-8 lg:px-16 bg-white border-t border-gray-100">
           <div className="max-w-7xl mx-auto">
-            <div className="flex items-end justify-between mb-8">
+            <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Các dự án khác</h2>
-                <p className="text-gray-500 mt-2">Khám phá thêm các dự án kiến trúc tương tự của DHStudio.</p>
+                <h2 className="text-2xl md:text-4xl font-bold text-gray-900">Các dự án khác</h2>
+                <p className="mt-2 text-sm md:text-base text-gray-500">Khám phá thêm các dự án kiến trúc tương tự của DHStudio.</p>
               </div>
-              <Link href="/projects" className="text-[#C00707] font-semibold hover:underline">
+              <Link
+                href="/projects"
+                className="inline-flex w-fit items-center gap-2 border border-[#C00707] px-4 py-2 text-sm md:text-base font-semibold text-[#C00707] transition hover:bg-[#C00707] hover:text-white"
+              >
                 Xem tất cả
+                <span aria-hidden="true">→</span>
               </Link>
             </div>
 

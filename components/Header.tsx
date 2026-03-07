@@ -95,7 +95,7 @@ export default function Header() {
               <span style={{ fontFamily: 'Audiowide, sans-serif' }}>DHStudio</span>
         </div>
 
-        <nav className="hidden md:flex items-center gap-12 text-gray-600 font-medium">
+        <nav className="hidden lg:flex items-center gap-12 text-gray-600 font-medium">
           {menu.map((item, i) => (
             <Link
               key={i}
@@ -108,7 +108,7 @@ export default function Header() {
         </nav>
 
         {/* CTA */}
-        <button className="hidden md:block border-b border-black pb-1 font-medium hover:opacity-70 transition">
+        <button className="hidden lg:block border-b border-black pb-1 font-medium hover:opacity-70 transition">
           +84 983 239 596
         </button>
 
@@ -117,7 +117,7 @@ export default function Header() {
           aria-label="Mo menu"
           aria-expanded={mobileMenuOpen}
           onClick={() => setMobileMenuOpen((prev) => !prev)}
-          className="md:hidden inline-flex items-center justify-center w-10 h-10 border border-gray-300 text-gray-700 transition-all duration-300"
+          className="lg:hidden inline-flex items-center justify-center w-10 h-10 border border-gray-300 text-gray-700 transition-all duration-300"
         >
           <svg
             viewBox="0 0 24 24"
@@ -137,7 +137,7 @@ export default function Header() {
       </div>
 
       <nav
-        className={`md:hidden border-t border-gray-200 bg-white px-4 transition-all duration-300 overflow-hidden ${
+        className={`lg:hidden border-t border-gray-200 bg-white px-4 transition-all duration-300 overflow-hidden ${
           mobileMenuOpen
             ? "max-h-[420px] py-4 opacity-100 translate-y-0"
             : "max-h-0 py-0 opacity-0 -translate-y-2 pointer-events-none"

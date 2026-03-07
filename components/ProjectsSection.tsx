@@ -1,20 +1,45 @@
-import { Link } from "lucide-react";
-import Image from "next/image";
+"use client";
 
-const projects = [
-    {
-        title: "Skyline Residence",
-        img: "/images/bg1.jpg",
-    },
-    {
-        title: "StoneCore Office Park",
-        img: "/images/bg1.jpg",
-    },
-];
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+type ProjectCard = {
+    _id?: string;
+    slugify?: string;
+    name?: string;
+    imgs?: Array<{ link?: string; url?: string; src?: string }> | string[];
+};
+
+const getProjectThumb = (project: ProjectCard): string => {
+    const images = Array.isArray(project.imgs) ? project.imgs : [];
+    const first = images[0];
+
+    if (typeof first === "string") {
+        return first;
+    }
+
+    if (first && typeof first === "object") {
+        return first.link || first.url || first.src || "/fallback.jpg";
+    }
+
+    return "/fallback.jpg";
+};
 
 export default function ProjectsSection() {
+    const [projects, setProjects] = useState<ProjectCard[]>([]);
+
+    useEffect(() => {
+        fetch("/api/projects?skip=0&limit=2", { cache: "no-store" })
+            .then((res) => res.json())
+            .then((data) => {
+                const items = Array.isArray(data?.items) ? data.items : [];
+                setProjects(items.slice(0, 2));
+            })
+            .catch(() => setProjects([]));
+    }, []);
+
     return (
-        <section className="py-24 border-b border-gray-200">
+        <section className="py-10 md:py-20 border-b border-gray-200">
             <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-3 gap-16 items-start">
 
                 {/* LEFT TEXT */}
@@ -24,46 +49,50 @@ export default function ProjectsSection() {
                     </span>
 
                     <h2 className="mt-6 text-[44px] leading-[1.2] font-semibold text-[#1f2937]">
-                        Our Real World <br /> Work in Action
+                        Các dự án thực tế đã triển khai của chúng tôi
                     </h2>
 
                     <p className="mt-5 text-gray-500 leading-relaxed max-w-sm">
                         Hãy cùng chiêm ngưỡng một số công trình và dự án cải tạo mà chúng tôi tự hào nhất.
                     </p>
-                    <button className="mt-10 border border-gray-300 px-6 py-3 flex items-center gap-3 hover:bg-black hover:text-white transition">
+                    <Link href="/project" className="mt-10 border border-gray-300 px-6 py-3 inline-flex items-center gap-3 hover:bg-black hover:text-white transition">
                         Xem thêm các dự án khác
                         <span>→</span>
-                    </button>
+                    </Link>
                 </div>
 
                 {/* PROJECT LIST */}
                 <div className="lg:col-span-2 grid sm:grid-cols-2 gap-10">
-                    {projects.map((p, i) => (
-                        <div key={i} className="group">
+                    {projects.map((p, i) => {
+                        const projectId = p.slugify || p._id;
+                        const href = projectId ? `/projects/${projectId}` : "/projects";
+                        const title = p.name || "Du an";
+                        const image = getProjectThumb(p);
+
+                        return (
+                        <Link key={p._id || p.slugify || i} href={href} className="group block">
 
                             {/* IMAGE */}
                             <div className="overflow-hidden">
-                                <Image
-                                    src={p.img}
-                                    alt={p.title}
-                                    width={500}
-                                    height={600}
+                                <img
+                                    src={image}
+                                    alt={title}
                                     className="object-cover w-full h-[420px] group-hover:scale-105 transition duration-500"
                                 />
                             </div>
 
                             {/* TITLE */}
                             <h3 className="mt-5 text-xl font-semibold text-[#1f2937]">
-                                {p.title}
+                                {title}
                             </h3>
 
                             {/* LINK */}
-                            <button className="mt-2 flex items-center gap-2 text-sm text-gray-500 hover:text-black transition">
+                            <span className="mt-2 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition">
                                 Xem chi tiết <span>→</span>
-                            </button>
+                            </span>
 
-                        </div>
-                    ))}
+                        </Link>
+                    )})}
                 </div>
             </div>
         </section>

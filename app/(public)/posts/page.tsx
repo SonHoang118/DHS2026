@@ -47,18 +47,15 @@ export default function Posts() {
 
   return (
     <main>
-      <section className="bg-[#f3f4f6] py-20">
+      <section className="bg-[#f3f4f6] py-10">
         <div className="max-w-7xl mx-auto px-6">
 
           {/* Header */}
-          <div className="flex justify-between items-start mb-14">
-            <h2 className="text-4xl font-semibold text-gray-900">
-              Our Recent Post
-            </h2>
+          <div className="mb-14 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-800">Các bài viết mới nhất</h2>
 
-            <p className="text-sm text-gray-500 max-w-sm text-right">
-              From modern city apartments to spacious family homes,
-              find the one that feels just right.
+            <p className="text-sm text-gray-500 max-w-sm md:text-right">
+              Cập nhật ngay những tin tức mới từ chúng tôi, có thể giúp ích cho ý tưởng dự án sắp tới của bạn đấy!
             </p>
           </div>
 

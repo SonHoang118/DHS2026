@@ -6,20 +6,21 @@ import Image from "next/image";
 
 export default function Home() {
   const stats = [
-    { value: "10+", label: "Years of Experience" },
-    { value: "1500+", label: "Projects Completed" },
-    { value: "4.8/5", label: "Customer Satisfaction Score" },
-    { value: "98%", label: "Project Success Rate" },
+    { value: "10+", label: "Năm kinh nghiệm" },
+    { value: "1500+", label: "Dự án hoàn thành" },
+    { value: "4.8/5", label: "Đánh giá của khách hàng" },
+    { value: "98%", label: "Tỷ lệ thành công dự án" },
   ];
   return (
     <main className="min-h-screen text-gray-800">
 
-      <div className="mx-auto mt-10 w-300" style={{ height: '500px' }}>
+      <div className="mx-auto mt-10 w-full max-w-6xl" style={{ height: 'clamp(220px, 55vw, 500px)' }}>
         <Slider
           images={[
-            'https://miro.medium.com/v2/resize:fit:1400/1*uRC-z-KOuJHgCuruttLw5Q.jpeg',
-            'https://www.marinabaysands.com/content/dam/marinabaysands/guides/exceptional-experiences/architecture-of-mbs/masthead-d.jpg',
-            'https://media.architecturaldigest.com/photos/6499bd6757eceeca17cb751f/16:9/w_2560%2Cc_limit/GettyImages-1170020493.jpg'
+            'https://res.cloudinary.com/dw3hx3utn/image/upload/v1772855393/lerp8gxlqzpn7ialu3g6.webp',
+            'https://res.cloudinary.com/dw3hx3utn/image/upload/v1772853976/nknz748p8v2lsawzxopi.png',
+            'https://res.cloudinary.com/dw3hx3utn/image/upload/v1772855146/adwxrzaa09e9pm4uqwaz.png',
+            'https://res.cloudinary.com/dw3hx3utn/image/upload/v1772856818/eozbvoc5dhaxuxlx0pzv.webp'
           ]}
         />
       </div>
@@ -30,7 +31,8 @@ export default function Home() {
 
         {/* TITLE */}
         <h1 className="
-        text-[32px]
+        text-[24px]
+        sm:text-[32px]
         md:text-[46px]
         font-light
         text-[#1f2937]
@@ -52,7 +54,7 @@ export default function Home() {
 
 
       {/* Đôi chút về chúng tôi */}
-      <section className="bg-[#f6f7f8] py-20 px-6">
+      <section className="bg-[#f6f7f8] md:py-20 py-10 px-6">
         <div className="max-w-6xl mx-auto">
 
           {/* HEADER */}
@@ -63,7 +65,7 @@ export default function Home() {
                 "Đôi chút" về chúng tôi
               </span>
 
-              <h2 className="mt-6 text-[30px] leading-snug font-semibold text-[#2b3440]">
+              <h2 className="mt-6 text-[20px] md:text-[30px] leading-snug font-semibold text-[#2b3440]">
                 Với kinh nghiệm hàng chục năm, chúng tôi chuyên biến những{" "}
                 <span className="text-orange-500">
                   ý tưởng
@@ -107,9 +109,9 @@ export default function Home() {
       <section>
         <div className="max-w-6xl mx-auto px-6 py-24">
           {/* Header */}
-          <div className="flex justify-between items-start mb-6">
-            <h1 className="text-3xl font-semibold">BIỆT THỰ SONG LẬP ID JUNCTION</h1>
-            <p className="text-sm text-gray-500 max-w-md text-right">
+          <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <h1 className="text-2xl md:text-3xl font-semibold">BIỆT THỰ SONG LẬP ID JUNCTION</h1>
+            <p className="max-w-md text-xs md:text-sm text-gray-500 md:text-right">
               Một chút 𝒇𝒂𝒓𝒎𝒉𝒐𝒖𝒔𝒆 nhẹ nhàng cho căn biệt thự song lập 𝐈𝐃 𝐉𝐔𝐍𝐂𝐓𝐈𝐎𝐍 (Nhơn Trạch, Long Thành).
             </p>
           </div>
@@ -125,7 +127,7 @@ export default function Home() {
           </div>
 
           {/* Info Row */}
-          <div className="grid grid-cols-4 gap-6 border-b pb-6 mb-8 text-sm">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 border-b pb-6 mb-8 text-sm">
             <Info label="Dịch vụ" value="Xây dựng nhà ở" />
             <Info label="Ngày" value="Tháng 6, 2025" />
             <Info label="Địa điểm" value="Nhơn Trạch, Long Thành" />
@@ -199,7 +201,7 @@ export default function Home() {
 
 
       {/* Vị trí của chúng tôi */}
-      <section className="text-center py-24">
+      <section className="text-center py-10 md:py-20">
 
         {/* badge */}
         <div className="inline-block px-5 py-1.5 border border-[#ff5a1f] text-[#ff5a1f] rounded-full text-sm">
@@ -207,7 +209,7 @@ export default function Home() {
         </div>
 
         {/* title */}
-        <h2 className="mt-6 text-[48px] font-semibold text-[#1f2937]">
+        <h2 className="mt-6 text-[25px] md:text-[48px] font-semibold text-[#1f2937]">
           Tìm chúng tôi trên bản đồ
         </h2>
         <div className="flex justify-center my-8">
@@ -217,12 +219,12 @@ export default function Home() {
 
 
       {/* Hãy nói về dự án của bạn nào ! */}
-      <section className="bg-[#f3f4f6] py-20 text-center">
-        <h1 className="text-[56px] font-semibold text-[#2c3640]">
+      <section className="bg-[#f3f4f6] py-10 md:py-20 text-center">
+        <h1 className="text-[25px] md:text-[48px] font-semibold text-[#2c3640]">
           Hãy nói về dự án của bạn nào !
         </h1>
 
-        <p className="mt-6 text-gray-500 max-w-2xl mx-auto text-lg">
+        <p className="mt-6 text-gray-500 max-w-2xl mx-auto text-[14px] md:text-lg">
           Dù bạn đang lên kế hoạch, xây dựng hay cải tạo, chúng tôi luôn sẵn sàng hỗ trợ.
           Hãy liên hệ ngay hôm nay và cùng nhau tạo ra điều gì đó tuyệt vời.
         </p>
@@ -230,7 +232,7 @@ export default function Home() {
 
 
       {/* CONTACT SECTION */}
-      <section className="bg-[#243241] py-24 px-6">
+      <section className="bg-[#243241] py-10 md:py-24 px-4 md:px-6">
         <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-16 items-start">
 
           {/* LEFT INFO */}
@@ -252,7 +254,7 @@ export default function Home() {
             {/* INFO GRID */}
             <div className="mt-12 space-y-8 text-gray-300">
 
-              <div className="border-t border-gray-500 pt-6 flex gap-16">
+              <div className="border-t border-gray-500 pt-6 flex flex-col gap-6 md:flex-row md:gap-16">
                 <div>
                   <p className="text-gray-400">Gửi tin nhắn</p>
                   <p className="mt-2 text-white">dhs.studio.arch@gmail.com</p>
@@ -288,7 +290,7 @@ export default function Home() {
 
 
           {/* FORM CARD */}
-          <div className="bg-[#ffffff] p-10 shadow-lg">
+          <div className="bg-[#ffffff] p-5 md:p-10 shadow-lg">
 
             <h3 className="text-2xl font-semibold text-[#2c3640] mb-8">
               Đăng ký tư vấn miễn phí
@@ -376,9 +378,9 @@ export default function Home() {
 
 function Info({ label, value }: { label: string; value: string }) {
   return (
-    <div>
-      <p className="text-gray-500 mb-1">{label}</p>
-      <p className="font-medium">{value}</p>
+    <div className="flex items-center justify-between gap-3 md:block">
+      <p className="text-gray-500 md:mb-1">{label}</p>
+      <p className="font-medium text-right md:text-left">{value}</p>
     </div>
   );
 }

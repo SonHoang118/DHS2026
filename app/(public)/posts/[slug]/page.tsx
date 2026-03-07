@@ -297,13 +297,17 @@ export default function PostDetail() {
       {/* RELATED POSTS */}
       {relatedPosts.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 md:px-6 py-20">
-          <div className="flex items-end justify-between mb-8">
+          <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">Bài viết đề xuất</h2>
-              <p className="text-gray-500 mt-2">Các nội dung liên quan bạn có thể quan tâm tiếp theo.</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Bài viết đề xuất</h2>
+              <p className="mt-2 text-sm md:text-base text-gray-500">Các nội dung liên quan bạn có thể quan tâm tiếp theo.</p>
             </div>
-            <Link href="/posts" className="text-[#C00707] font-semibold hover:underline">
+            <Link
+              href="/posts"
+              className="inline-flex w-fit items-center gap-2 border border-[#C00707] px-4 py-2 text-sm md:text-base font-semibold text-[#C00707] transition hover:bg-[#C00707] hover:text-white"
+            >
               Xem tất cả
+              <span aria-hidden="true">→</span>
             </Link>
           </div>
 
