@@ -14,6 +14,7 @@ export async function getProjects(skip: number = 0, limit: number = 10, keyword:
           { location: { $regex: trimmedKeyword, $options: "i" } },
           { decs: { $regex: trimmedKeyword, $options: "i" } },
           { style: { $regex: trimmedKeyword, $options: "i" } },
+          { category: { $regex: trimmedKeyword, $options: "i" } },
         ],
       }
     : {};

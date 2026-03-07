@@ -100,7 +100,7 @@ const normalizePostImages = (rawImages: any): string[] => {
   return rawImages
     .map((img) => {
       if (typeof img === 'string') return img;
-      if (img && typeof img === 'object') return img.url || img.src || '';
+      if (img && typeof img === 'object') return img.link || img.url || img.src || '';
       return '';
     })
     .filter(Boolean);
@@ -342,7 +342,12 @@ export default function PostDetail() {
       <FaqSection />
 
       {/* CTA Section */}
-      <section className="py-20 px-4 md:px-8 lg:px-16 bg-gradient-to-r from-[#C00707] via-[#FF4400] to-[#FFB33F] text-white">
+      <section
+        className="px-4 py-20 text-white md:px-8 lg:px-16"
+        style={{
+          background: 'linear-gradient(90deg, #C00707 0%, #FF4400 52%, #FFB33F 100%)',
+        }}
+      >
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Bạn Có Dự Án Tương Tự?

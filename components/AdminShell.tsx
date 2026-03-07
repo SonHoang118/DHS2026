@@ -17,6 +17,8 @@ type NavItem = {
 const navItems: NavItem[] = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: 'DG' },
   { href: '/admin/projects', label: 'Du an', icon: 'DA' },
+  { href: '/admin/styles', label: 'Style', icon: 'ST' },
+  { href: '/admin/categories', label: 'Category', icon: 'CT' },
   { href: '/admin/posts', label: 'Bai viet', icon: 'BV' },
   { href: '/admin/contacts', label: 'Lien he', icon: 'LH' },
 ];
@@ -56,7 +58,7 @@ export default function AdminShell({ children }: AdminShellProps) {
   return (
     <div className="min-h-screen bg-[#f5f6f2] text-[#132725]">
       <div className="grid min-h-screen lg:grid-cols-[280px_1fr]">
-        <aside className="hidden border-r border-[#1e3632]/10 bg-[#16302d] p-6 text-[#ecf3ef] lg:block">
+        <aside className="sticky top-0 hidden h-screen overflow-y-auto border-r border-[#1e3632]/10 bg-[#16302d] p-6 text-[#ecf3ef] lg:block">
           <div className="mb-8 rounded-2xl border border-[#d3b289]/40 bg-[#ecf3ef]/10 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-[#d3b289]">DHS Studio</p>
             <h2 className="mt-2 text-xl font-semibold">Admin Center</h2>
@@ -90,6 +92,12 @@ export default function AdminShell({ children }: AdminShellProps) {
           </nav>
 
           <div className="mt-8 border-t border-[#ecf3ef]/15 pt-5">
+            <Link
+              href="/"
+              className="mb-3 inline-flex w-full items-center justify-center rounded-xl border border-[#d3b289]/40 bg-[#ecf3ef]/5 px-4 py-3 text-sm font-medium text-[#f0ddc2] transition hover:bg-[#ecf3ef]/10"
+            >
+              Ve trang chu
+            </Link>
             <button
               type="button"
               onClick={handleLogout}
@@ -108,14 +116,22 @@ export default function AdminShell({ children }: AdminShellProps) {
                 <h1 className="text-xl font-semibold text-[#143330] sm:text-2xl">{pageTitle}</h1>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setOpen((prev) => !prev)}
-                className="inline-flex items-center rounded-lg border border-[#173532]/20 bg-white px-3 py-2 text-sm font-medium text-[#173532] shadow-sm lg:hidden"
-                aria-expanded={open}
-              >
-                Menu
-              </button>
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/"
+                  className="inline-flex items-center rounded-lg border border-[#173532]/20 bg-white px-3 py-2 text-sm font-medium text-[#173532] shadow-sm"
+                >
+                  Ve trang chu
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setOpen((prev) => !prev)}
+                  className="inline-flex items-center rounded-lg border border-[#173532]/20 bg-white px-3 py-2 text-sm font-medium text-[#173532] shadow-sm lg:hidden"
+                  aria-expanded={open}
+                >
+                  Menu
+                </button>
+              </div>
             </div>
 
             {open && (
@@ -135,6 +151,13 @@ export default function AdminShell({ children }: AdminShellProps) {
                     </Link>
                   );
                 })}
+                <Link
+                  href="/"
+                  onClick={() => setOpen(false)}
+                  className="block rounded-lg border border-[#153430]/20 px-3 py-2 text-sm font-medium text-[#153430]"
+                >
+                  Ve trang chu
+                </Link>
                 <button
                   type="button"
                   onClick={() => {
