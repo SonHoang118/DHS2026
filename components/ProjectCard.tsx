@@ -9,7 +9,7 @@ type ProjectCardProps = {
 };
 
 export default function ProjectCard({ item, large, index }: ProjectCardProps) {
-	const ref = useRef<HTMLDivElement>(null);
+	const ref = useRef<HTMLAnchorElement>(null);
 	const [visible, setVisible] = useState(false);
 	const [delay] = useState(() => Math.floor(Math.random() * 400));
 	useEffect(() => {
@@ -34,7 +34,7 @@ export default function ProjectCard({ item, large, index }: ProjectCardProps) {
 			href={projectPath}
 			aria-label={`Xem chi tiet du an ${item.name}`}
 			ref={ref}
-			className={`group cursor-pointer transition duration-700 ease-out transform ${visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
+			className={`group block w-full cursor-pointer transition duration-700 ease-out transform ${visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
 			style={{ willChange: "transform, opacity", transitionDelay: `${delay}ms` }}
 		>
 			<div className="relative overflow-hidden border-2 border-transparent group-hover:border-red-500 transition">
