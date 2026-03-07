@@ -1,202 +1,102 @@
 'use client';
 
-import AdminSidebar from '@/components/AdminSidebar';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
+  const stats = [
+    { label: 'Du an hoan thanh', value: '150+', hint: 'Cong trinh', tone: 'from-[#17443f] to-[#29695f]' },
+    { label: 'Bai viet dang tai', value: '42', hint: 'Bai blog', tone: 'from-[#865323] to-[#b0783b]' },
+    { label: 'Lien he moi', value: '25', hint: 'Tin nhan chua doc', tone: 'from-[#1d5e5b] to-[#247774]' },
+    { label: 'Khach hang', value: '186', hint: 'Da hop tac', tone: 'from-[#3f5169] to-[#576f90]' },
+  ];
+
+  const actions = [
+    {
+      title: 'Quan ly du an',
+      desc: 'Them, sua, cap nhat tien do thi cong.',
+      href: '/admin/projects',
+      mark: 'DA',
+    },
+    {
+      title: 'Quan ly bai viet',
+      desc: 'Dang bai moi va toi uu noi dung website.',
+      href: '/admin/posts',
+      mark: 'BV',
+    },
+    {
+      title: 'Quan ly lien he',
+      desc: 'Theo doi yeu cau va phan hoi khach hang.',
+      href: '/admin/contacts',
+      mark: 'LH',
+    },
+  ];
+
   return (
-    <div className="admin-layout">
-      <AdminSidebar />
-      <main className="admin-main">
-        <div className="admin-header">
-          <h1>📊 Bảng Điều Khiển</h1>
-          <p>Chào mừng quay lại bảng quản lý công ty</p>
+    <div className="space-y-6">
+      <section className="relative overflow-hidden rounded-3xl border border-[#13312e]/10 bg-[linear-gradient(140deg,#173f3a_0%,#245852_48%,#356f65_100%)] px-6 py-8 text-white shadow-[0_20px_45px_rgba(14,34,31,0.22)] sm:px-8">
+        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#f3d7b8]/20 blur-2xl" />
+        <p className="text-xs uppercase tracking-[0.2em] text-[#f2dac0]">Tong quan he thong</p>
+        <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">Bang dieu khien quan tri DHS Studio</h2>
+        <p className="mt-3 max-w-2xl text-sm text-[#d9e8e0] sm:text-base">
+          Theo doi hieu suat noi dung, du an va phan hoi khach hang trong cung mot khong gian quan ly thong nhat.
+        </p>
+      </section>
+
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {stats.map((item) => (
+          <article
+            key={item.label}
+            className="rounded-2xl border border-[#153530]/10 bg-white p-4 shadow-[0_8px_30px_rgba(12,35,30,0.08)]"
+          >
+            <div className={`mb-4 inline-flex rounded-lg bg-linear-to-br ${item.tone} px-3 py-1 text-xs font-semibold text-white`}>
+              {item.label}
+            </div>
+            <p className="text-3xl font-semibold text-[#0e2825]">{item.value}</p>
+            <p className="mt-1 text-sm text-[#61766b]">{item.hint}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="rounded-3xl border border-[#173531]/10 bg-white p-5 shadow-[0_12px_35px_rgba(13,35,31,0.08)] sm:p-7">
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <h3 className="text-lg font-semibold text-[#143330] sm:text-xl">Truy cap nhanh</h3>
+          <span className="rounded-full bg-[#edf3ef] px-3 py-1 text-xs font-medium text-[#244a45]">3 khu vuc chinh</span>
         </div>
 
-        <div className="dashboard-grid">
-          <div className="stat-card">
-            <div className="stat-icon">🏗️</div>
-            <div className="stat-content">
-              <h3>Dự Án Hoàn Thành</h3>
-              <p className="stat-number">150+</p>
-              <p className="stat-label">công trình</p>
-            </div>
-          </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {actions.map((action) => (
+            <Link
+              key={action.href}
+              href={action.href}
+              className="group rounded-2xl border border-[#1a3a35]/10 bg-[#f7faf8] p-5 transition hover:-translate-y-0.5 hover:border-[#1f4b44]/30 hover:shadow-[0_14px_30px_rgba(23,53,49,0.12)]"
+            >
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#173531] text-sm font-semibold text-white">
+                {action.mark}
+              </span>
+              <h4 className="mt-4 text-base font-semibold text-[#143330]">{action.title}</h4>
+              <p className="mt-2 text-sm text-[#60786c]">{action.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
 
-          <div className="stat-card">
-            <div className="stat-icon">📄</div>
-            <div className="stat-content">
-              <h3>Bài Viết Blog</h3>
-              <p className="stat-number">42</p>
-              <p className="stat-label">bài viết</p>
-            </div>
+      <section className="rounded-3xl border border-[#173531]/10 bg-white p-5 shadow-[0_12px_35px_rgba(13,35,31,0.08)] sm:p-7">
+        <h3 className="text-lg font-semibold text-[#143330] sm:text-xl">Nho viec hom nay</h3>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          <div className="rounded-xl border border-[#1b3d38]/10 bg-[#fafdfb] p-4 text-sm text-[#33514b]">
+            Kiem tra 5 tin nhan lien he moi va gan nguoi phu trach.
           </div>
-
-          <div className="stat-card">
-            <div className="stat-icon">📧</div>
-            <div className="stat-content">
-              <h3>Liên Hệ Mới</h3>
-              <p className="stat-number">25</p>
-              <p className="stat-label">tin nhắn</p>
-            </div>
+          <div className="rounded-xl border border-[#1b3d38]/10 bg-[#fafdfb] p-4 text-sm text-[#33514b]">
+            Xuat ban 1 bai viet huong dan khach hang chon vat lieu.
           </div>
-
-          <div className="stat-card">
-            <div className="stat-icon">👥</div>
-            <div className="stat-content">
-              <h3>Khách Hàng</h3>
-              <p className="stat-number">186</p>
-              <p className="stat-label">khách hàng</p>
-            </div>
+          <div className="rounded-xl border border-[#1b3d38]/10 bg-[#fafdfb] p-4 text-sm text-[#33514b]">
+            Cap nhat anh thumb cho du an biet thu moi nhat.
+          </div>
+          <div className="rounded-xl border border-[#1b3d38]/10 bg-[#fafdfb] p-4 text-sm text-[#33514b]">
+            Ra soat trang thai du an quy 2 truoc buoi hop chieu.
           </div>
         </div>
-
-        <div className="dashboard-section">
-          <h2>Quản Lý Nhanh</h2>
-          <div className="quick-actions">
-            <Link href="/admin/projects" className="action-card">
-              <span className="action-icon">🏗️</span>
-              <h3>Quản Lý Dự Án</h3>
-              <p>Thêm, sửa, xóa dự án</p>
-            </Link>
-            <Link href="/admin/posts" className="action-card">
-              <span className="action-icon">📝</span>
-              <h3>Quản Lý Bài Viết</h3>
-              <p>Tạo và chỉnh sửa blog</p>
-            </Link>
-            <Link href="/admin/contacts" className="action-card">
-              <span className="action-icon">📧</span>
-              <h3>Quản Lý Liên Hệ</h3>
-              <p>Xem tin nhắn từ khách hàng</p>
-            </Link>
-          </div>
-        </div>
-
-        <style jsx>{`
-          .admin-layout {
-            display: flex;
-            min-height: 100vh;
-            background-color: var(--color-gray-light);
-          }
-
-          .admin-main {
-            flex: 1;
-            padding: var(--spacing-2xl);
-          }
-
-          .admin-header {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-            color: white;
-            padding: var(--spacing-2xl);
-            border-radius: var(--border-radius-lg);
-            margin-bottom: var(--spacing-2xl);
-          }
-
-          .admin-header h1 {
-            color: white;
-            margin-bottom: var(--spacing-md);
-          }
-
-          .admin-header p {
-            color: rgba(255, 255, 255, 0.9);
-          }
-
-          .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-2xl);
-          }
-
-          .stat-card {
-            background: white;
-            padding: var(--spacing-lg);
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--shadow-md);
-            display: flex;
-            gap: var(--spacing-lg);
-            align-items: center;
-          }
-
-          .stat-icon {
-            font-size: var(--font-size-4xl);
-            min-width: 60px;
-            text-align: center;
-          }
-
-          .stat-content h3 {
-            font-size: var(--font-size-sm);
-            color: var(--color-gray);
-            font-weight: 600;
-            margin: 0 0 var(--spacing-sm) 0;
-          }
-
-          .stat-number {
-            font-size: var(--font-size-2xl);
-            color: var(--color-primary);
-            font-weight: 700;
-            margin: 0;
-          }
-
-          .stat-label {
-            font-size: var(--font-size-sm);
-            color: var(--color-gray);
-            margin: 0;
-          }
-
-          .dashboard-section {
-            background: white;
-            padding: var(--spacing-2xl);
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--shadow-md);
-          }
-
-          .dashboard-section h2 {
-            margin-bottom: var(--spacing-xl);
-            color: var(--color-primary);
-          }
-
-          .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--spacing-lg);
-          }
-
-          .action-card {
-            background-color: var(--color-gray-light);
-            padding: var(--spacing-lg);
-            border-radius: var(--border-radius-lg);
-            text-align: center;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-          }
-
-          .action-card:hover {
-            background-color: var(--color-white);
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-5px);
-          }
-
-          .action-icon {
-            font-size: var(--font-size-4xl);
-            display: block;
-            margin-bottom: var(--spacing-md);
-          }
-
-          .action-card h3 {
-            color: var(--color-primary);
-            margin-bottom: var(--spacing-sm);
-            font-size: var(--font-size-lg);
-          }
-
-          .action-card p {
-            color: var(--color-gray);
-            font-size: var(--font-size-sm);
-            margin: 0;
-          }
-        `}</style>
-      </main>
+      </section>
     </div>
   );
 }

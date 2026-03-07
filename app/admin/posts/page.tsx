@@ -1,7 +1,5 @@
 'use client';
 
-import AdminSidebar from '@/components/AdminSidebar';
-
 export default function AdminPosts() {
   const posts = [
     { id: 1, title: 'Xu Hướng Kiến Trúc Bền Vững Năm 2024', author: 'Nguyễn Văn A', date: '15/02/2024' },
@@ -10,131 +8,62 @@ export default function AdminPosts() {
   ];
 
   return (
-    <div className="admin-layout">
-      <AdminSidebar />
-      <main className="admin-main">
-        <div className="admin-header">
-          <h1>📝 Quản Lý Bài Viết</h1>
-          <p>Quản lý tất cả bài viết blog của công ty</p>
+    <div className="space-y-6">
+      <section className="rounded-3xl border border-[#153631]/10 bg-[linear-gradient(120deg,#253f5f_0%,#364f77_100%)] p-6 text-white shadow-[0_18px_40px_rgba(23,43,69,0.22)] sm:p-7">
+        <p className="text-xs uppercase tracking-[0.2em] text-[#e6ddbf]">Content desk</p>
+        <h2 className="mt-3 text-2xl font-semibold">Quan ly bai viet</h2>
+        <p className="mt-2 max-w-2xl text-sm text-[#dfe6f3]">Dieu phoi ke hoach noi dung, theo doi tac gia va lich dang trong mot bang tong hop.</p>
+      </section>
+
+      <section className="rounded-3xl border border-[#153631]/10 bg-white p-5 shadow-[0_12px_32px_rgba(12,35,30,0.08)] sm:p-6">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="text-lg font-semibold text-[#13322f]">Danh sach bai viet</h3>
+            <p className="text-sm text-[#5d756a]">Tong {posts.length} bai viet trong kho noi dung.</p>
+          </div>
+
+          <button
+            type="button"
+            className="rounded-xl bg-[#253f5f] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#1b2f48]"
+          >
+            + Viet bai moi
+          </button>
         </div>
 
-        <div className="admin-actions">
-          <button className="btn btn-primary">+ Viết Bài Mới</button>
-        </div>
-
-        <div className="admin-table-container">
-          <table className="admin-table">
+        <div className="overflow-x-auto rounded-2xl border border-[#153631]/10">
+          <table className="min-w-full border-separate border-spacing-0 text-sm">
             <thead>
-              <tr>
-                <th>ID</th>
-                <th>Tiêu Đề</th>
-                <th>Tác Giả</th>
-                <th>Ngày Đăng</th>
-                <th>Hành Động</th>
+              <tr className="bg-[#f2f5fb] text-left text-[#334560]">
+                <th className="px-4 py-3 font-semibold">ID</th>
+                <th className="px-4 py-3 font-semibold">Tieu de</th>
+                <th className="px-4 py-3 font-semibold">Tac gia</th>
+                <th className="px-4 py-3 font-semibold">Ngay dang</th>
+                <th className="px-4 py-3 font-semibold">Hanh dong</th>
               </tr>
             </thead>
             <tbody>
               {posts.map((post) => (
-                <tr key={post.id}>
-                  <td>#{post.id}</td>
-                  <td>{post.title}</td>
-                  <td>{post.author}</td>
-                  <td>{post.date}</td>
-                  <td>
-                    <button className="btn-small">Sửa</button>
-                    <button className="btn-small btn-danger">Xóa</button>
+                <tr key={post.id} className="border-t border-[#153631]/10 odd:bg-white even:bg-[#fbfcff]">
+                  <td className="px-4 py-3 text-[#4f665d]">#{post.id}</td>
+                  <td className="px-4 py-3 font-medium text-[#0f2a27]">{post.title}</td>
+                  <td className="px-4 py-3 text-[#3d4f68]">{post.author}</td>
+                  <td className="px-4 py-3 text-[#4f665d]">{post.date}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-wrap gap-2">
+                      <button type="button" className="rounded-lg border border-[#253f5f]/30 px-3 py-1.5 text-xs font-medium text-[#253f5f] hover:bg-[#eff4fd]">
+                        Sua
+                      </button>
+                      <button type="button" className="rounded-lg border border-[#9a433d]/30 px-3 py-1.5 text-xs font-medium text-[#9a433d] hover:bg-[#fff1f0]">
+                        Xoa
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
-        <style jsx>{`
-          .admin-layout {
-            display: flex;
-            min-height: 100vh;
-            background-color: var(--color-gray-light);
-          }
-
-          .admin-main {
-            flex: 1;
-            padding: var(--spacing-2xl);
-          }
-
-          .admin-header {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-            color: white;
-            padding: var(--spacing-2xl);
-            border-radius: var(--border-radius-lg);
-            margin-bottom: var(--spacing-2xl);
-          }
-
-          .admin-header h1 {
-            color: white;
-            margin-bottom: var(--spacing-md);
-          }
-
-          .admin-actions {
-            margin-bottom: var(--spacing-xl);
-            display: flex;
-            gap: var(--spacing-md);
-          }
-
-          .admin-table-container {
-            background: white;
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--shadow-md);
-            overflow: auto;
-          }
-
-          .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-          }
-
-          .admin-table th,
-          .admin-table td {
-            padding: var(--spacing-md);
-            text-align: left;
-            border-bottom: 1px solid var(--color-border);
-          }
-
-          .admin-table th {
-            background-color: var(--color-gray-light);
-            font-weight: 600;
-            color: var(--color-gray-dark);
-          }
-
-          .admin-table tr:hover {
-            background-color: var(--color-gray-light);
-          }
-
-          .btn-small {
-            padding: var(--spacing-xs) var(--spacing-md);
-            font-size: var(--font-size-sm);
-            margin-right: var(--spacing-sm);
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-          }
-
-          .btn-small:hover {
-            background-color: var(--color-primary-dark);
-          }
-
-          .btn-danger:hover {
-            background-color: var(--color-danger);
-          }
-
-          .btn-danger {
-            background-color: #ef9a9a;
-          }
-        `}</style>
-      </main>
+      </section>
     </div>
   );
 }

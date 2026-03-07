@@ -1,7 +1,5 @@
 'use client';
 
-import AdminSidebar from '@/components/AdminSidebar';
-
 export default function AdminProjects() {
   const projects = [
     { id: 1, title: 'Tòa Nhà Thương Mại Trung Tâm', status: 'Hoàn Thành', year: 2022 },
@@ -10,141 +8,64 @@ export default function AdminProjects() {
   ];
 
   return (
-    <div className="admin-layout">
-      <AdminSidebar />
-      <main className="admin-main">
-        <div className="admin-header">
-          <h1>🏗️ Quản Lý Dự Án</h1>
-          <p>Quản lý tất cả các dự án của công ty</p>
+    <div className="space-y-6">
+      <section className="rounded-3xl border border-[#153631]/10 bg-[linear-gradient(120deg,#173f3a_0%,#27554e_100%)] p-6 text-white shadow-[0_18px_40px_rgba(14,35,31,0.2)] sm:p-7">
+        <p className="text-xs uppercase tracking-[0.2em] text-[#e8d0b2]">Project management</p>
+        <h2 className="mt-3 text-2xl font-semibold">Quan ly du an</h2>
+        <p className="mt-2 max-w-2xl text-sm text-[#d9e6df]">Theo doi danh sach du an va cap nhat trang thai nhanh trong mot bang du lieu thong nhat.</p>
+      </section>
+
+      <section className="rounded-3xl border border-[#153631]/10 bg-white p-5 shadow-[0_12px_32px_rgba(12,35,30,0.08)] sm:p-6">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="text-lg font-semibold text-[#13322f]">Danh sach du an</h3>
+            <p className="text-sm text-[#5d756a]">Tong {projects.length} du an trong he thong.</p>
+          </div>
+
+          <button
+            type="button"
+            className="rounded-xl bg-[#173531] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#0f2926]"
+          >
+            + Them du an moi
+          </button>
         </div>
 
-        <div className="admin-actions">
-          <button className="btn btn-primary">+ Thêm Dự Án Mới</button>
-        </div>
-
-        <div className="admin-table-container">
-          <table className="admin-table">
+        <div className="overflow-x-auto rounded-2xl border border-[#153631]/10">
+          <table className="min-w-full border-separate border-spacing-0 text-sm">
             <thead>
-              <tr>
-                <th>ID</th>
-                <th>Tên Dự Án</th>
-                <th>Trạng Thái</th>
-                <th>Năm</th>
-                <th>Hành Động</th>
+              <tr className="bg-[#f1f6f3] text-left text-[#36544d]">
+                <th className="px-4 py-3 font-semibold">ID</th>
+                <th className="px-4 py-3 font-semibold">Ten du an</th>
+                <th className="px-4 py-3 font-semibold">Trang thai</th>
+                <th className="px-4 py-3 font-semibold">Nam</th>
+                <th className="px-4 py-3 font-semibold">Hanh dong</th>
               </tr>
             </thead>
             <tbody>
               {projects.map((project) => (
-                <tr key={project.id}>
-                  <td>#{project.id}</td>
-                  <td>{project.title}</td>
-                  <td><span className="badge-success">{project.status}</span></td>
-                  <td>{project.year}</td>
-                  <td>
-                    <button className="btn-small">Sửa</button>
-                    <button className="btn-small btn-danger">Xóa</button>
+                <tr key={project.id} className="border-t border-[#153631]/10 odd:bg-white even:bg-[#fbfdfc]">
+                  <td className="px-4 py-3 text-[#4f665d]">#{project.id}</td>
+                  <td className="px-4 py-3 font-medium text-[#0f2a27]">{project.title}</td>
+                  <td className="px-4 py-3">
+                    <span className="rounded-full bg-[#e6f4ec] px-3 py-1 text-xs font-semibold text-[#2d6a4f]">{project.status}</span>
+                  </td>
+                  <td className="px-4 py-3 text-[#4f665d]">{project.year}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-wrap gap-2">
+                      <button type="button" className="rounded-lg border border-[#153631]/20 px-3 py-1.5 text-xs font-medium text-[#173531] hover:bg-[#eff6f2]">
+                        Sua
+                      </button>
+                      <button type="button" className="rounded-lg border border-[#9a433d]/30 px-3 py-1.5 text-xs font-medium text-[#9a433d] hover:bg-[#fff1f0]">
+                        Xoa
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
-        <style jsx>{`
-          .admin-layout {
-            display: flex;
-            min-height: 100vh;
-            background-color: var(--color-gray-light);
-          }
-
-          .admin-main {
-            flex: 1;
-            padding: var(--spacing-2xl);
-          }
-
-          .admin-header {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-            color: white;
-            padding: var(--spacing-2xl);
-            border-radius: var(--border-radius-lg);
-            margin-bottom: var(--spacing-2xl);
-          }
-
-          .admin-header h1 {
-            color: white;
-            margin-bottom: var(--spacing-md);
-          }
-
-          .admin-actions {
-            margin-bottom: var(--spacing-xl);
-            display: flex;
-            gap: var(--spacing-md);
-          }
-
-          .admin-table-container {
-            background: white;
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--shadow-md);
-            overflow: auto;
-          }
-
-          .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-          }
-
-          .admin-table th,
-          .admin-table td {
-            padding: var(--spacing-md);
-            text-align: left;
-            border-bottom: 1px solid var(--color-border);
-          }
-
-          .admin-table th {
-            background-color: var(--color-gray-light);
-            font-weight: 600;
-            color: var(--color-gray-dark);
-          }
-
-          .admin-table tr:hover {
-            background-color: var(--color-gray-light);
-          }
-
-          .badge-success {
-            display: inline-block;
-            background-color: #c8e6c9;
-            color: #2e7d32;
-            padding: var(--spacing-xs) var(--spacing-md);
-            border-radius: var(--border-radius);
-            font-size: var(--font-size-sm);
-            font-weight: 600;
-          }
-
-          .btn-small {
-            padding: var(--spacing-xs) var(--spacing-md);
-            font-size: var(--font-size-sm);
-            margin-right: var(--spacing-sm);
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-          }
-
-          .btn-small:hover {
-            background-color: var(--color-primary-dark);
-          }
-
-          .btn-danger:hover {
-            background-color: var(--color-danger);
-          }
-
-          .btn-danger {
-            background-color: #ef9a9a;
-          }
-        `}</style>
-      </main>
+      </section>
     </div>
   );
 }
