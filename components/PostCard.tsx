@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 import { formatDate } from "@/lib/date";
 
@@ -9,7 +10,7 @@ type PostCardProps = {
 };
 
 export default function PostCard({ item, featured = false, index }: PostCardProps) {
-	const ref = useRef<HTMLDivElement>(null);
+	const ref = useRef<HTMLAnchorElement>(null);
 	const [visible, setVisible] = useState(false);
 	const [delay] = useState(() => Math.floor(Math.random() * 400));
 	useEffect(() => {
@@ -28,11 +29,39 @@ export default function PostCard({ item, featured = false, index }: PostCardProp
 		return () => observer.disconnect();
 	}, []);
 
+	const postPath = `/posts/${item.slugify || item._id}`;
+
+	const getContentPreview = (rawContent: unknown) => {
+		if (!rawContent) return "";
+
+		if (typeof rawContent === "string") {
+			try {
+				const parsed = JSON.parse(rawContent);
+				if (parsed?.blocks && Array.isArray(parsed.blocks)) {
+					return parsed.blocks.map((block: any) => block.text || "").join(" ").trim();
+				}
+				return rawContent;
+			} catch {
+				return rawContent;
+			}
+		}
+
+		if (typeof rawContent === "object" && rawContent !== null && Array.isArray((rawContent as any).blocks)) {
+			return (rawContent as any).blocks.map((block: any) => block.text || "").join(" ").trim();
+		}
+
+		return "";
+	};
+
+	const previewText = getContentPreview(item.content);
+
 	if (featured) {
 		return (
 			<>
 				{/* Image */}
-				<div
+				<Link
+					href={postPath}
+					aria-label={`Xem chi tiet bai viet ${item.title}`}
 					ref={ref}
 					className={`group transition cursor-pointer duration-700 ease-out transform ${visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
 					style={{ willChange: "transform, opacity", transitionDelay: `${delay}ms` }}
@@ -45,7 +74,7 @@ export default function PostCard({ item, featured = false, index }: PostCardProp
 							className={`w-full object-cover transition duration-500 group-hover:scale-102`}
 						/>
 					</div>
-				</div>
+				</Link>
 
 				{/* Content */}
 				<div className="transition duration-700 ease-out">
@@ -53,17 +82,19 @@ export default function PostCard({ item, featured = false, index }: PostCardProp
 						Chính trị &nbsp; {formatDate(item.createdAt)}
 					</p>
 
-					<h3 className="text-3xl font-semibold text-gray-900 leading-snug mb-4">
-						{item.title}
-					</h3>
+					<Link href={postPath} className="block">
+						<h3 className="text-3xl font-semibold text-gray-900 leading-snug mb-4 hover:text-[#C00707] transition-colors">
+							{item.title}
+						</h3>
+					</Link>
 
 					<p className="text-gray-600 mb-6 leading-relaxed">
-						{item.content.slice(0, 200)}...
+						{previewText.slice(0, 200)}...
 					</p>
 
-					<button className="px-6 py-2 border border-purple-500 text-purple-600 rounded-lg hover:bg-purple-50 transition">
+					<Link href={postPath} className="inline-flex px-6 py-2 border border-purple-500 text-purple-600 rounded-lg hover:bg-purple-50 transition">
 						Read More
-					</button>
+					</Link>
 				</div>
 			</>
 		);
@@ -71,7 +102,9 @@ export default function PostCard({ item, featured = false, index }: PostCardProp
 
 	// Default (small card)
 	return (
-		<div
+		<Link
+			href={postPath}
+			aria-label={`Xem chi tiet bai viet ${item.title}`}
 			ref={ref}
 			className={`group cursor-pointer transition duration-700 ease-out transform ${visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
 			style={{ willChange: "transform, opacity", transitionDelay: `${delay}ms` }}
@@ -91,11 +124,11 @@ export default function PostCard({ item, featured = false, index }: PostCardProp
 				{item.title}
 			</h4>
 			<p className="text-sm text-gray-600 mb-3">
-				{item.content.slice(0, 200)}...
+				{previewText.slice(0, 200)}...
 			</p>
-			<button className="text-purple-600 text-sm font-medium hover:underline">
+			<span className="text-purple-600 text-sm font-medium hover:underline">
 				Read More...
-			</button>
-		</div>
+			</span>
+		</Link>
 	);
 }

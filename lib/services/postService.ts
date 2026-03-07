@@ -1,5 +1,6 @@
 import { Post } from "@/models/Post";
 import { connectDB } from "@/lib/mongodb";
+import mongoose from "mongoose";
 
 export async function getPosts(skip: number = 0, limit: number = 10) {
   await connectDB();
@@ -13,4 +14,22 @@ export async function getPosts(skip: number = 0, limit: number = 10) {
     items: posts,
     total
   };
+}
+
+export async function getPostBySlug(slug: string) {
+  await connectDB();
+
+  const trimmedSlug = slug.trim();
+  if (!trimmedSlug) {
+    return null;
+  }
+
+  let post = await Post.findOne({ slugify: trimmedSlug }).lean();
+
+  // Backward-compatible fallback for data without slugify.
+  if (!post && mongoose.Types.ObjectId.isValid(trimmedSlug)) {
+    post = await Post.findById(trimmedSlug).lean();
+  }
+
+  return post;
 }

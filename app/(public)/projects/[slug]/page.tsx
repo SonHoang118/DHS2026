@@ -1,8 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import Slider from '@/components/Slider';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import FaqSection from '@/components/FaqSection';
+import BlogSection from '@/components/BlogSection';
 
 type ProjectDetailData = {
   _id?: string;
@@ -54,6 +57,7 @@ export default function ProjectDetail() {
   const params = useParams();
   const slug = params.slug as string;
   const [project, setProject] = useState<ProjectDetailData | null>(null);
+  const [relatedProjects, setRelatedProjects] = useState<ProjectDetailData[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const detailsRef = useRef<HTMLDivElement>(null);
@@ -86,6 +90,32 @@ export default function ProjectDetail() {
         setLoading(false);
       });
   }, [slug]);
+
+  useEffect(() => {
+    if (!project?._id) {
+      setRelatedProjects([]);
+      return;
+    }
+
+    fetch('/api/projects?skip=0&limit=8', { cache: 'no-store' })
+      .then((res) => res.json())
+      .then((data) => {
+        const items = Array.isArray(data?.items) ? data.items : [];
+        const filtered = items
+          .filter((item: ProjectDetailData) => {
+            if (!item) return false;
+            if (item._id && project._id && item._id === project._id) return false;
+            if (item.slugify && slug && item.slugify === slug) return false;
+            return true;
+          })
+          .slice(0, 3);
+
+        setRelatedProjects(filtered);
+      })
+      .catch(() => {
+        setRelatedProjects([]);
+      });
+  }, [project?._id, slug]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -184,6 +214,11 @@ export default function ProjectDetail() {
   const displayDate = project.date ? new Date(project.date) : null;
   const projectTitle = project.name || 'Dự án';
 
+  const getProjectThumb = (item: ProjectDetailData) => {
+    const images = normalizeImageList(item.imgs);
+    return images[0] || '/fallback.jpg';
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 scroll-smooth">
       {/* Image Gallery Hero */}
@@ -278,7 +313,7 @@ export default function ProjectDetail() {
 
           {/* Thumbnail Gallery */}
           {projectImages.length > 1 && (
-            <div className="border-t pt-8">
+            <div className="border-t pt-8 border-gray-200">
               <h3 className="text-xl font-bold text-gray-800 mb-6">Hình Ảnh Dự Án</h3>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {imagesWithColumns.map(({ img, colSpan, idx }) => (
@@ -311,6 +346,65 @@ export default function ProjectDetail() {
         </div>
       </section>
 
+      {/* Related Projects */}
+      {relatedProjects.length > 0 && (
+        <section className="py-16 px-4 md:px-8 lg:px-16 bg-white border-t border-gray-100">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Các dự án khác</h2>
+                <p className="text-gray-500 mt-2">Khám phá thêm các dự án kiến trúc tương tự của DHStudio.</p>
+              </div>
+              <Link href="/projects" className="text-[#C00707] font-semibold hover:underline">
+                Xem tất cả
+              </Link>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {relatedProjects.map((item) => {
+                const href = `/projects/${item.slugify || item._id}`;
+                const thumb = getProjectThumb(item);
+                const itemStyles = normalizeStyleList(item.style);
+                const itemYear = item.date ? new Date(item.date).getFullYear() : null;
+
+                return (
+                  <Link
+                    key={item._id || item.slugify}
+                    href={href}
+                    className="group bg-white border border-gray-100 overflow-hidden shadow-[0_6px_20px_rgba(15,23,42,0.06)] hover:shadow-[0_14px_32px_rgba(15,23,42,0.12)] transition-all"
+                  >
+                    <img src={thumb} alt={item.name || 'Du an'} className="w-full h-52 object-cover group-hover:scale-[1.02] transition-transform" />
+                    <div className="p-5">
+                      <div className="flex flex-wrap gap-2 mb-3 text-xs">
+                        {itemStyles.slice(0, 2).map((s) => (
+                          <span key={s} className="bg-[#C00707]/10 text-[#C00707] px-2 py-1 font-medium">
+                            {s}
+                          </span>
+                        ))}
+                        {itemYear && (
+                          <span className="bg-gray-100 text-gray-600 px-2 py-1 font-medium">
+                            {itemYear}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-lg font-bold text-gray-900 line-clamp-2 mb-2 group-hover:text-[#C00707] transition-colors">
+                        {item.name || 'Dự án'}
+                      </h3>
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                        {item.decs || 'Tiếp tục khám phá chi tiết về dự án này.'}
+                      </p>
+                      <p className="text-sm text-[#C00707] font-semibold">Xem chi tiết →</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+      <BlogSection />
+      <FaqSection />
+
       {/* CTA Section */}
       <section className="py-20 px-4 md:px-8 lg:px-16 bg-gradient-to-r from-[#C00707] via-[#FF4400] to-[#FFB33F] text-white">
         <div className="max-w-4xl mx-auto text-center">
@@ -336,6 +430,7 @@ export default function ProjectDetail() {
           </div>
         </div>
       </section>
+      
     </main>
   );
 }

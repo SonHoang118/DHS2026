@@ -1,304 +1,354 @@
 'use client';
 
+import FaqSection from '@/components/FaqSection';
+import ProjectsSection from '@/components/ProjectsSection';
+import draftToHtml from 'draftjs-to-html';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+
+type RawDraftEntityRange = {
+  offset: number;
+  length: number;
+  key: number;
+};
+
+type RawDraftInlineStyleRange = {
+  offset: number;
+  length: number;
+  style: string;
+};
+
+type RawDraftBlock = {
+  key: string;
+  text: string;
+  type: string;
+  depth: number;
+  inlineStyleRanges: RawDraftInlineStyleRange[];
+  entityRanges: RawDraftEntityRange[];
+  data: Record<string, any>;
+};
+
+type RawDraftContentState = {
+  blocks: RawDraftBlock[];
+  entityMap: Record<string, any>;
+};
+
+type PostDetailData = {
+  _id?: string;
+  imgTitle?: string;
+  title?: string;
+  content?: string | RawDraftContentState;
+  decs?: string;
+  imgsId?: any;
+  createdAt?: string;
+  updatedAt?: string;
+  slugify?: string;
+};
+
+type RelatedPost = {
+  _id?: string;
+  slugify?: string;
+  title?: string;
+  decs?: string;
+  imgTitle?: string;
+  createdAt?: string;
+};
+
+const parseRawContent = (rawContent: unknown): RawDraftContentState | null => {
+  if (!rawContent) return null;
+
+  if (typeof rawContent === 'string') {
+    try {
+      const parsed = JSON.parse(rawContent);
+      if (parsed?.blocks && Array.isArray(parsed.blocks)) {
+        return parsed as RawDraftContentState;
+      }
+      return null;
+    } catch {
+      return {
+        blocks: [
+          {
+            key: 'plain',
+            text: rawContent,
+            type: 'unstyled',
+            depth: 0,
+            inlineStyleRanges: [],
+            entityRanges: [],
+            data: {},
+          },
+        ],
+        entityMap: {},
+      };
+    }
+  }
+
+  if (
+    typeof rawContent === 'object' &&
+    rawContent !== null &&
+    Array.isArray((rawContent as any).blocks)
+  ) {
+    return rawContent as RawDraftContentState;
+  }
+
+  return null;
+};
+
+const normalizePostImages = (rawImages: any): string[] => {
+  if (!Array.isArray(rawImages)) return [];
+
+  return rawImages
+    .map((img) => {
+      if (typeof img === 'string') return img;
+      if (img && typeof img === 'object') return img.url || img.src || '';
+      return '';
+    })
+    .filter(Boolean);
+};
 
 export default function PostDetail() {
   const params = useParams();
   const slug = params.slug as string;
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const [post, setPost] = useState<PostDetailData | null>(null);
+  const [relatedPosts, setRelatedPosts] = useState<RelatedPost[]>([]);
+  const [loading, setLoading] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Dummy post data based on provided structure
-  const posts: Record<string, any> = {
-    'may-bay-gap-su-co-khi-ha-canh-o-tan-son-nhat-toan-bo-hanh-khach-an-toan': {
-      _id: '681dbf4d9ca949b4c15fbb8d',
-      imgTitle: 'https://res.cloudinary.com/dcqivfwxv/image/upload/v1746795925/itnvqoxd…',
-      title: 'Máy bay gặp sự cố khi hạ cánh ở Tân Sơn Nhất, toàn bộ hành khách an toàn',
-      content: {
-        blocks: [
-          {
-            key: '50f80',
-            text: '(Dân trí) - Chuyến bay của Vietjet gặp sự cố khi hạ cánh tại sân bay Tân Sơn Nhất. Toàn bộ hành khách đã được sơ tán an toàn.',
-            type: 'unstyled',
-            depth: 0,
-            inlineStyleRanges: [],
-            entityRanges: [],
-            data: {}
-          },
-          {
-            key: 'abc123',
-            text: 'Chi tiết sự việc',
-            type: 'header-two',
-            depth: 0,
-            inlineStyleRanges: [],
-            entityRanges: [],
-            data: {}
-          },
-          {
-            key: 'def456',
-            text: 'Theo thông tin ban đầu, máy bay gặp trục trặc kỹ thuật khi tiếp cận đường băng. Phi công đã xử lý khéo léo, đảm bảo an toàn cho tất cả hành khách.',
-            type: 'unstyled',
-            depth: 0,
-            inlineStyleRanges: [],
-            entityRanges: [],
-            data: {}
-          }
-        ]
-      },
-      decs: 'Chi tiết về sự cố máy bay tại sân bay Tân Sơn Nhất',
-      imgsId: [
-        { url: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=600&fit=crop' },
-        { url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop' },
-        { url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop' },
-        { url: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=600&fit=crop' },
-        { url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop' },
-        { url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop' }
-      ],
-      createdAt: '2025-05-09T08:39:41.418+00:00',
-      updatedAt: '2025-05-09T13:23:26.911+00:00',
-      __v: 0,
-      slugify: 'may-bay-gap-su-co-khi-ha-canh-o-tan-son-nhat-toan-bo-hanh-khach-an-toan'
-    },
-    'xu-huong-kien-truc-2024': {
-      _id: 'sample-id-1',
-      imgTitle: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1200&h=600&fit=crop',
-      title: 'Xu Hướng Kiến Trúc Bền Vững Năm 2024',
-      content: {
-        blocks: [
-          {
-            key: 'intro',
-            text: 'Năm 2024 sẽ chứng kiến sự thay đổi đáng kể trong lĩnh vực kiến trúc, với sự tập trung vào tính bền vững và kỹ thuật số.',
-            type: 'unstyled',
-            depth: 0,
-            inlineStyleRanges: [],
-            entityRanges: [],
-            data: {}
-          },
-          {
-            key: 'header1',
-            text: 'Kiến Trúc Xanh và Bền Vững',
-            type: 'header-two',
-            depth: 0,
-            inlineStyleRanges: [],
-            entityRanges: [],
-            data: {}
-          },
-          {
-            key: 'para1',
-            text: 'Các tòa nhà xanh không chỉ tốt cho môi trường mà còn giúp giảm chi phí vận hành.',
-            type: 'unstyled',
-            depth: 0,
-            inlineStyleRanges: [],
-            entityRanges: [],
-            data: {}
-          }
-        ]
-      },
-      decs: 'Khám phá xu hướng kiến trúc bền vững mới nhất',
-      imgsId: [
-        { url: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&h=600&fit=crop' },
-        { url: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=600&fit=crop' }
-      ],
-      createdAt: '2024-02-15T10:00:00.000+00:00',
-      updatedAt: '2024-02-15T10:00:00.000+00:00',
-      __v: 0,
-      slugify: 'xu-huong-kien-truc-2024'
-    }
-  };
+  const content = useMemo(() => parseRawContent(post?.content), [post?.content]);
+  const contentHtml = useMemo(() => {
+    if (!content) return '';
+    return draftToHtml(content);
+  }, [content]);
 
-  const post = posts[slug] || posts['may-bay-gap-su-co-khi-ha-canh-o-tan-son-nhat-toan-bo-hanh-khach-an-toan'];
+  const galleryImages = normalizePostImages(post?.imgsId);
+  const heroImage = post?.imgTitle || galleryImages[0] || '/fallback.jpg';
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in');
-          }
-        });
-      },
-      { threshold: 0.1 }
+    if (!slug) return;
+
+    setLoading(true);
+    fetch(`/api/posts/${encodeURIComponent(slug)}`, { cache: 'no-store' })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error('Post not found');
+        }
+        return res.json();
+      })
+      .then((data) => setPost(data))
+      .catch(() => setPost(null))
+      .finally(() => setLoading(false));
+  }, [slug]);
+
+  useEffect(() => {
+    if (!post?._id) {
+      setRelatedPosts([]);
+      return;
+    }
+
+    fetch('/api/posts?skip=0&limit=6', { cache: 'no-store' })
+      .then((res) => res.json())
+      .then((data) => {
+        const items = Array.isArray(data?.items) ? data.items : [];
+        const filtered = items
+          .filter((item: RelatedPost) => {
+            if (!item) return false;
+            if (item._id && post._id && item._id === post._id) return false;
+            if (item.slugify && slug && item.slugify === slug) return false;
+            return true;
+          })
+          .slice(0, 3);
+
+        setRelatedPosts(filtered);
+      })
+      .catch(() => setRelatedPosts([]));
+  }, [post?._id, slug]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        Đang tải bài viết...
+      </main>
     );
+  }
 
-    if (contentRef.current) observer.observe(contentRef.current);
+  if (!post) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        Không tìm thấy bài viết
+      </main>
+    );
+  }
 
-    return () => observer.disconnect();
-  }, []);
-
-  // Function to render content blocks
-  const renderContent = (content: any) => {
-    if (!content || !content.blocks) return null;
-
-    return content.blocks.map((block: any) => {
-      const { key, text, type } = block;
-
-      switch (type) {
-        case 'header-one':
-          return <h1 key={key} className="text-3xl font-bold text-gray-800 mb-6">{text}</h1>;
-        case 'header-two':
-          return <h2 key={key} className="text-2xl font-bold text-gray-800 mb-4">{text}</h2>;
-        case 'header-three':
-          return <h3 key={key} className="text-xl font-bold text-gray-800 mb-3">{text}</h3>;
-        case 'unstyled':
-        default:
-          return <p key={key} className="text-lg text-gray-700 leading-relaxed mb-4">{text}</p>;
-      }
-    });
-  };
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % post.imgsId.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + post.imgsId.length) % post.imgsId.length);
-  };
+  const createdDate = post.createdAt
+    ? new Date(post.createdAt).toLocaleDateString('vi-VN')
+    : '';
+  const updatedDate = post.updatedAt
+    ? new Date(post.updatedAt).toLocaleDateString('vi-VN')
+    : '';
+  const readingMinutes = Math.max(
+    1,
+    Math.ceil(
+      (content?.blocks || []).reduce((sum: number, block: RawDraftBlock) => sum + (block.text?.length || 0), 0) / 900
+    )
+  );
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 scroll-smooth">
-      {/* Hero Section */}
-      <section className="relative bg-black overflow-hidden">
-        <div className="relative aspect-[16/9] bg-black flex items-center justify-center">
-          <img
-            src={post.imgTitle}
-            alt={post.title}
-            className="w-full h-full object-cover opacity-60"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 text-white">
-            <div className="max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
-                {post.title}
-              </h1>
-              {post.decs && (
-                <p className="text-xl md:text-2xl opacity-90 mb-6">
-                  {post.decs}
-                </p>
-              )}
-              <div className="flex flex-wrap gap-4 text-sm">
-                <span className="bg-[#C00707] text-white px-3 py-1">
-                  📅 {new Date(post.createdAt).toLocaleDateString('vi-VN')}
-                </span>
-                <span className="bg-[#FF4400] text-white px-3 py-1">
-                  ⏱️ {Math.ceil(post.content?.blocks?.length / 3) || 5} phút đọc
-                </span>
-              </div>
+    <main className="min-h-screen bg-linear-to-b from-[#f8fafc] via-white to-[#f9fafb]">
+
+      {/* HERO */}
+      <section className="relative h-130 bg-black overflow-hidden">
+        <img
+          src={heroImage}
+          alt={post.title || 'Bai viet'}
+          className="absolute inset-0 w-full h-full object-cover opacity-60"
+        />
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/50 to-black/20" />
+
+        <div className="absolute top-8 left-6 md:left-10 z-10">
+          <Link
+            href="/posts"
+            className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-2 text-sm hover:bg-white/30 transition"
+          >
+            ← Quay lại bài viết
+          </Link>
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto h-full px-6 md:px-8 flex items-end pb-14 text-white">
+          <div className="max-w-4xl">
+            <div className="flex flex-wrap gap-3 mb-5 text-sm">
+              <span className="bg-[#C00707] px-3 py-1 font-medium">Bài viết nổi bật</span>
+              <span className="bg-white/20 backdrop-blur-md px-3 py-1">{createdDate}</span>
+              <span className="bg-white/20 backdrop-blur-md px-3 py-1">{readingMinutes} phút đọc</span>
             </div>
+
+            <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-4">{post.title}</h1>
+
+            {post.decs && (
+              <p className="text-base md:text-xl text-white/90 max-w-3xl leading-relaxed">{post.decs}</p>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Content Section */}
-      <section
-        ref={contentRef}
-        className="py-20 px-4 md:px-8 lg:px-16 bg-white opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
-      >
-        <div className="max-w-4xl mx-auto">
-          <article className="prose prose-lg max-w-none">
-            {renderContent(post.content)}
-          </article>
+      {/* CONTENT */}
+      <section className=" max-w-6xl mx-auto px-4 md:px-6 -mt-16 relative z-20">
+        <div className="grid lg:grid-cols-12 gap-8">
+          <article
+            ref={contentRef}
+            className="lg:col-span-8 bg-white border border-gray-100 shadow-[0_12px_40px_rgba(15,23,42,0.08)] p-6 md:p-10 rounded-md"
+          >
+            <div
+              className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-blockquote:border-[#C00707]"
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
+            />
 
-          {/* Image Gallery */}
-          {post.imgsId && post.imgsId.length > 0 && (
-            <div className="mt-12">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">Hình Ảnh Liên Quan</h3>
-              <div className="relative bg-black overflow-hidden mb-8">
-                <div className="relative aspect-video bg-black flex items-center justify-center">
-                  <img
-                    src={post.imgsId[currentImageIndex].url}
-                    alt={`${post.title} ${currentImageIndex + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                  {post.imgsId.length > 1 && (
-                    <>
-                      <button
-                        onClick={prevImage}
-                        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 transition-all z-10"
-                      >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={nextImage}
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 transition-all z-10"
-                      >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </button>
-                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
-                        {post.imgsId.map((_: any, idx: number) => (
-                          <button
-                            key={idx}
-                            onClick={() => setCurrentImageIndex(idx)}
-                            className={`w-2 h-2 transition-all ${
-                              idx === currentImageIndex ? 'bg-white w-6' : 'bg-white/50'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </>
-                  )}
+            {!contentHtml && (
+              <p className="text-lg text-gray-600">Nội dung bài viết đang được cập nhật.</p>
+            )}
+
+            {galleryImages.length > 0 && (
+              <div className="mt-12 pt-8 border-t border-gray-100">
+                <h3 className="text-2xl font-bold text-gray-900 mb-5">Hình ảnh liên quan</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {galleryImages.map((image, idx) => (
+                    <img
+                      key={idx}
+                      src={image}
+                      alt={`${post.title || 'Bai viet'} ${idx + 1}`}
+                      className="w-full h-40 object-cover rounded-md"
+                    />
+                  ))}
                 </div>
               </div>
+            )}
+          </article>
 
-              {/* Thumbnail Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {post.imgsId.map((img: any, idx: number) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentImageIndex(idx)}
-                    className={`relative aspect-square overflow-hidden transition-all ${
-                      idx === currentImageIndex
-                        ? 'ring-4 ring-[#C00707]'
-                        : 'hover:opacity-80'
-                    }`}
-                  >
-                    <img src={img.url} alt={`${post.title} ${idx + 1}`} className="w-full h-full object-cover" />
-                  </button>
-                ))}
+          <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-18 self-start">
+            <div className="bg-white border border-gray-100 shadow-[0_8px_24px_rgba(15,23,42,0.06)] p-6 rounded-md">
+              <h4 className="text-lg font-bold text-gray-900 mb-4">Thông tin bài viết</h4>
+              <div className="space-y-3 text-sm text-gray-600">
+                <p>
+                  <span className="font-semibold text-gray-900">Đăng ngày:</span> {createdDate || 'Đang cập nhật'}
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-900">Cập nhật:</span> {updatedDate || createdDate || 'Đang cập nhật'}
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-900">Thời gian đọc:</span> {readingMinutes} phút
+                </p>
               </div>
             </div>
-          )}
 
-          {/* Post Footer */}
-          <footer className="mt-16 pt-8 border-t border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-500">
-                Đăng ngày {new Date(post.createdAt).toLocaleDateString('vi-VN')}
-                {post.updatedAt !== post.createdAt && (
-                  <span className="ml-2">
-                    • Cập nhật {new Date(post.updatedAt).toLocaleDateString('vi-VN')}
-                  </span>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <button className="text-gray-500 hover:text-[#C00707] transition-colors">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                  </svg>
-                </button>
-                <button className="text-gray-500 hover:text-[#C00707] transition-colors">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                </button>
-              </div>
+            <div className="bg-linear-to-br from-[#C00707] to-[#FF4400] text-white p-6 shadow-[0_10px_30px_rgba(192,7,7,0.25)] rounded-md">
+              <h4 className="text-lg font-bold mb-3">Bạn cần tư vấn dự án?</h4>
+              <p className="text-white/90 mb-5 text-sm">
+                Liên hệ DHStudio để được hỗ trợ miễn phí về thiết kế và thi công kiến trúc.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex bg-white text-[#C00707] px-4 py-2 font-semibold hover:bg-gray-100 transition"
+              >
+                Liên hệ ngay
+              </Link>
             </div>
-          </footer>
+          </aside>
         </div>
       </section>
+
+      {/* RELATED POSTS */}
+      {relatedPosts.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 md:px-6 py-20">
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">Bài viết đề xuất</h2>
+              <p className="text-gray-500 mt-2">Các nội dung liên quan bạn có thể quan tâm tiếp theo.</p>
+            </div>
+            <Link href="/posts" className="text-[#C00707] font-semibold hover:underline">
+              Xem tất cả
+            </Link>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {relatedPosts.map((item) => {
+              const href = `/posts/${item.slugify || item._id}`;
+              const thumb = item.imgTitle || '/fallback.jpg';
+              const dateText = item.createdAt
+                ? new Date(item.createdAt).toLocaleDateString('vi-VN')
+                : '';
+
+              return (
+                <Link
+                  key={item._id || item.slugify}
+                  href={href}
+                  className="group bg-white border border-gray-100 overflow-hidden shadow-[0_6px_20px_rgba(15,23,42,0.06)] hover:shadow-[0_14px_32px_rgba(15,23,42,0.12)] transition-all rounded-md"
+                >
+                  <img src={thumb} alt={item.title || 'Bai viet'} className="w-full h-48 object-cover group-hover:scale-[1.02] transition-transform" />
+                  <div className="p-5">
+                    <p className="text-xs uppercase tracking-wide text-gray-400 mb-2">{dateText}</p>
+                    <h3 className="text-lg font-bold text-gray-900 line-clamp-2 mb-2 group-hover:text-[#C00707] transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 line-clamp-2">{item.decs || 'Tiếp tục khám phá nội dung chi tiết của bài viết này.'}</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      <ProjectsSection />
+      <FaqSection />
 
       {/* CTA Section */}
       <section className="py-20 px-4 md:px-8 lg:px-16 bg-gradient-to-r from-[#C00707] via-[#FF4400] to-[#FFB33F] text-white">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Bạn Quan Tâm Đến Dự Án Kiến Trúc?
+            Bạn Có Dự Án Tương Tự?
           </h2>
           <p className="text-xl opacity-90 mb-8">
-            Hãy liên hệ với DHStudio để được tư vấn miễn phí về các dự án kiến trúc và nội thất
+            Hãy liên hệ với DHStudio để được tư vấn miễn phí và thực hiện dự án kiến trúc của bạn
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
@@ -316,6 +366,7 @@ export default function PostDetail() {
           </div>
         </div>
       </section>
+
     </main>
   );
 }
