@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import TypewriterText from '@/components/TypewriterText';
 
 export default function Home() {
   return (
@@ -8,7 +9,12 @@ export default function Home() {
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
-          <h1>THIẾT KẾ & THI CÔNG KIẾN TRÚC CHUYÊN NGHIỆP</h1>
+          <TypewriterText
+            as="h1"
+            text="THIẾT KẾ & THI CÔNG KIẾN TRÚC CHUYÊN NGHIỆP"
+            speed={30}
+            showCursor
+          />
           <p>Chúng tôi mang đến giải pháp kiến trúc toàn diện từ khái niệm đến thực thi</p>
           <div className="hero-buttons">
             <Link href="/projects" className="btn btn-primary">Xem Dự Án</Link>

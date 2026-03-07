@@ -2,6 +2,7 @@ import BlogSection from "@/components/BlogSection";
 import FaqSection from "@/components/FaqSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import Slider from "@/components/Slider";
+import TypewriterText from "@/components/TypewriterText";
 import Image from "next/image";
 
 export default function Home() {
@@ -30,25 +31,52 @@ export default function Home() {
       <section className="py-14 text-center">
 
         {/* TITLE */}
-        <h1 className="
+        {/* <h1 className="
         text-[24px]
         sm:text-[32px]
         md:text-[46px]
         font-light
         text-[#1f2937]
       ">
-          DHS - Thiết kế và thi công kiến trúc
-        </h1>
+        DHS - Thiết kế và thi công kiến trúc
+      </h1> */}
+
+        <TypewriterText
+          as="h1"
+          speed={30}
+          humanize={true}
+          className="text-[24px]
+        sm:text-[32px]
+        md:text-[46px]
+        font-light
+        text-[#1f2937]"
+          text="DHS - Thiết kế và thi công kiến trúc"
+        />
+        <TypewriterText
+          as="p"
+          delay={1500}
+          speed={7}
+          humanize={true}
+          className="mt-10
+        text-4xl
+        font-bold
+        text-black"
+          text="Xin chào"
+        />
+
+
+
+
 
         {/* SUBTITLE */}
-        <p className="
+        {/* <p className="
         mt-10
         text-4xl
         font-bold
         text-black
       ">
           Xin chào
-        </p>
+        </p> */}
 
       </section>
 
@@ -356,7 +384,7 @@ export default function Home() {
         </div>
       </section>
 
-      
+
 
       {/* Một vài bài viết khác */}
       <BlogSection />

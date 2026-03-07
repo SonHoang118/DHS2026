@@ -39,3 +39,23 @@
 .hero-slider .slick-arrow {
   border: none !important;
 }
+
+@keyframes typewriter-caret-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  55%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  height: 1em;
+  margin-left: 0.12em;
+  vertical-align: -0.12em;
+  background-color: currentColor;
+  animation: typewriter-caret-blink 1s step-end infinite;
+}
