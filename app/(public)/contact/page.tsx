@@ -410,32 +410,12 @@ export default function Contact() {
         className="py-20 px-4 md:px-8 lg:px-16 bg-gradient-to-r from-[#C00707] via-[#FF4400] to-[#FFB33F] text-white"
       >
         <div className="max-w-4xl mx-auto text-center">
-          <RevealOnView onceKey="contact-cta-title-block" threshold={0.25} rootMargin="0px 0px -10% 0px" className="delay-75 will-change-transform">
-            <div className="min-h-[40px] md:min-h-[52px]">
-              <TypewriterText
-                onceKey="contact-cta-title"
-                as="h2"
-                delay={150}
-                speed={45}
-                humanize={true}
-                startWhenAncestorVisible={true}
-                className="text-3xl md:text-4xl font-bold mb-6"
-                text="Sẵn Sàng Bắt Đầu Dự Án Của Bạn?"
-              />
-            </div>
-          </RevealOnView>
-          <RevealOnView onceKey="contact-cta-description-block" threshold={0.25} rootMargin="0px 0px -10% 0px" className="delay-200 will-change-transform">
-            <TypewriterText
-              onceKey="contact-cta-description"
-              as="p"
-              delay={800}
-              speed={55}
-              humanize={true}
-              startWhenAncestorVisible={true}
-              className="text-xl opacity-90 mb-8"
-              text="Hãy liên hệ ngay hôm nay để nhận tư vấn miễn phí và báo giá chi tiết cho dự án kiến trúc của bạn"
-            />
-          </RevealOnView>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Sẵn Sàng Bắt Đầu Dự Án Của Bạn?
+          </h2>
+          <p className="text-xl opacity-90 mb-8">
+            Hãy liên hệ ngay hôm nay để nhận tư vấn miễn phí và báo giá chi tiết cho dự án kiến trúc của bạn
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="#contact-form"

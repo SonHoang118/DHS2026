@@ -1,6 +1,7 @@
 'use client';
 
 import FaqSection from '@/components/FaqSection';
+import NumberCountOnView from '@/components/NumberCountOnView';
 import RevealOnView from '@/components/RevealOnView';
 import TypewriterText from '@/components/TypewriterText';
 
@@ -59,22 +60,54 @@ export default function About() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-5xl font-bold text-[#C00707] mb-3">10+</div>
+              <div className="text-5xl font-bold text-[#C00707] mb-3">
+                <NumberCountOnView
+                  value="10+"
+                  onceKey="about-stats-exp"
+                  durationMs={1250}
+                  threshold={0.45}
+                  rootMargin="0px 0px -10% 0px"
+                />
+              </div>
               <p className="text-gray-600 text-lg font-semibold">Năm Kinh Nghiệm</p>
               <p className="text-gray-500">Phục vụ uy tín</p>
             </div>
             <div className="text-center">
-              <div className="text-5xl font-bold text-[#FF4400] mb-3">150+</div>
+              <div className="text-5xl font-bold text-[#FF4400] mb-3">
+                <NumberCountOnView
+                  value="150+"
+                  onceKey="about-stats-projects"
+                  durationMs={1650}
+                  threshold={0.45}
+                  rootMargin="0px 0px -10% 0px"
+                />
+              </div>
               <p className="text-gray-600 text-lg font-semibold">Dự Án Hoàn Thành</p>
               <p className="text-gray-500">Chất lượng đảm bảo</p>
             </div>
             <div className="text-center">
-              <div className="text-5xl font-bold text-[#FFB33F] mb-3">50+</div>
+              <div className="text-5xl font-bold text-[#FFB33F] mb-3">
+                <NumberCountOnView
+                  value="50+"
+                  onceKey="about-stats-experts"
+                  durationMs={1450}
+                  threshold={0.45}
+                  rootMargin="0px 0px -10% 0px"
+                />
+              </div>
               <p className="text-gray-600 text-lg font-semibold">Nhân Viên Chuyên Gia</p>
               <p className="text-gray-500">Đội ngũ hàng đầu</p>
             </div>
             <div className="text-center">
-              <div className="text-5xl font-bold text-[#134E8E] mb-3">100%</div>
+              <div className="text-5xl font-bold text-[#134E8E] mb-3">
+                <NumberCountOnView
+                  value="100%"
+                  onceKey="about-stats-satisfaction"
+                  durationMs={1850}
+                  threshold={0.45}
+                  rootMargin="0px 0px -10% 0px"
+                />
+              </div>
               <p className="text-gray-600 text-lg font-semibold">Khách Hàng Hài Lòng</p>
               <p className="text-gray-500">Cam kết dịch vụ</p>
             </div>

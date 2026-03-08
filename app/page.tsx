@@ -7,6 +7,7 @@ import ProjectsSection from "@/components/ProjectsSection";
 import RevealOnView from "@/components/RevealOnView";
 import Slider from "@/components/Slider";
 import TypewriterText from "@/components/TypewriterText";
+import NumberCountOnView from "@/components/NumberCountOnView";
 import Image from "next/image";
 
 export default function Home() {
@@ -109,7 +110,13 @@ export default function Home() {
                   <div className="border-t border-gray-300 mb-6"></div>
 
                   <div className="text-4xl font-semibold text-[#2b3440] text-center">
-                    {item.value}
+                    <NumberCountOnView
+                      value={item.value}
+                      onceKey={`home-about-stat-${i + 1}`}
+                      durationMs={1300 + i * 220}
+                      threshold={0.45}
+                      rootMargin="0px 0px -10% 0px"
+                    />
                   </div>
 
                   <p className="text-gray-500 mt-2 text-sm text-center">
