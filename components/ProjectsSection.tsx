@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import RevealOnView from "@/components/RevealOnView";
+import TypewriterText from "./TypewriterText";
 
 type ProjectCard = {
     _id?: string;
@@ -48,13 +50,41 @@ export default function ProjectsSection() {
                         Dự án gần đây
                     </span>
 
-                    <h2 className="mt-6 text-[44px] leading-[1.2] font-semibold text-[#1f2937]">
-                        Các dự án thực tế đã triển khai của chúng tôi
-                    </h2>
+                    <div className="min-h-[235px]">
 
-                    <p className="mt-5 text-gray-500 leading-relaxed max-w-sm">
-                        Hãy cùng chiêm ngưỡng một số công trình và dự án cải tạo mà chúng tôi tự hào nhất.
-                    </p>
+
+                        <TypewriterText
+                            onceKey="projects-section-heading"
+                            as="h2"
+                            delay={300}
+                            speed={50}
+                            humanize={true}
+                            startWhenAncestorVisible={true}
+                            className="mt-6 text-[44px] leading-[1.2] font-semibold text-[#1f2937]"
+                            text="Các dự án thực tế đã triển khai của chúng tôi"
+                        />
+
+
+                        {/* <h2 className="mt-6 text-[44px] leading-[1.2] font-semibold text-[#1f2937]">
+                            Các dự án thực tế đã triển khai của chúng tôi
+                            </h2> */}
+
+                        <TypewriterText
+                            onceKey="projects-section-description"
+                            as="p"
+                            delay={1400}
+                            speed={50}
+                            humanize={true}
+                            startWhenAncestorVisible={true}
+                            className="mt-5 text-gray-500 leading-relaxed max-w-sm"
+                            text="Hãy cùng chiêm ngưỡng một số công trình và dự án cải tạo mà chúng tôi tự hào nhất."
+                        />
+                        {/* <p className="mt-5 text-gray-500 leading-relaxed max-w-sm">
+                            Hãy cùng chiêm ngưỡng một số công trình và dự án cải tạo mà chúng tôi tự hào nhất.
+                        </p> */}
+
+                    </div>
+
                     <Link href="/project" className="mt-10 border border-gray-300 px-6 py-3 inline-flex items-center gap-3 hover:bg-black hover:text-white transition">
                         Xem thêm các dự án khác
                         <span>→</span>
@@ -68,31 +98,42 @@ export default function ProjectsSection() {
                         const href = projectId ? `/projects/${projectId}` : "/projects";
                         const title = p.name || "Du an";
                         const image = getProjectThumb(p);
+                        const delayClass = i === 0 ? "delay-100" : "delay-300";
+                        const onceKey = `projects-section-card-${projectId || i}`;
 
                         return (
-                        <Link key={p._id || p.slugify || i} href={href} className="group block">
+                            <RevealOnView
+                                key={p._id || p.slugify || i}
+                                onceKey={onceKey}
+                                threshold={0.2}
+                                rootMargin="0px 0px -10% 0px"
+                                className={`${delayClass} will-change-transform`}
+                            >
+                                <Link href={href} className="group block">
 
-                            {/* IMAGE */}
-                            <div className="overflow-hidden">
-                                <img
-                                    src={image}
-                                    alt={title}
-                                    className="object-cover w-full h-[420px] group-hover:scale-105 transition duration-500"
-                                />
-                            </div>
+                                    {/* IMAGE */}
+                                    <div className="overflow-hidden">
+                                        <img
+                                            src={image}
+                                            alt={title}
+                                            className="object-cover w-full h-[420px] group-hover:scale-105 transition duration-500"
+                                        />
+                                    </div>
 
-                            {/* TITLE */}
-                            <h3 className="mt-5 text-xl font-semibold text-[#1f2937]">
-                                {title}
-                            </h3>
+                                    {/* TITLE */}
+                                    <h3 className="mt-5 text-xl font-semibold text-[#1f2937]">
+                                        {title}
+                                    </h3>
 
-                            {/* LINK */}
-                            <span className="mt-2 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition">
-                                Xem chi tiết <span>→</span>
-                            </span>
+                                    {/* LINK */}
+                                    <span className="mt-2 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition">
+                                        Xem chi tiết <span>→</span>
+                                    </span>
 
-                        </Link>
-                    )})}
+                                </Link>
+                            </RevealOnView>
+                        )
+                    })}
                 </div>
             </div>
         </section>
