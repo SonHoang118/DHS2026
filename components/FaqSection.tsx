@@ -32,7 +32,7 @@ export default function FaqSection() {
     const questionDelayClasses = ["delay-75", "delay-150", "delay-200", "delay-300", "delay-[380ms]"];
 
     return (
-        <section className="py-10 md:py-24 px-6">
+        <section className="py-20 md:py-24 px-6">
 
             {/* HEADER */}
             <div className="text-center max-w-3xl mx-auto">

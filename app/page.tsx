@@ -1,4 +1,7 @@
+"use client";
+
 import BlogSection from "@/components/BlogSection";
+import ContactForm from "@/components/ContactForm";
 import FaqSection from "@/components/FaqSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import RevealOnView from "@/components/RevealOnView";
@@ -433,61 +436,7 @@ export default function Home() {
                 />
               </div>
 
-              <form className="space-y-5">
-
-                <div>
-                  <label className="text-sm text-gray-700">Họ và tên*</label>
-                  <input
-                    className="w-full mt-2 px-4 py-3 border border-gray-300 bg-transparent outline-none"
-                    placeholder="Họ và tên của bạn"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm text-gray-700">Địa chỉ Email*</label>
-                  <input
-                    className="w-full mt-2 px-4 py-3 border border-gray-300 bg-transparent outline-none"
-                    placeholder="Địa chỉ Email của bạn"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm text-gray-700">Số điện thoại*</label>
-                    <input
-                      className="w-full mt-2 px-4 py-3 border border-gray-300 bg-transparent outline-none"
-                      placeholder="Số điện thoại của bạn"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-sm text-gray-700">Loại dự án*</label>
-                    <select className="w-full mt-2 px-4 py-3 border border-gray-300 bg-transparent outline-none">
-                      <option>Chọn loại dự án</option>
-                      <option>Xây dựng</option>
-                      <option>Cải tạo</option>
-                      <option>Tư vấn</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-sm text-gray-700">Tin nhắn*</label>
-                  <textarea
-                    rows={5}
-                    className="w-full mt-2 px-4 py-3 border border-gray-300 bg-transparent outline-none resize-none"
-                    placeholder="Hãy cho chúng tôi biết về dự án của bạn..."
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="bg-[#ff4d2d] text-white px-8 py-3 mt-4 hover:opacity-90 transition flex items-center gap-2"
-                >
-                  Gửi yêu cầu →
-                </button>
-
-              </form>
+              <ContactForm />
             </div>
           </RevealOnView>
 

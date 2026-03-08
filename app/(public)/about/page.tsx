@@ -3,36 +3,8 @@
 import FaqSection from '@/components/FaqSection';
 import RevealOnView from '@/components/RevealOnView';
 import TypewriterText from '@/components/TypewriterText';
-import { useRef, useEffect } from 'react';
 
 export default function About() {
-  const overviewRef = useRef<HTMLDivElement>(null);
-  const servicesRef = useRef<HTMLDivElement>(null);
-  const teamRef = useRef<HTMLDivElement>(null);
-  const valuesRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in');
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
-    );
-
-    if (overviewRef.current) observer.observe(overviewRef.current);
-    if (servicesRef.current) observer.observe(servicesRef.current);
-    if (teamRef.current) observer.observe(teamRef.current);
-    if (valuesRef.current) observer.observe(valuesRef.current);
-    if (ctaRef.current) observer.observe(ctaRef.current);
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 scroll-smooth">
       {/* Hero Section */}
@@ -112,8 +84,7 @@ export default function About() {
 
       {/* Overview Section */}
       <section
-        ref={overviewRef}
-        className="py-20 px-4 md:px-8 lg:px-16 bg-white opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
+        className="py-20 px-4 md:px-8 lg:px-16 bg-white"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
@@ -197,8 +168,7 @@ export default function About() {
 
       {/* Services/Specialization Section */}
       <section
-        ref={servicesRef}
-        className="py-20 px-4 md:px-8 lg:px-16 bg-gray-50 opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
+        className="py-20 px-4 md:px-8 lg:px-16 bg-gray-50"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
@@ -328,8 +298,7 @@ export default function About() {
 
       {/* Team Section */}
       <section
-        ref={teamRef}
-        className="py-20 px-4 md:px-8 lg:px-16 bg-white opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
+        className="py-20 px-4 md:px-8 lg:px-16 bg-white"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
@@ -413,8 +382,7 @@ export default function About() {
 
       {/* Values Section */}
       <section
-        ref={valuesRef}
-        className="py-20 px-4 md:px-8 lg:px-16 bg-gradient-to-r from-[#C00707]/10 to-[#FF4400]/10 opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
+        className="py-20 px-4 md:px-8 lg:px-16 bg-gradient-to-r from-[#C00707]/10 to-[#FF4400]/10"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
@@ -513,8 +481,7 @@ export default function About() {
 
       {/* CTA Section */}
       <section
-        ref={ctaRef}
-        className="py-20 px-4 md:px-8 lg:px-16 bg-gradient-to-r from-[#C00707] via-[#FF4400] to-[#FFB33F] text-white opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
+        className="py-20 px-4 md:px-8 lg:px-16 bg-gradient-to-r from-[#C00707] via-[#FF4400] to-[#FFB33F] text-white"
       >
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
