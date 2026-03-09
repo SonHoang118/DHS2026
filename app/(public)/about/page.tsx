@@ -4,6 +4,19 @@ import FaqSection from '@/components/FaqSection';
 import NumberCountOnView from '@/components/NumberCountOnView';
 import RevealOnView from '@/components/RevealOnView';
 import TypewriterText from '@/components/TypewriterText';
+import {
+  BadgeCheck,
+  Building2,
+  GraduationCap,
+  HandCoins,
+  Headset,
+  House,
+  Landmark,
+  Leaf,
+  Palette,
+  Sparkles,
+  Store,
+} from 'lucide-react';
 
 export default function About() {
   return (
@@ -238,7 +251,9 @@ export default function About() {
           <div className="grid md:grid-cols-3 gap-8">
             <RevealOnView onceKey="about-services-card-office" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-100 will-change-transform">
               <div className="bg-white p-8 shadow-lg">
-                <div className="text-4xl mb-4">🏢</div>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-[#134E8E]/10 text-[#134E8E]">
+                  <Building2 className="h-7 w-7" strokeWidth={1.9} aria-hidden="true" />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">Kiến Trúc Văn Phòng</h3>
                 <p className="text-gray-600">
                   Thiết kế không gian làm việc hiện đại, tối ưu năng suất và tạo môi trường làm việc thoải mái.
@@ -253,7 +268,9 @@ export default function About() {
 
             <RevealOnView onceKey="about-services-card-home" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-200 will-change-transform">
               <div className="bg-white p-8 shadow-lg">
-                <div className="text-4xl mb-4">🏠</div>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-[#C00707]/10 text-[#C00707]">
+                  <House className="h-7 w-7" strokeWidth={1.9} aria-hidden="true" />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">Nhà Ở & Biệt Thự</h3>
                 <p className="text-gray-600">
                   Tạo ra những căn hộ và biệt thự phản ánh cá nhân chủ nhân, kết hợp thẩm mỹ và tính năng.
@@ -268,7 +285,9 @@ export default function About() {
 
             <RevealOnView onceKey="about-services-card-commercial" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-300 will-change-transform">
               <div className="bg-white p-8 shadow-lg">
-                <div className="text-4xl mb-4">🍽️</div>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-[#FF4400]/10 text-[#FF4400]">
+                  <Store className="h-7 w-7" strokeWidth={1.9} aria-hidden="true" />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">Thương Mại & Giải Trí</h3>
                 <p className="text-gray-600">
                   Thiết kế các không gian bán lẻ, nhà hàng, khách sạn và công trình giải trí đẳng cấp.
@@ -283,7 +302,9 @@ export default function About() {
 
             <RevealOnView onceKey="about-services-card-education" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-[380ms] will-change-transform">
               <div className="bg-white p-8 shadow-lg">
-                <div className="text-4xl mb-4">🎓</div>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-[#FFB33F]/20 text-[#CC7A00]">
+                  <GraduationCap className="h-7 w-7" strokeWidth={1.9} aria-hidden="true" />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">Giáo Dục & Y Tế</h3>
                 <p className="text-gray-600">
                   Thiết kế cơ sở hạ tầng giáo dục và y tế theo tiêu chuẩn quốc tế, ưu tiên an toàn.
@@ -298,7 +319,9 @@ export default function About() {
 
             <RevealOnView onceKey="about-services-card-public" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-[460ms] will-change-transform">
               <div className="bg-white p-8 shadow-lg">
-                <div className="text-4xl mb-4">🏗️</div>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-slate-200 text-slate-700">
+                  <Landmark className="h-7 w-7" strokeWidth={1.9} aria-hidden="true" />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">Công Trình Công Cộng</h3>
                 <p className="text-gray-600">
                   Tư vấn và thiết kế công trình công cộng phục vụ cộng đồng, nâng cao chất lượng đô thị.
@@ -313,7 +336,9 @@ export default function About() {
 
             <RevealOnView onceKey="about-services-card-interior" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-[540ms] will-change-transform">
               <div className="bg-white p-8 shadow-lg">
-                <div className="text-4xl mb-4">🎨</div>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-[#134E8E]/10 text-[#134E8E]">
+                  <Palette className="h-7 w-7" strokeWidth={1.9} aria-hidden="true" />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">Thiết Kế Nội Thất</h3>
                 <p className="text-gray-600">
                   Thiết kế nội thất sáng tạo, gợi ý lựa chọn vật liệu và hệ thống từng chi tiết.
@@ -439,9 +464,7 @@ export default function About() {
             <RevealOnView onceKey="about-values-card-expertise" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-100 will-change-transform">
               <div className="bg-white p-8 shadow-lg">
                 <div className="w-16 h-16 bg-[#C00707]/10 flex items-center justify-center mb-4">
-                  <svg className="w-8 h-8 text-[#C00707]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  <BadgeCheck className="w-8 h-8 text-[#C00707]" strokeWidth={1.9} aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Kinh Nghiệm Chuyên Sâu</h3>
                 <p className="text-gray-600">
@@ -453,9 +476,7 @@ export default function About() {
             <RevealOnView onceKey="about-values-card-innovation" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-200 will-change-transform">
               <div className="bg-white p-8 shadow-lg">
                 <div className="w-16 h-16 bg-[#FF4400]/10 flex items-center justify-center mb-4">
-                  <svg className="w-8 h-8 text-[#FF4400]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
+                  <Sparkles className="w-8 h-8 text-[#FF4400]" strokeWidth={1.9} aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Sáng Tạo & Đổi Mới</h3>
                 <p className="text-gray-600">
@@ -467,9 +488,7 @@ export default function About() {
             <RevealOnView onceKey="about-values-card-value" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-300 will-change-transform">
               <div className="bg-white p-8 shadow-lg">
                 <div className="w-16 h-16 bg-[#134E8E]/10 flex items-center justify-center mb-4">
-                  <svg className="w-8 h-8 text-[#134E8E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  <HandCoins className="w-8 h-8 text-[#134E8E]" strokeWidth={1.9} aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Giá Trị Tối Đa</h3>
                 <p className="text-gray-600">
@@ -481,9 +500,7 @@ export default function About() {
             <RevealOnView onceKey="about-values-card-green" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-[380ms] will-change-transform">
               <div className="bg-white p-8 shadow-lg">
                 <div className="w-16 h-16 bg-[#FFB33F]/10 flex items-center justify-center mb-4">
-                  <svg className="w-8 h-8 text-[#FFB33F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
+                  <Leaf className="w-8 h-8 text-[#CC7A00]" strokeWidth={1.9} aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Bền Vững & Xanh</h3>
                 <p className="text-gray-600">
@@ -495,9 +512,7 @@ export default function About() {
             <RevealOnView onceKey="about-values-card-support" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-[460ms] will-change-transform">
               <div className="bg-white p-8 shadow-lg">
                 <div className="w-16 h-16 bg-[#C00707]/10 flex items-center justify-center mb-4">
-                  <svg className="w-8 h-8 text-[#C00707]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                  </svg>
+                  <Headset className="w-8 h-8 text-[#C00707]" strokeWidth={1.9} aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Hỗ Trợ Toàn Diện</h3>
                 <p className="text-gray-600">

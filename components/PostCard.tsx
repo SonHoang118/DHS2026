@@ -71,6 +71,7 @@ export default function PostCard({ item, featured = false, index }: PostCardProp
 							src={item.imgTitle}
 							alt={item.title}
 							fill
+							sizes="(min-width: 768px) 50vw, 100vw"
 							className={`w-full object-cover transition duration-500 group-hover:scale-102`}
 						/>
 					</div>
@@ -114,6 +115,7 @@ export default function PostCard({ item, featured = false, index }: PostCardProp
 					src={item.imgTitle}
 					alt={item.title}
 					fill
+					sizes="(min-width: 768px) 33vw, 100vw"
 					className={`w-full object-cover transition duration-500 group-hover:scale-102`}
 				/>
 			</div>

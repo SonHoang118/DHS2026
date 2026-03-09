@@ -86,7 +86,7 @@ export default function Home() {
                     onceKey="home-about-title"
                     as="h2"
                     delay={100}
-                    speed={40}
+                    speed={70}
                     humanize={true}
                     startWhenAncestorVisible={true}
                     className="mt-6 text-[20px] md:text-[30px] leading-snug font-semibold text-[#2b3440]"
@@ -154,8 +154,8 @@ export default function Home() {
               <TypewriterText
                 onceKey="home-featured-subtitle"
                 as="p"
-                delay={1000}
-                speed={50}
+                delay={400}
+                speed={240}
                 humanize={true}
                 startWhenAncestorVisible={true}
                 className="max-w-md text-xs md:text-sm text-gray-500 md:text-right"
@@ -325,8 +325,8 @@ export default function Home() {
             <TypewriterText
               onceKey="home-cta-description"
               as="p"
-              delay={900}
-              speed={45}
+              delay={500}
+              speed={145}
               humanize={true}
               startWhenAncestorVisible={true}
               className="mt-6 text-gray-500 max-w-2xl mx-auto text-[14px] md:text-lg"
@@ -372,8 +372,8 @@ export default function Home() {
                   <TypewriterText
                     onceKey="home-contact-intro"
                     as="p"
-                    delay={900}
-                    speed={45}
+                    delay={500}
+                    speed={145}
                     humanize={true}
                     startWhenAncestorVisible={true}
                     className="mt-6 text-gray-300 leading-relaxed max-w-md"
@@ -431,16 +431,7 @@ export default function Home() {
             <div className="bg-[#ffffff] p-5 md:p-10 shadow-lg">
 
               <div className="min-h-[32px] md:min-h-[36px]">
-                <TypewriterText
-                  onceKey="home-contact-form-title"
-                  as="h3"
-                  delay={350}
-                  speed={40}
-                  humanize={true}
-                  startWhenAncestorVisible={true}
-                  className="text-2xl font-semibold text-[#2c3640] mb-8"
-                  text="Đăng ký tư vấn miễn phí"
-                />
+                <h3 className="text-2xl font-semibold text-[#2c3640] mb-8">Đăng ký tư vấn miễn phí</h3>
               </div>
 
               <ContactForm />
