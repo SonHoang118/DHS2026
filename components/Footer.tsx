@@ -1,8 +1,29 @@
 
 
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { MouseEvent } from "react";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  const handleContactFormJump = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== "/contact") {
+      return;
+    }
+
+    e.preventDefault();
+    const form = document.getElementById("contact-form");
+    if (!form) {
+      return;
+    }
+
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", "/contact#contact-form");
+  };
+
   return (
     <footer className="w-full text-white">
 
@@ -10,9 +31,9 @@ export default function Footer() {
       <div className="relative bg-gradient-to-br from-[#a10d12] via-[#8f0b0f] to-[#7c0a0d] overflow-hidden">
 
         {/* polygon overlay */}
-        <div className="absolute inset-0 opacity-20 bg-[linear-gradient(120deg,transparent_25%,rgba(255,255,255,.15)_25%,rgba(255,255,255,.15)_50%,transparent_50%,transparent_75%,rgba(255,255,255,.15)_75%)] bg-[length:600px_600px]" />
+        <div className="absolute inset-0 pointer-events-none opacity-20 bg-[linear-gradient(120deg,transparent_25%,rgba(255,255,255,.15)_25%,rgba(255,255,255,.15)_50%,transparent_50%,transparent_75%,rgba(255,255,255,.15)_75%)] bg-[length:600px_600px]" />
 
-        <div className="max-w-[1200px] mx-auto py-16 px-6 grid grid-cols-3 gap-16 max-md:grid-cols-1">
+        <div className="relative z-10 max-w-[1200px] mx-auto py-16 px-6 grid grid-cols-3 gap-16 max-md:grid-cols-1">
 
           {/* CONTACT */}
           <div>
@@ -56,28 +77,37 @@ export default function Footer() {
             <h2 className="text-2xl font-semibold mb-6">Kết nối với chúng tôi</h2>
 
             <div className="flex gap-5">
+              <a
+                href="/contact#contact-form"
+                onClick={handleContactFormJump}
+                aria-label="Email liên hệ"
+                className="inline-flex h-11 w-11 rounded-full border border-white/35 bg-white/10 bg-center bg-no-repeat bg-[length:24px_24px] transition hover:bg-white/20"
+                style={{ backgroundImage: "url(https://res.cloudinary.com/dcqivfwxv/image/upload/v1772953420/email_icon_rdt8c2.png)" }}
+              ></a>
 
+              <a
+                href="https://m.me/104988175154682"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Messenger"
+                className="inline-flex h-11 w-11 rounded-full border border-white/35 bg-white/10 bg-center bg-no-repeat bg-[length:24px_24px] transition hover:bg-white/20"
+                style={{ backgroundImage: "url(https://res.cloudinary.com/dcqivfwxv/image/upload/v1772953415/messenger_icon_f0n1tx.png)" }}
+              />
 
+              <a
+                href="https://zalo.me/0983239596"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Zalo"
+                className="inline-flex h-11 w-11 rounded-full border border-white/35 bg-white/10 bg-center bg-no-repeat bg-[length:24px_24px] transition hover:bg-white/20"
+                style={{ backgroundImage: "url(https://res.cloudinary.com/dcqivfwxv/image/upload/v1772953427/zalo_icon_rdbis6.png)" }}
+              />
 
-              <Link 
-              href="https://m.me/104988175154682"
-              target="_blank"    
-              style={{ backgroundImage: 'url(/images/email_icon.png)'}}
-              />
-              <Link 
-              href="https://m.me/104988175154682"
-              target="_blank"    
-              style={{ backgroundImage: 'url(/images/email_icon.png)'}}
-              />
-              <a 
-              href="https://zalo.me/0983239596"
-              target="_blank"    
-              style={{ backgroundImage: 'url(/images/email_icon.png)'}}
-              />
-              <a 
-              href="tel:0983239596"
-              target="_blank"    
-              style={{ backgroundImage: 'url(/images/email_icon.png)'}}
+              <a
+                href="tel:0983239596"
+                aria-label="Gọi hotline"
+                className="inline-flex h-11 w-11 rounded-full border border-white/35 bg-white/10 bg-center bg-no-repeat bg-[length:24px_24px] transition hover:bg-white/20"
+                style={{ backgroundImage: "url(https://res.cloudinary.com/dcqivfwxv/image/upload/v1772953424/phone_icon_vcpres.png)" }}
               />
 
 

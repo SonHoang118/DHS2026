@@ -71,9 +71,9 @@ export default function Contact() {
       {/* Quick Contact Cards */}
       <section className="py-16 px-4 md:px-8 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <RevealOnView onceKey="contact-quick-hotline" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-100 will-change-transform">
-              <div className="text-center p-6 bg-gradient-to-br from-[#C00707]/10 to-[#FF4400]/10 transition-all duration-300">
+              <a href="tel:+842838238899" className="block text-center p-6 bg-gradient-to-br from-[#C00707]/10 to-[#FF4400]/10 transition-all duration-300">
                 <div className="w-16 h-16 bg-[#C00707] flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -82,11 +82,11 @@ export default function Contact() {
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Hotline 24/7</h3>
                 <p className="text-gray-600 mb-2">+84 28 3823 8899</p>
                 <p className="text-sm text-gray-500">Hỗ trợ tư vấn mọi lúc</p>
-              </div>
+              </a>
             </RevealOnView>
 
             <RevealOnView onceKey="contact-quick-chat" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-200 will-change-transform">
-              <div className="text-center p-6 bg-gradient-to-br from-[#FF4400]/10 to-[#FFB33F]/10 transition-all duration-300">
+              <a href="https://m.me/104988175154682" target="_blank" rel="noopener noreferrer" className="block text-center p-6 bg-gradient-to-br from-[#FF4400]/10 to-[#FFB33F]/10 transition-all duration-300">
                 <div className="w-16 h-16 bg-[#FF4400] flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -95,11 +95,11 @@ export default function Contact() {
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Chat Trực Tiếp</h3>
                 <p className="text-gray-600 mb-2">Zalo: 093 123 4567</p>
                 <p className="text-sm text-gray-500">Phản hồi trong 5 phút</p>
-              </div>
+              </a>
             </RevealOnView>
 
             <RevealOnView onceKey="contact-quick-email" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-300 will-change-transform">
-              <div className="text-center p-6 bg-gradient-to-br from-[#FFB33F]/10 to-[#134E8E]/10 transition-all duration-300">
+              <a href="#contact-form" className="block text-center p-6 bg-gradient-to-br from-[#FFB33F]/10 to-[#134E8E]/10 transition-all duration-300">
                 <div className="w-16 h-16 bg-[#134E8E] flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -108,7 +108,20 @@ export default function Contact() {
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Email Hỗ Trợ</h3>
                 <p className="text-gray-600 mb-2">info@architecture.vn</p>
                 <p className="text-sm text-gray-500">Phản hồi trong 24h</p>
-              </div>
+              </a>
+            </RevealOnView>
+
+            <RevealOnView onceKey="contact-quick-zalo" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-[380ms] will-change-transform">
+              <a href="https://zalo.me/0983239596" target="_blank" rel="noopener noreferrer" className="block text-center p-6 bg-gradient-to-br from-[#134E8E]/10 to-[#4DA3FF]/10 transition-all duration-300">
+                <div className="w-16 h-16 bg-[#0068FF] flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h8M8 14h5M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Zalo Hỗ Trợ</h3>
+                <p className="text-gray-600 mb-2">Zalo: 0983 239 596</p>
+                <p className="text-sm text-gray-500">Kết nối nhanh trên Zalo</p>
+              </a>
             </RevealOnView>
           </div>
         </div>

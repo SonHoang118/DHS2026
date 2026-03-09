@@ -9,6 +9,7 @@ import Slider from "@/components/Slider";
 import TypewriterText from "@/components/TypewriterText";
 import NumberCountOnView from "@/components/NumberCountOnView";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   const stats = [
@@ -36,7 +37,7 @@ export default function Home() {
 
       {/* Heading Xin chào */}
       <RevealOnView onceKey="home-heading" threshold={0.2} rootMargin="0px 0px -10% 0px" className="delay-75 will-change-transform">
-        <section className="py-14 text-center min-h-[265px]">
+        <section className="py-14 text-center min-h-66.25">
 
           {/* TITLE */}
           <TypewriterText
@@ -93,11 +94,10 @@ export default function Home() {
                   />
                 </div>
               </div>
-
-              <button className="border border-gray-300 px-6 py-3 rounded-md text-[#2b3440] hover:bg-white transition flex items-center gap-2">
+              <Link href="/about" className="border border-gray-300 px-6 py-3 inline-flex items-center gap-3 hover:bg-black hover:text-white transition">
                 Biết thêm về chúng tôi
                 <span>→</span>
-              </button>
+              </Link>
             </div>
 
 
@@ -138,7 +138,7 @@ export default function Home() {
           <RevealOnView onceKey="home-featured-header" threshold={1} rootMargin="0px 0px -10% 0px" className="will-change-transform">
 
             {/* Header */}
-            <div className="min-h-[108px] md:min-h-10 mb-6 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div className="min-h-27 md:min-h-10 mb-6 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <TypewriterText
                 onceKey="home-featured-title"
                 as="h1"
@@ -354,17 +354,17 @@ export default function Home() {
               <RevealOnView onceKey="home-contact-title-block" threshold={0.35} rootMargin="0px 0px -10% 0px" className="delay-150 will-change-transform">
                 <div className="min-h-[48px]">
 
-                <TypewriterText
-                  onceKey="home-contact-title"
-                  as="h2"
-                  delay={250}
-                  speed={35}
-                  humanize={true}
-                  startWhenAncestorVisible={true}
-                  className="text-5xl font-semibold mt-6"
-                  text="Hãy cùng nhau hợp tác!"
+                  <TypewriterText
+                    onceKey="home-contact-title"
+                    as="h2"
+                    delay={250}
+                    speed={35}
+                    humanize={true}
+                    startWhenAncestorVisible={true}
+                    className="text-5xl font-semibold mt-6"
+                    text="Hãy cùng nhau hợp tác!"
                   />
-                  </div>
+                </div>
               </RevealOnView>
 
               <RevealOnView onceKey="home-contact-intro-block" threshold={0.35} rootMargin="0px 0px -10% 0px" className="delay-200 will-change-transform">

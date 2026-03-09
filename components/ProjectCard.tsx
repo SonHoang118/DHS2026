@@ -39,7 +39,7 @@ export default function ProjectCard({ item, large, index }: ProjectCardProps) {
 		>
 			<div className="relative overflow-hidden border-2 border-transparent group-hover:border-red-500 transition">
 				<Image
-					src={item.imgs?.[0]?.link ?? "/fallback.jpg"}
+					src={item.imgs?.[0]?.link ?? "/images/404img.jpg"}
 					alt=""
 					width={600}
 					height={400}

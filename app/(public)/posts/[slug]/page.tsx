@@ -120,7 +120,7 @@ export default function PostDetail() {
   }, [content]);
 
   const galleryImages = normalizePostImages(post?.imgsId);
-  const heroImage = post?.imgTitle || galleryImages[0] || '/fallback.jpg';
+  const heroImage = post?.imgTitle || galleryImages[0] || '/images/404img.jpg';
 
   useEffect(() => {
     if (!slug) return;
@@ -314,7 +314,7 @@ export default function PostDetail() {
           <div className="grid md:grid-cols-3 gap-6">
             {relatedPosts.map((item) => {
               const href = `/posts/${item.slugify || item._id}`;
-              const thumb = item.imgTitle || '/fallback.jpg';
+              const thumb = item.imgTitle || '/images/404img.jpg';
               const dateText = item.createdAt
                 ? new Date(item.createdAt).toLocaleDateString('vi-VN')
                 : '';

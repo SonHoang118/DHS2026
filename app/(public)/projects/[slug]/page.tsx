@@ -218,7 +218,7 @@ export default function ProjectDetail() {
 
   const getProjectThumb = (item: ProjectDetailData) => {
     const images = normalizeImageList(item.imgs);
-    return images[0] || '/fallback.jpg';
+    return images[0] || '/images/404img.jpg';
   };
 
   return (
@@ -226,7 +226,7 @@ export default function ProjectDetail() {
       {/* Image Gallery Hero */}
       <div className="mx-auto mt-10 w-full max-w-6xl" style={{ height: 'clamp(220px, 55vw, 500px)' }}>
         <Slider
-          images={projectImages.length > 0 ? projectImages : ['/fallback.jpg']}
+          images={projectImages.length > 0 ? projectImages : ['/images/404img.jpg']}
         />
       </div>
 

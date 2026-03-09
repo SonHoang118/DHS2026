@@ -21,10 +21,10 @@ const getProjectThumb = (project: ProjectCard): string => {
     }
 
     if (first && typeof first === "object") {
-        return first.link || first.url || first.src || "/fallback.jpg";
+        return first.link || first.url || first.src || "/images/404img.jpg";
     }
 
-    return "/fallback.jpg";
+    return "/images/404img.jpg";
 };
 
 export default function ProjectsSection() {

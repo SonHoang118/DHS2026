@@ -90,10 +90,10 @@ export default function Header() {
     <header className={`fixed top-0 left-0 right-0 z-50 w-full border-b border-white/40 bg-white/60 backdrop-blur-xl supports-backdrop-filter:bg-white/45 shadow-[0_6px_24px_rgba(15,23,42,0.08)] transition-transform duration-300 ${headerTranslate}`}>
       <div className={`max-w-[1200px] mx-auto flex items-center justify-between px-4 md:px-6 transition-all duration-300 ${headerPadding}`}>
 
-        <div className="flex items-center gap-3  text-[22px] text-[#C00707]">
-              <img src='/images/logo.jpg' alt='DHStudio Logo' className="w-7.5" />
-              <span style={{ fontFamily: 'Audiowide, sans-serif' }}>DHStudio</span>
-        </div>
+        <Link href="/" className="flex items-center gap-3 text-[22px] text-[#C00707]">
+          <img src='/images/logo.jpg' alt='DHStudio Logo' className="w-7.5" />
+          <span style={{ fontFamily: 'Audiowide, sans-serif' }}>DHStudio</span>
+        </Link>
 
         <nav className="hidden lg:flex items-center gap-12 text-gray-600 font-medium">
           {menu.map((item, i) => (

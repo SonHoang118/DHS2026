@@ -96,7 +96,7 @@ export default function BlogSection() {
           <Link href={getPostHref(featured)} className="block bg-white rounded-xl overflow-hidden shadow-md">
             <div className="relative w-full h-64 md:h-[360px]">
               <img
-                src={featured?.imgTitle || "/fallback.jpg"}
+                src={featured?.imgTitle || "/images/404img.jpg"}
                 alt={featured?.title || "post"}
                 className="w-full h-full object-cover"
               />
@@ -137,7 +137,7 @@ export default function BlogSection() {
               className="flex gap-3 md:gap-4 bg-white p-2 md:p-3 rounded-lg shadow-sm"
             >
               <div className="relative w-24 md:w-28 h-16 md:h-20 shrink-0">
-                <img src={item.imgTitle || "/fallback.jpg"} alt={item.title || "post"} className="w-full h-full object-cover rounded-md" />
+                <img src={item.imgTitle || "/images/404img.jpg"} alt={item.title || "post"} className="w-full h-full object-cover rounded-md" />
               </div>
               <div className="flex flex-col justify-between">
                 <h4 className="text-sm md:text-[15px] font-medium text-gray-800 leading-snug">
