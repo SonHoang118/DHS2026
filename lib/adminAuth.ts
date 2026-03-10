@@ -1,4 +1,4 @@
-export const ADMIN_EMAIL = 'admin@dhs.local';
+export const ADMIN_EMAIL = 'admin@gmail.com';
 export const ADMIN_PASSWORD = 'DHS2026@admin';
 
 export const ADMIN_AUTH_COOKIE = 'admin_session';

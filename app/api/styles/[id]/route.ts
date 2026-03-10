@@ -48,9 +48,8 @@ export async function PUT(
 
     const oldName = String(style.name || '');
     if (oldName && oldName !== newName) {
-      const projects = await Project.find({
-        $or: [{ style: oldName }, { style: { $in: [oldName] } }],
-      });
+      const projects = await Project.find()
+        .or([{ style: oldName }, { style: { $in: [oldName] } }]);
 
       for (const project of projects) {
         const nextStyles = [...new Set(toArray(project.style).map((name) => (name === oldName ? newName : name)))];
@@ -88,9 +87,8 @@ export async function DELETE(
 
     const styleName = String(style.name || '');
     if (styleName) {
-      const projects = await Project.find({
-        $or: [{ style: styleName }, { style: { $in: [styleName] } }],
-      });
+      const projects = await Project.find()
+        .or([{ style: styleName }, { style: { $in: [styleName] } }]);
 
       for (const project of projects) {
         const nextStyles = toArray(project.style).filter((name) => name !== styleName);
@@ -99,7 +97,7 @@ export async function DELETE(
       }
     }
 
-    await Style.deleteOne({ _id: style._id });
+    await Style.deleteOne().where('_id').equals(style._id);
     return NextResponse.json({ message: 'Style deleted' });
   } catch (error) {
     console.error(error);

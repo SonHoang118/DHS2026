@@ -17,7 +17,7 @@ async function buildUniqueSlug(name: string, projectId: string) {
   // Ensure slug uniqueness while allowing current project's own slug.
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const existing = await Project.findOne({ slugify: slug }).lean();
+    const existing = await Project.findOne().where('slugify').equals(slug).lean();
     if (!existing || String(existing._id) === projectId) {
       return slug;
     }
@@ -32,9 +32,9 @@ async function findProjectByIdentifier(identifier: string) {
     return null;
   }
 
-  let project = await Project.findOne({ slugify: trimmed });
+  let project = await Project.findOne().where('slugify').equals(trimmed);
   if (!project && mongoose.Types.ObjectId.isValid(trimmed)) {
-    project = await Project.findById(trimmed);
+    project = await Project.findOne().where('_id').equals(trimmed);
   }
 
   return project;
@@ -141,7 +141,7 @@ export async function PUT(
       .filter(Boolean);
 
     const nextStyles = payload.style;
-    const removedStyles = previousStyles.filter((name) => !nextStyles.includes(name));
+    const removedStyles = previousStyles.filter((name: string) => !nextStyles.includes(name));
 
     const previousCategories = Array.isArray(project.category)
       ? project.category.map((item: unknown) => String(item || "")).filter(Boolean)
@@ -151,7 +151,7 @@ export async function PUT(
 
     const nextCategories = payload.category;
     const removedCategories = previousCategories.filter(
-      (name) => !nextCategories.includes(name)
+      (name: string) => !nextCategories.includes(name)
     );
 
     Object.assign(project, payload);
@@ -226,7 +226,7 @@ export async function DELETE(
       .map((image) => image.id)
       .filter(Boolean);
 
-    await Project.deleteOne({ _id: project._id });
+    await Project.deleteOne().where('_id').equals(project._id);
 
     if (styleNames.length > 0) {
       await Style.updateMany(

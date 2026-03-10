@@ -116,7 +116,7 @@ async function buildUniqueSlug(title: string, postId: string) {
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const existing = await Post.findOne({ slugify: slug }).lean();
+    const existing = await Post.findOne().where('slugify').equals(slug).lean();
     if (!existing || String(existing._id) === postId) {
       return slug;
     }
@@ -132,9 +132,9 @@ async function findPostByIdentifier(identifier: string) {
     return null;
   }
 
-  let post = await Post.findOne({ slugify: trimmed });
+  let post = await Post.findOne().where('slugify').equals(trimmed);
   if (!post && mongoose.Types.ObjectId.isValid(trimmed)) {
-    post = await Post.findById(trimmed);
+    post = await Post.findOne().where('_id').equals(trimmed);
   }
 
   return post;
@@ -254,7 +254,7 @@ export async function DELETE(
       })
     );
 
-    await Post.deleteOne({ _id: post._id });
+    await Post.deleteOne().where('_id').equals(post._id);
 
     if (allImageIds.length > 0) {
       await Promise.allSettled(allImageIds.map((publicId) => deleteCloudinaryImage(publicId)));

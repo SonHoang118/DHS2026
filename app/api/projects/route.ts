@@ -15,7 +15,7 @@ async function buildUniqueSlug(name: string) {
   // Ensure slug uniqueness even when names are duplicated.
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const existing = await Project.findOne({ slugify: slug }).lean();
+    const existing = await Project.findOne().where('slugify').equals(slug).lean();
     if (!existing) {
       return slug;
     }

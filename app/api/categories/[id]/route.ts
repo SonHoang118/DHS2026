@@ -48,9 +48,8 @@ export async function PUT(
 
     const oldName = String(category.name || '');
     if (oldName && oldName !== newName) {
-      const projects = await Project.find({
-        $or: [{ category: oldName }, { category: { $in: [oldName] } }],
-      });
+      const projects = await Project.find()
+        .or([{ category: oldName }, { category: { $in: [oldName] } }]);
 
       for (const project of projects) {
         const nextCategories = [...new Set(toArray(project.category).map((name) => (name === oldName ? newName : name)))];
@@ -88,9 +87,8 @@ export async function DELETE(
 
     const categoryName = String(category.name || '');
     if (categoryName) {
-      const projects = await Project.find({
-        $or: [{ category: categoryName }, { category: { $in: [categoryName] } }],
-      });
+      const projects = await Project.find()
+        .or([{ category: categoryName }, { category: { $in: [categoryName] } }]);
 
       for (const project of projects) {
         const nextCategories = toArray(project.category).filter((name) => name !== categoryName);
@@ -99,7 +97,7 @@ export async function DELETE(
       }
     }
 
-    await Category.deleteOne({ _id: category._id });
+    await Category.deleteOne().where('_id').equals(category._id);
     return NextResponse.json({ message: 'Category deleted' });
   } catch (error) {
     console.error(error);

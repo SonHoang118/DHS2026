@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ADMIN_AUTH_COOKIE, isAuthenticatedToken } from '@/lib/adminAuth';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isLoginRoute = pathname === '/admin/login';
   const token = request.cookies.get(ADMIN_AUTH_COOKIE)?.value;

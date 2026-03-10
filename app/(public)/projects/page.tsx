@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import FaqSection from "@/components/FaqSection";
 import Pagination from "@/components/Pagination";
@@ -21,7 +21,7 @@ async function getProjects(page: number, q: string) {
 }
 
 
-export default function Page() {
+function ProjectsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [projects, setProjects] = useState<any[]>([]);
@@ -132,5 +132,13 @@ export default function Page() {
       )}
       <FaqSection/>
     </section>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="py-10 text-center">Đang tải dữ liệu...</div>}>
+      <ProjectsPageContent />
+    </Suspense>
   );
 }

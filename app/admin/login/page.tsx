@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default function AdminLogin() {
+function AdminLoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
@@ -138,5 +139,13 @@ export default function AdminLogin() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function AdminLogin() {
+  return (
+    <Suspense fallback={<div className="py-10 text-center">Dang tai...</div>}>
+      <AdminLoginContent />
+    </Suspense>
   );
 }

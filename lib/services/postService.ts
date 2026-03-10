@@ -6,7 +6,7 @@ export async function getPosts(skip: number = 0, limit: number = 10) {
   await connectDB();
 
   const [posts, total] = await Promise.all([
-    Post.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+    Post.find().sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
     Post.countDocuments()
   ]);
 
@@ -24,11 +24,11 @@ export async function getPostBySlug(slug: string) {
     return null;
   }
 
-  let post = await Post.findOne({ slugify: trimmedSlug }).lean();
+  let post = await Post.findOne().where('slugify').equals(trimmedSlug).lean();
 
   // Backward-compatible fallback for data without slugify.
   if (!post && mongoose.Types.ObjectId.isValid(trimmedSlug)) {
-    post = await Post.findById(trimmedSlug).lean();
+    post = await Post.findOne().where('_id').equals(trimmedSlug).lean();
   }
 
   return post;

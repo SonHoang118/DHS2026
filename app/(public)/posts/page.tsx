@@ -1,8 +1,6 @@
-'use client';
-
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import FaqSection from "@/components/FaqSection";
 import Pagination from "@/components/Pagination";
@@ -22,7 +20,7 @@ async function getPosts(page: number) {
 }
 
 
-export default function Posts() {
+function PostsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [posts, setPosts] = useState<any[]>([]);
@@ -92,5 +90,13 @@ export default function Posts() {
 
       <FaqSection/>
     </main>
+  );
+}
+
+export default function Posts() {
+  return (
+    <Suspense fallback={<div className="py-10 text-center">Đang tải dữ liệu...</div>}>
+      <PostsContent />
+    </Suspense>
   );
 }

@@ -48,7 +48,7 @@ async function buildUniqueSlug(title: string) {
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const existing = await Post.findOne({ slugify: slug }).lean();
+    const existing = await Post.findOne().where('slugify').equals(slug).lean();
     if (!existing) {
       return slug;
     }

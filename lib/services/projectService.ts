@@ -6,22 +6,26 @@ export async function getProjects(skip: number = 0, limit: number = 10, keyword:
   await connectDB();
 
   const trimmedKeyword = keyword.trim();
-  const query = trimmedKeyword
-    ? {
-        $or: [
-          { name: { $regex: trimmedKeyword, $options: "i" } },
-          { investor: { $regex: trimmedKeyword, $options: "i" } },
-          { location: { $regex: trimmedKeyword, $options: "i" } },
-          { decs: { $regex: trimmedKeyword, $options: "i" } },
-          { style: { $regex: trimmedKeyword, $options: "i" } },
-          { category: { $regex: trimmedKeyword, $options: "i" } },
-        ],
-      }
-    : {};
+  const searchConditions = [
+    { name: { $regex: trimmedKeyword, $options: "i" } },
+    { investor: { $regex: trimmedKeyword, $options: "i" } },
+    { location: { $regex: trimmedKeyword, $options: "i" } },
+    { decs: { $regex: trimmedKeyword, $options: "i" } },
+    { style: { $regex: trimmedKeyword, $options: "i" } },
+    { category: { $regex: trimmedKeyword, $options: "i" } },
+  ];
+
+  const projectsQuery = trimmedKeyword
+    ? Project.find().or(searchConditions)
+    : Project.find();
+
+  const totalQuery = trimmedKeyword
+    ? Project.find().or(searchConditions).countDocuments()
+    : Project.countDocuments();
 
   const [projects, total] = await Promise.all([
-    Project.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
-    Project.countDocuments(query)
+    projectsQuery.sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+    totalQuery,
   ]);
 
   return {
@@ -38,11 +42,11 @@ export async function getProjectBySlug(slug: string) {
     return null;
   }
 
-  let project = await Project.findOne({ slugify: trimmedSlug }).lean();
+  let project = await Project.findOne().where('slugify').equals(trimmedSlug).lean();
 
   // Backward-compatible fallback in case old records do not have slugify.
   if (!project && mongoose.Types.ObjectId.isValid(trimmedSlug)) {
-    project = await Project.findById(trimmedSlug).lean();
+    project = await Project.findOne().where('_id').equals(trimmedSlug).lean();
   }
 
   return project;
