@@ -365,10 +365,10 @@ export default function PostDetail() {
               Yêu Cầu Tư Vấn
             </a>
             <a
-              href="tel:+842838238899"
+              href="tel:+84983239596"
               className="border-2 border-white text-white px-8 py-4 font-semibold hover:bg-white hover:text-[#134E8E] transition-all duration-200 transform text-lg"
             >
-              Gọi Ngay: +84 28 3823 8899
+              Gọi Ngay: +84 983 239 596
             </a>
           </div>
         </div>

@@ -7,7 +7,7 @@ import TypewriterText from "@/components/TypewriterText";
 const faqs = [
     {
         q: "Bạn phục vụ những khu vực nào?",
-        a: "Chúng tôi chủ yếu phục vụ khách hàng trên khắp California, nhưng chúng tôi cũng sẵn sàng nhận các dự án chọn lọc ở các bang lân cận dựa trên phạm vi và thời gian.",
+        a: "Chúng tôi chủ yếu phục vụ khách hàng trên khắp khu vực Hà Nội, nhưng chúng tôi cũng sẵn sàng nhận các dự án chọn lọc ở các tỉnh lân cận dựa trên phạm vi và thời gian.",
     },
     {
         q: "Tôi nên liên hệ với bạn sớm bao nhiêu cho một dự án mới?",

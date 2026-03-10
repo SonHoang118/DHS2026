@@ -80,7 +80,7 @@ export default function PostCard({ item, featured = false, index }: PostCardProp
 				{/* Content */}
 				<div className="transition duration-700 ease-out">
 					<p className="text-xs tracking-widest text-gray-500 mb-3">
-						Chính trị &nbsp; {formatDate(item.createdAt)}
+						Được viết bởi: Admin &nbsp; {formatDate(item.createdAt)}
 					</p>
 
 					<Link href={postPath} className="block">
@@ -120,7 +120,7 @@ export default function PostCard({ item, featured = false, index }: PostCardProp
 				/>
 			</div>
 			<p className="text-xs text-gray-500 mb-2">
-				Chính trị &nbsp; {formatDate(item.createdAt)}
+				Được viết bởi: Admin &nbsp; {formatDate(item.createdAt)}
 			</p>
 			<h4 className="font-semibold text-lg text-gray-900 mb-2">
 				{item.title}

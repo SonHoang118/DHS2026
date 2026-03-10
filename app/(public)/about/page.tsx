@@ -75,7 +75,7 @@ export default function About() {
             <div className="text-center">
               <div className="text-5xl font-bold text-[#C00707] mb-3">
                 <NumberCountOnView
-                  value="10+"
+                  value="5+"
                   onceKey="about-stats-exp"
                   durationMs={1250}
                   threshold={0.45}
@@ -101,28 +101,28 @@ export default function About() {
             <div className="text-center">
               <div className="text-5xl font-bold text-[#FFB33F] mb-3">
                 <NumberCountOnView
-                  value="50+"
+                  value="4.8/5"
                   onceKey="about-stats-experts"
                   durationMs={1450}
                   threshold={0.45}
                   rootMargin="0px 0px -10% 0px"
                 />
               </div>
-              <p className="text-gray-600 text-lg font-semibold">Nhân Viên Chuyên Gia</p>
-              <p className="text-gray-500">Đội ngũ hàng đầu</p>
+              <p className="text-gray-600 text-lg font-semibold">Đánh giá</p>
+              <p className="text-gray-500">Hài lòng từ khách hàng</p>
             </div>
             <div className="text-center">
               <div className="text-5xl font-bold text-[#134E8E] mb-3">
                 <NumberCountOnView
-                  value="100%"
+                  value="98%"
                   onceKey="about-stats-satisfaction"
                   durationMs={1850}
                   threshold={0.45}
                   rootMargin="0px 0px -10% 0px"
                 />
               </div>
-              <p className="text-gray-600 text-lg font-semibold">Khách Hàng Hài Lòng</p>
-              <p className="text-gray-500">Cam kết dịch vụ</p>
+              <p className="text-gray-600 text-lg font-semibold">Phần trăm tỷ lệ</p>
+              <p className="text-gray-500">Hoàn thành dự án</p>
             </div>
           </div>
         </div>
@@ -158,7 +158,7 @@ export default function About() {
                   humanize={true}
                   startWhenAncestorVisible={true}
                   className="text-xl text-gray-600 max-w-3xl mx-auto"
-                  text="Từ một nhóm kiến trúc sư có đam mê, DHStudio đã phát triển thành một công ty kiến trúc hàng đầu, được tin tưởng bởi hàng ngàn khách hàng trên toàn quốc."
+                  text="Từ một nhóm kiến trúc sư có đam mê, DHStudio đã phát triển thành một công ty kiến trúc lâu năm, có kinh nghiệm tư vấn và thiết kế dày dặn."
                 />
               </div>
             </RevealOnView>
@@ -468,7 +468,7 @@ export default function About() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Kinh Nghiệm Chuyên Sâu</h3>
                 <p className="text-gray-600">
-                  Hơn 10 năm tư vấn và thiết kế với 150+ dự án thành công, từ nhỏ đến lớn
+                  Kinh nghiệm dày dặn trong tư vấn và thiết kế với 150+ dự án thành công, từ nhỏ đến lớn
                 </p>
               </div>
             </RevealOnView>
@@ -547,10 +547,10 @@ export default function About() {
               Yêu Cầu Tư Vấn
             </a>
             <a
-              href="tel:+842838238899"
+              href="tel:+84983239596"
               className="border-2 border-white text-white px-8 py-4 font-semibold hover:bg-white hover:text-[#134E8E] transition-all duration-200 transform text-lg"
             >
-              Gọi Ngay: +84 28 3823 8899
+              Gọi Ngay: +84 983 239 596
             </a>
           </div>
           <p className="text-sm opacity-75 mt-6">

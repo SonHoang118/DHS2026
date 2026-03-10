@@ -13,8 +13,8 @@ import Link from "next/link";
 
 export default function Home() {
   const stats = [
-    { value: "10+", label: "Năm kinh nghiệm" },
-    { value: "1500+", label: "Dự án hoàn thành" },
+    { value: "5+", label: "Năm kinh nghiệm" },
+    { value: "150+", label: "Dự án hoàn thành" },
     { value: "4.8/5", label: "Đánh giá của khách hàng" },
     { value: "98%", label: "Tỷ lệ thành công dự án" },
   ];
@@ -113,7 +113,7 @@ export default function Home() {
                     <NumberCountOnView
                       value={item.value}
                       onceKey={`home-about-stat-${i + 1}`}
-                      durationMs={1300 + i * 220}
+                      durationMs={3300 + i * 220}
                       threshold={0.45}
                       rootMargin="0px 0px -10% 0px"
                     />
@@ -455,13 +455,6 @@ export default function Home() {
     </main>
   );
 }
-
-
-
-
-
-
-
 
 
 

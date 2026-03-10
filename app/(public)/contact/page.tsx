@@ -80,7 +80,7 @@ export default function Contact() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Hotline 24/7</h3>
-                <p className="text-gray-600 mb-2">+84 28 3823 8899</p>
+                <p className="text-gray-600 mb-2">+84 983 239 596</p>
                 <p className="text-sm text-gray-500">Hỗ trợ tư vấn mọi lúc</p>
               </a>
             </RevealOnView>
@@ -93,7 +93,7 @@ export default function Contact() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Chat Trực Tiếp</h3>
-                <p className="text-gray-600 mb-2">Zalo: 093 123 4567</p>
+                <p className="text-gray-600 mb-2">Messenger: DHStudio</p>
                 <p className="text-sm text-gray-500">Phản hồi trong 5 phút</p>
               </a>
             </RevealOnView>
@@ -106,7 +106,7 @@ export default function Contact() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Email Hỗ Trợ</h3>
-                <p className="text-gray-600 mb-2">info@architecture.vn</p>
+                <p className="text-gray-600 mb-2">dhs.studio.arch@gmail.com</p>
                 <p className="text-sm text-gray-500">Phản hồi trong 24h</p>
               </a>
             </RevealOnView>
@@ -179,8 +179,8 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold text-gray-800 mb-2">Địa Chỉ</h3>
-                      <p className="text-gray-600">123 Đường Nguyễn Hữu Cảnh, Quận 1</p>
-                      <p className="text-gray-600">TP. Hồ Chí Minh, Việt Nam</p>
+                      <p className="text-gray-600">7 Đông Hội, Thôn Trung Thôn, Đông Anh</p>
+                      <p className="text-gray-600">TP Hà Nội, Việt Nam</p>
                     </div>
                   </div>
                 </div>
@@ -196,8 +196,8 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold text-gray-800 mb-2">Điện Thoại</h3>
-                      <p className="text-gray-600">+84 28 3823 8899</p>
-                      <p className="text-gray-600">+84 93 123 4567 (Mobile)</p>
+                      <p className="text-gray-600">+84 983 239 596</p>
+                      <p className="text-gray-600">+84 983 239 596</p>
                     </div>
                   </div>
                 </div>
@@ -214,10 +214,10 @@ export default function Contact() {
                     <div>
                       <h3 className="text-xl font-semibold text-gray-800 mb-2">Email</h3>
                       <p className="text-gray-600">
-                        <a href="mailto:info@architecture.vn" className="hover:text-[#134E8E] transition-colors">info@architecture.vn</a>
+                        <a href="mailto:dhs.studio.arch@gmail.com" className="hover:text-[#134E8E] transition-colors">dhs.studio.arch@gmail.com</a>
                       </p>
                       <p className="text-gray-600">
-                        <a href="mailto:projects@architecture.vn" className="hover:text-[#134E8E] transition-colors">projects@architecture.vn</a>
+                        <a href="mailto:projects@architecture.vn" className="hover:text-[#134E8E] transition-colors">dhs.studio.arch@gmail.com</a>
                       </p>
                     </div>
                   </div>
@@ -361,7 +361,7 @@ export default function Contact() {
                   humanize={true}
                   startWhenAncestorVisible={true}
                   className="text-gray-600 text-[13px] md:text-lg max-w-2xl mx-auto"
-                  text="Địa chỉ văn phòng chính tại trung tâm TP.HCM, dễ dàng tiếp cận bằng nhiều phương tiện công cộng"
+                  text="Địa chỉ văn phòng chính gần trung tâm, dễ dàng tiếp cận bằng nhiều phương tiện công cộng"
                 />
               </div>
             </RevealOnView>
@@ -389,7 +389,7 @@ export default function Contact() {
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-800 mb-2">Gần Trung Tâm</h3>
-              <p className="text-gray-600 text-sm">Cách sân bay 20 phút, cách bến xe 10 phút</p>
+              <p className="text-gray-600 text-sm">Cách sân bay 30 phút, cách bến xe 10 phút</p>
             </div>
 
             <div className="text-center">
@@ -399,7 +399,7 @@ export default function Contact() {
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-800 mb-2">Dễ Tiếp Cận</h3>
-              <p className="text-gray-600 text-sm">Gần metro, bus và nhiều tuyến đường chính</p>
+              <p className="text-gray-600 text-sm">Gần tuyến bus và nhiều tuyến đường chính</p>
             </div>
 
             <div className="text-center">
@@ -437,10 +437,10 @@ export default function Contact() {
               Gửi Yêu Cầu Tư Vấn
             </a>
             <a
-              href="tel:+842838238899"
+              href="tel:+84983239596"
               className="border-2 border-white text-white px-8 py-4 font-semibold hover:bg-white hover:text-[#134E8E] transition-all duration-200 transform text-lg"
             >
-              Gọi Ngay: +84 28 3823 8899
+              Gọi Ngay: +84 983 239 596
             </a>
           </div>
           <p className="text-sm opacity-75 mt-6">
