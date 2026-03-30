@@ -1,40 +1,3 @@
-// 'use client';
-
-// import Link from 'next/link';
-// import { useState } from 'react';
-
-// export default function Header() {
-//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-//   return (
-//     <header className="header">
-//       <div className="header-container">
-//         <Link href="/" className="logo">
-//           <span className="logo-icon">🏢</span>
-//           <span className="logo-text">KIẾN TRÚC CHUYÊN NGHIỆP</span>
-//         </Link>
-
-//         <button
-//           className="mobile-menu-btn"
-//           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-//         >
-//           ☰
-//         </button>
-
-//         <nav className={`nav ${mobileMenuOpen ? 'open' : ''}`}>
-//           <ul>
-//             <li><Link href="/">Trang Chủ</Link></li>
-//             <li><Link href="/about">Về Chúng Tôi</Link></li>
-//             <li><Link href="/services">Dịch Vụ</Link></li>
-//             <li><Link href="/projects">Dự Án</Link></li>
-//             <li><Link href="/posts">Blog</Link></li>
-//             <li><Link href="/contact" className="btn-contact">Liên Hệ</Link></li>
-//           </ul>
-//         </nav>
-//       </div>
-//     </header>
-//   );
-// }
 "use client";
 
 import Link from "next/link";
@@ -90,9 +53,9 @@ export default function Header() {
     <header className={`fixed top-0 left-0 right-0 z-50 w-full border-b border-white/40 bg-white/60 backdrop-blur-xl supports-backdrop-filter:bg-white/45 shadow-[0_6px_24px_rgba(15,23,42,0.08)] transition-transform duration-300 ${headerTranslate}`}>
       <div className={`max-w-[1200px] mx-auto flex items-center justify-between px-4 md:px-6 transition-all duration-300 ${headerPadding}`}>
 
-        <Link href="/" className="flex items-center gap-3 text-[22px] text-[#C00707]">
-          <img src='/images/logo.jpg' alt='DHStudio Logo' className="w-7.5" />
-          <span style={{ fontFamily: 'Audiowide, sans-serif' }}>DHStudio</span>
+        <Link href="/" className="flex items-center gap-3 text-[22px] text-[#760001]">
+          <img src='/images/logo2.jpg' alt='DHStudio Logo' className="w-8.5" />
+          <span style={{ fontFamily: 'Rubik, sans-serif', fontWeight: 'bold' }}>DHStudio</span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-12 text-gray-600 font-medium">
