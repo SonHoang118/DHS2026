@@ -30,9 +30,11 @@ export async function GET(request: NextRequest) {
     const skip = parseInt(searchParams.get("skip") || "0", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);
     const q = searchParams.get("q") || "";
+    const categories = searchParams.getAll("category").map((c) => c.trim()).filter(Boolean);
+    const styles = searchParams.getAll("style").map((s) => s.trim()).filter(Boolean);
 
     const { getProjects } = await import("@/lib/services/projectService");
-    const { items, total } = await getProjects(skip, limit, q);
+    const { items, total } = await getProjects(skip, limit, q, categories, styles);
 
     return NextResponse.json({
       items,

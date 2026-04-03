@@ -10,12 +10,27 @@ const PER_PAGE = 8;
 
 
 // Fetch projects 
-async function getProjects(page: number, q: string) {
+async function getProjects(page: number, q: string, categories: string[], styles: string[]) {
   const skip = (page - 1) * PER_PAGE;
-  const res = await fetch(
-    `/api/projects?skip=${skip}&limit=${PER_PAGE}&q=${encodeURIComponent(q)}`,
-    { cache: "no-store" }
-  );
+  const params = new URLSearchParams();
+  params.set("skip", String(skip));
+  params.set("limit", String(PER_PAGE));
+
+  if (q.trim()) {
+    params.set("q", q.trim());
+  }
+  categories.forEach((category) => {
+    if (category.trim()) {
+      params.append("category", category.trim());
+    }
+  });
+  styles.forEach((style) => {
+    if (style.trim()) {
+      params.append("style", style.trim());
+    }
+  });
+
+  const res = await fetch(`/api/projects?${params.toString()}`, { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to fetch");
   return res.json();
 }
@@ -29,6 +44,8 @@ function ProjectsPageContent() {
   const [loading, setLoading] = useState(false);
   const page = Number(searchParams.get("page") || 1);
   const q = searchParams.get("q") || "";
+  const categories = searchParams.getAll("category").map((c) => c.trim()).filter(Boolean);
+  const styles = searchParams.getAll("style").map((s) => s.trim()).filter(Boolean);
   const [searchInput, setSearchInput] = useState(q);
   const totalPages = Math.ceil(total / PER_PAGE);
 
@@ -38,13 +55,13 @@ function ProjectsPageContent() {
 
   useEffect(() => {
     setLoading(true);
-    getProjects(page, q)
+    getProjects(page, q, categories, styles)
       .then((data) => {
         setProjects(data.items);
         setTotal(data.total);
       })
       .finally(() => setLoading(false));
-  }, [page, q]);
+  }, [page, q, categories.join("|"), styles.join("|")]);
 
   const handlePageChange = (p: number) => {
     const nextParams = new URLSearchParams();
@@ -52,6 +69,8 @@ function ProjectsPageContent() {
     if (q) {
       nextParams.set("q", q);
     }
+    categories.forEach((cat) => nextParams.append("category", cat));
+    styles.forEach((sty) => nextParams.append("style", sty));
     router.push(`?${nextParams.toString()}`);
   };
 
@@ -61,6 +80,8 @@ function ProjectsPageContent() {
     if (searchInput.trim()) {
       nextParams.set("q", searchInput.trim());
     }
+    categories.forEach((cat) => nextParams.append("category", cat));
+    styles.forEach((sty) => nextParams.append("style", sty));
     nextParams.set("page", "1");
     router.push(`?${nextParams.toString()}`);
   };
@@ -106,9 +127,33 @@ function ProjectsPageContent() {
         </form>
       </div>
 
-      {q && (
+      {(q || categories.length > 0 || styles.length > 0) && (
         <p className="mb-6 text-sm text-gray-500">
-          Kết quả cho: <span className="font-semibold text-gray-700">"{q}"</span> ({total} dự án)
+          {q && (
+            <>
+              Kết quả cho: <span className="font-semibold text-gray-700">{`"${q}"`}</span>. 
+            </>
+          )}
+          {categories.length > 0 && (
+            <>
+              Lọc theo danh mục: <span className="font-semibold text-gray-700">{categories.join(", ")}</span>. 
+            </>
+          )}
+          {styles.length > 0 && (
+            <>
+              Lọc theo phong cách: <span className="font-semibold text-gray-700">{styles.join(", ")}</span>. 
+            </>
+          )}
+          ({total} dự án)
+          <button
+            onClick={() => {
+              setSearchInput("");
+              router.push("?page=1");
+            }}
+            className="ml-3 text-xs text-[#C00707] hover:underline"
+          >
+            Xóa bộ lọc
+          </button>
         </p>
       )}
 
