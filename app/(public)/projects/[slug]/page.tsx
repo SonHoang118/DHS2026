@@ -319,8 +319,11 @@ export default function ProjectDetail() {
               <h3 className="text-xl font-bold text-gray-800 mb-6">Hình Ảnh Dự Án</h3>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {imagesWithColumns.map(({ img, colSpan, idx }) => (
-                  <button
+                  <a
                     key={idx}
+                    href={img}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={() => setCurrentImageIndex(idx)}
                     className={`relative overflow-hidden transition-all ${
                       colSpan === 1
@@ -340,7 +343,7 @@ export default function ProjectDetail() {
                     }}
                   >
                     <img src={img} alt={`${projectTitle} ${idx + 1}`} className="w-full h-full object-cover" />
-                  </button>
+                  </a>
                 ))}
               </div>
             </div>
