@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import SiteChrome from "@/components/SiteChrome";
 import { getSiteUrl } from "@/lib/seo";
 import "./globals.css";
@@ -117,6 +118,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SiteChrome>{children}</SiteChrome>
+        <Analytics />
       </body>
     </html>
   );
