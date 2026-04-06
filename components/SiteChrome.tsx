@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import ScrollToTopButton from '@/components/ScrollToTopButton';
 import { usePathname } from 'next/navigation';
+import { Suspense } from 'react';
 
 type SiteChromeProps = {
   children: React.ReactNode;
@@ -19,7 +20,9 @@ export default function SiteChrome({ children }: SiteChromeProps) {
 
   return (
     <>
-      <Header />
+      <Suspense fallback={null}>
+        <Header />
+      </Suspense>
       <div className="pt-20 md:pt-24">{children}</div>
       <Footer />
       <ScrollToTopButton />
