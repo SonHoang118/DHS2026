@@ -131,13 +131,13 @@ export default function Header() {
                 >
                   <Link
                     href={item.href}
-                    className="hover:text-[#FF4400] transition"
+                    className="hover:text-[#760001] transition"
                   >
                     <span className="inline-flex items-center gap-1">
                       {item.name}
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 stroke-current"
+                        className="h-4 w-4 stroke-current translate-y-px"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -153,10 +153,10 @@ export default function Header() {
                     }`}
                     style={{ zIndex: 60 }}
                   >
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-4">
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Danh mục</h4>
-                        <ul className="space-y-1">
+                        <h4 className="text-sm font-bold text-gray-700 mb-2">Danh mục</h4>
+                        <ul className="flex flex-wrap gap-2">
                           {categories.length > 0 ? (
                             categories.map((cat, idx) => {
                               const selected = selectedCategories.includes(cat);
@@ -164,7 +164,7 @@ export default function Header() {
                                 <li key={idx}>
                                   <Link
                                     href={makeProjectsLink({ category: cat })}
-                                    className={`inline-block px-2 py-1 rounded-md text-sm transition border border-dashed ${selected ? "border-[#C00707] bg-[#ffe9e3] text-[#C00707] font-semibold" : "border-gray-300 bg-white text-gray-600 hover:border-[#FF4400] hover:text-[#FF4400]"}`}
+                                    className={`inline-block px-2 py-1 rounded-md text-sm transition border border-dashed ${selected ? "border-[#C00707] bg-[#ffe9e3] text-[#C00707] font-semibold" : "border-gray-300 bg-white text-gray-600 hover:border-[#760001] hover:text-[#760001]"}`}
                                   >
                                     {cat}
                                   </Link>
@@ -177,8 +177,8 @@ export default function Header() {
                         </ul>
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Phong cách</h4>
-                        <ul className="space-y-1">
+                        <h4 className="text-sm font-bold text-gray-700 mb-2">Phong cách</h4>
+                        <ul className="flex flex-wrap gap-2">
                           {styles.length > 0 ? (
                             styles.map((styleItem, idx) => {
                               const selected = selectedStyles.includes(styleItem);
@@ -186,7 +186,7 @@ export default function Header() {
                                 <li key={idx}>
                                   <Link
                                     href={makeProjectsLink({ style: styleItem })}
-                                    className={`inline-block px-2 py-1 rounded-md text-sm transition border border-dashed ${selected ? "border-[#C00707] bg-[#ffe9e3] text-[#C00707] font-semibold" : "border-gray-300 bg-white text-gray-600 hover:border-[#FF4400] hover:text-[#FF4400]"}`}
+                                    className={`inline-block px-2 py-1 rounded-md text-sm transition border border-dashed ${selected ? "border-[#C00707] bg-[#ffe9e3] text-[#C00707] font-semibold" : "border-gray-300 bg-white text-gray-600 hover:border-[#760001] hover:text-[#760001]"}`}
                                   >
                                     {styleItem}
                                   </Link>
@@ -208,7 +208,7 @@ export default function Header() {
               <Link
                 key={i}
                 href={item.href}
-                className="hover:text-[#FF4400] transition"
+                className="hover:text-[#760001] transition"
               >
                 {item.name}
               </Link>
@@ -246,10 +246,10 @@ export default function Header() {
       </div>
 
       <nav
-        className={`lg:hidden border-t border-gray-200 bg-white px-4 transition-all duration-300 overflow-hidden ${
+        className={`lg:hidden border-t border-gray-200 bg-white px-4 transition-all duration-300 ${
           mobileMenuOpen
-            ? "max-h-[420px] py-4 opacity-100 translate-y-0"
-            : "max-h-0 py-0 opacity-0 -translate-y-2 pointer-events-none"
+            ? "max-h-[calc(100dvh-76px)] py-4 opacity-100 translate-y-0 overflow-y-auto overscroll-contain"
+            : "max-h-0 py-0 opacity-0 -translate-y-2 pointer-events-none overflow-hidden"
         }`}
       >
         <ul className="flex flex-col gap-3">
@@ -266,7 +266,7 @@ export default function Header() {
                     <button
                       type="button"
                       onClick={() => setIsProjectMobileDropdownOpen((prev) => !prev)}
-                      className="w-full text-left py-2 text-gray-700 font-medium hover:text-[#FF4400] transition flex items-center justify-between"
+                      className="w-full text-left py-2 text-gray-700 font-medium hover:text-[#760001] transition flex items-center justify-between"
                     >
                       Dự án
                       <svg
@@ -286,7 +286,7 @@ export default function Header() {
                           <Link
                             href="/projects"
                             onClick={() => { setMobileMenuOpen(false); setIsProjectMobileDropdownOpen(false); }}
-                            className="block px-3 py-2 rounded-md border border-dashed border-gray-300 text-sm text-gray-700 hover:border-[#FF4400] hover:text-[#FF4400]"
+                            className="block px-3 py-2 rounded-md border border-dashed border-gray-300 text-sm text-gray-700 hover:border-[#760001] hover:text-[#760001]"
                           >
                             Tất cả dự án
                           </Link>
@@ -301,7 +301,7 @@ export default function Header() {
                                   key={`mobile-cat-${idx}`}
                                   href={makeProjectsLink({ category: cat })}
                                   onClick={() => { setMobileMenuOpen(false); setIsProjectMobileDropdownOpen(false); }}
-                                  className={`px-2 py-1 rounded-md border border-dashed text-sm ${selected ? "border-[#C00707] bg-[#ffe9e3] text-[#C00707]" : "border-gray-300 text-gray-600 hover:border-[#FF4400] hover:text-[#FF4400]"}`}
+                                  className={`px-2 py-1 rounded-md border border-dashed text-sm ${selected ? "border-[#C00707] bg-[#ffe9e3] text-[#C00707]" : "border-gray-300 text-gray-600 hover:border-[#760001] hover:text-[#760001]"}`}
                                 >
                                   {cat}
                                 </Link>
@@ -319,7 +319,7 @@ export default function Header() {
                                   key={`mobile-style-${idx}`}
                                   href={makeProjectsLink({ style: styleItem })}
                                   onClick={() => { setMobileMenuOpen(false); setIsProjectMobileDropdownOpen(false); }}
-                                  className={`px-2 py-1 rounded-md border border-dashed text-sm ${selected ? "border-[#C00707] bg-[#ffe9e3] text-[#C00707]" : "border-gray-300 text-gray-600 hover:border-[#FF4400] hover:text-[#FF4400]"}`}
+                                  className={`px-2 py-1 rounded-md border border-dashed text-sm ${selected ? "border-[#C00707] bg-[#ffe9e3] text-[#C00707]" : "border-gray-300 text-gray-600 hover:border-[#760001] hover:text-[#760001]"}`}
                                 >
                                   {styleItem}
                                 </Link>
@@ -344,7 +344,7 @@ export default function Header() {
                   <Link
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block py-2 text-gray-700 font-medium hover:text-[#FF4400] transition"
+                    className="block py-2 text-gray-700 font-medium hover:text-[#760001] transition"
                   >
                     {item.name}
                   </Link>
